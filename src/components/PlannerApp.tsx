@@ -101,7 +101,16 @@ export function PlannerApp() {
     setDetailExpanded(false);
   }
 
-  const shellExpanded = detailExpanded && selected !== null;
+  const hasSelection = selected !== null;
+  const shellExpanded = detailExpanded && hasSelection;
+
+  const shellClass = [
+    "planner-shell",
+    hasSelection ? "planner-shell-has-detail" : "",
+    shellExpanded ? "planner-shell-detail-expanded" : "",
+  ]
+    .filter(Boolean)
+    .join(" ");
 
   return (
     <div className="planner">
@@ -126,9 +135,7 @@ export function PlannerApp() {
         </div>
       </header>
 
-      <div
-        className={`planner-shell ${shellExpanded ? "planner-shell-detail-expanded" : ""}`}
-      >
+      <div className={shellClass}>
         <FilterBar
           filters={filters}
           onChange={setFilters}
@@ -256,19 +263,21 @@ export function PlannerApp() {
           )}
         </main>
 
-        <aside
-          className={`detail-aside ${shellExpanded ? "detail-aside-expanded" : ""}`}
-          aria-label="Event detail"
-        >
-          <EventDetail
-            event={selected}
-            departureCityId={departureCityId}
-            stayDays={stayDays}
-            expanded={detailExpanded}
-            onExpandedChange={setDetailExpanded}
-            onClose={handleCloseDetail}
-          />
-        </aside>
+        {hasSelection ? (
+          <aside
+            className={`detail-aside ${shellExpanded ? "detail-aside-expanded" : ""}`}
+            aria-label="Event detail"
+          >
+            <EventDetail
+              event={selected}
+              departureCityId={departureCityId}
+              stayDays={stayDays}
+              expanded={detailExpanded}
+              onExpandedChange={setDetailExpanded}
+              onClose={handleCloseDetail}
+            />
+          </aside>
+        ) : null}
       </div>
     </div>
   );
