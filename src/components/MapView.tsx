@@ -27,7 +27,7 @@ interface MapViewProps {
   filters: FilterState;
   departureCityId: DepartureCityId;
   stayDays: number;
-  selectedId: string | null;
+  selectedIds: string[];
   onSelect: (id: string) => void;
 }
 
@@ -69,7 +69,7 @@ export function MapView({
   filters,
   departureCityId,
   stayDays,
-  selectedId,
+  selectedIds,
   onSelect,
 }: MapViewProps) {
   const highlightedRegions =
@@ -99,7 +99,7 @@ export function MapView({
           <Marker
             key={event.id}
             position={[event.lat, event.lng]}
-            icon={createMarkerIcon(event, selectedId === event.id)}
+            icon={createMarkerIcon(event, selectedIds.includes(event.id))}
             eventHandlers={{
               click: () => onSelect(event.id),
             }}

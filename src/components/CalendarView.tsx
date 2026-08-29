@@ -20,7 +20,7 @@ interface CalendarViewProps {
   year: number;
   month: number; // 1–12
   onMonthChange: (year: number, month: number) => void;
-  selectedId: string | null;
+  selectedIds: string[];
   onSelect: (id: string) => void;
 }
 
@@ -63,14 +63,14 @@ function eventsForScopedMonth(
 
 interface MonthPanelListProps {
   monthEvents: WildlifeEvent[];
-  selectedId: string | null;
+  selectedIds: string[];
   onSelect: (id: string) => void;
   compact?: boolean;
 }
 
 function MonthPanelList({
   monthEvents,
-  selectedId,
+  selectedIds,
   onSelect,
   compact = false,
 }: MonthPanelListProps) {
@@ -84,7 +84,7 @@ function MonthPanelList({
         <li key={e.id}>
           <button
             type="button"
-            className={`cal-day-panel-item ${compact ? "cal-day-panel-item-compact" : ""} ${selectedId === e.id ? "cal-day-panel-item-on" : ""}`}
+            className={`cal-day-panel-item ${compact ? "cal-day-panel-item-compact" : ""} ${selectedIds.includes(e.id) ? "cal-day-panel-item-on" : ""}`}
             onClick={() => onSelect(e.id)}
           >
             <span
@@ -110,7 +110,7 @@ function MonthPanelList({
 interface YearViewProps {
   events: WildlifeEvent[];
   scope: CalendarScope;
-  selectedId: string | null;
+  selectedIds: string[];
   onSelect: (id: string) => void;
   onOpenMonth: (month: number) => void;
 }
@@ -118,7 +118,7 @@ interface YearViewProps {
 function YearView({
   events,
   scope,
-  selectedId,
+  selectedIds,
   onSelect,
   onOpenMonth,
 }: YearViewProps) {
@@ -170,7 +170,7 @@ function YearView({
                   </button>
                   <MonthPanelList
                     monthEvents={monthEvents}
-                    selectedId={selectedId}
+                    selectedIds={selectedIds}
                     onSelect={onSelect}
                     compact
                   />
@@ -194,7 +194,7 @@ export function CalendarView({
   year,
   month,
   onMonthChange,
-  selectedId,
+  selectedIds,
   onSelect,
 }: CalendarViewProps) {
   const [mode, setMode] = useState<CalendarMode>("month");
@@ -334,7 +334,7 @@ export function CalendarView({
         <YearView
           events={events}
           scope={scope}
-          selectedId={selectedId}
+          selectedIds={selectedIds}
           onSelect={onSelect}
           onOpenMonth={openMonth}
         />
@@ -409,7 +409,7 @@ export function CalendarView({
                       {dayEvents.slice(0, MAX_DOTS).map((e) => (
                         <span
                           key={e.id}
-                          className={`cal-dot ${selectedId === e.id ? "cal-dot-on" : ""}`}
+                          className={`cal-dot ${selectedIds.includes(e.id) ? "cal-dot-on" : ""}`}
                           style={{ background: e.atmosphere[1] }}
                           aria-hidden="true"
                         />
@@ -441,7 +441,7 @@ export function CalendarView({
               </div>
               <MonthPanelList
                 monthEvents={activeDayEvents}
-                selectedId={selectedId}
+                selectedIds={selectedIds}
                 onSelect={onSelect}
               />
             </div>

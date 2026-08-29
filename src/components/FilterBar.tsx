@@ -23,9 +23,8 @@ import {
   activeFilterCount,
   emptyFilters,
   labelize,
-  resolveStayDays,
-  usesDateRangeForStayDays,
 } from "@/lib/filters";
+import { DEFAULT_TYPICAL_TRIP_DAYS } from "@/lib/budget";
 import type { FilterState } from "@/lib/types";
 
 interface FilterBarProps {
@@ -95,8 +94,8 @@ export function FilterBar({
   const count = activeFilterCount(filters);
   const monthsActive = filters.months.length > 0;
   const datesActive = Boolean(filters.dateFrom || filters.dateTo);
-  const stayDays = resolveStayDays(filters);
-  const stayFromDates = usesDateRangeForStayDays(filters);
+  const tripLengthActive = filters.tripDays !== DEFAULT_TYPICAL_TRIP_DAYS;
+  const datesDisabled = monthsActive || tripLengthActive;
 
   return (
     <aside className="filter-bar" aria-label="Trip filters">
@@ -147,11 +146,6 @@ export function FilterBar({
         options={MONTHS.map((m) => String(m.value))}
         selected={filters.months.map(String)}
         disabled={datesActive}
-        hint={
-          datesActive
-            ? "Clear specific dates to filter by month instead."
-            : undefined
-        }
         onToggle={(v) => {
           const month = Number(v);
           onChange({
@@ -165,56 +159,52 @@ export function FilterBar({
       />
 
       <fieldset
-        className={`filter-group ${stayFromDates ? "filter-group-disabled" : ""}`}
-        disabled={stayFromDates}
+        className={`filter-group ${datesActive ? "filter-group-disabled" : ""}`}
+        disabled={datesActive}
       >
         <legend className="filter-legend">Trip length</legend>
-        {stayFromDates ? (
-          <p className="filter-group-hint">
-            {stayDays} {stayDays === 1 ? "day" : "days"} (from your specific
-            dates).
-          </p>
-        ) : (
-          <div className="chip-row">
-            {TRIP_LENGTH_OPTIONS.map((days) => {
-              const on = filters.tripDays === days;
-              return (
-                <button
-                  key={days}
-                  type="button"
-                  className={`chip ${on ? "chip-on" : ""}`}
-                  aria-pressed={on}
-                  onClick={() => onChange({ ...filters, tripDays: days })}
-                >
-                  {days} days
-                </button>
-              );
-            })}
-          </div>
-        )}
+        <div className="chip-row">
+          {TRIP_LENGTH_OPTIONS.map((days) => {
+            const on = filters.tripDays === days;
+            return (
+              <button
+                key={days}
+                type="button"
+                className={`chip ${on ? "chip-on" : ""}`}
+                aria-pressed={on}
+                onClick={() =>
+                  onChange({
+                    ...filters,
+                    dateFrom: "",
+                    dateTo: "",
+                    tripDays: days,
+                  })
+                }
+              >
+                {days} days
+              </button>
+            );
+          })}
+        </div>
       </fieldset>
 
       <fieldset
-        className={`filter-group ${monthsActive ? "filter-group-disabled" : ""}`}
-        disabled={monthsActive}
+        className={`filter-group ${datesDisabled ? "filter-group-disabled" : ""}`}
+        disabled={datesDisabled}
       >
         <legend className="filter-legend">Specific dates</legend>
-        {monthsActive ? (
-          <p className="filter-group-hint">
-            Clear month chips to filter by date range instead.
-          </p>
-        ) : null}
         <div className="date-row">
           <label className="date-field">
             <span>From</span>
             <input
               type="date"
               value={filters.dateFrom}
-              disabled={monthsActive}
+              disabled={datesDisabled}
               onChange={(e) =>
                 onChange({
                   ...filters,
                   months: [],
+                  tripDays: DEFAULT_TYPICAL_TRIP_DAYS,
                   dateFrom: e.target.value,
                 })
               }
@@ -225,11 +215,12 @@ export function FilterBar({
             <input
               type="date"
               value={filters.dateTo}
-              disabled={monthsActive}
+              disabled={datesDisabled}
               onChange={(e) =>
                 onChange({
                   ...filters,
                   months: [],
+                  tripDays: DEFAULT_TYPICAL_TRIP_DAYS,
                   dateTo: e.target.value,
                 })
               }

@@ -115,11 +115,13 @@ export function adjacentScopeMonth(
   month: number,
   direction: -1 | 1,
 ): number | null {
-  const idx = scope.months.indexOf(month);
-  if (idx === -1) return scope.months[0] ?? null;
-  const next = idx + direction;
-  if (next < 0 || next >= scope.months.length) return null;
-  return scope.months[next];
+  const months = scope.months;
+  if (months.length === 0) return null;
+  const idx = months.indexOf(month);
+  if (idx === -1) return months[0] ?? null;
+  if (months.length === 1) return null;
+  const next = (idx + direction + months.length) % months.length;
+  return months[next];
 }
 
 export function eventOnScopedDay(
@@ -191,6 +193,18 @@ export function calendarAnchorMonth(scope: CalendarScope): number {
   if (scope.dayWindow) return scope.dayWindow.startMonth;
   if (scope.restricted && scope.months.length > 0) return scope.months[0];
   return new Date().getMonth() + 1;
+}
+
+export function eventAnchorMonth(
+  event: WildlifeEvent,
+  scope: CalendarScope,
+): number {
+  const startMonth = parseIsoParts(event.startDate).month;
+  if (scope.months.includes(startMonth)) return startMonth;
+  for (const m of scope.months) {
+    if (eventOverlapsScopedMonth(event, scope, m)) return m;
+  }
+  return calendarAnchorMonth(scope);
 }
 
 export function annualWindow(event: WildlifeEvent): AnnualWindow {

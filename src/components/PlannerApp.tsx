@@ -9,7 +9,11 @@ import {
   type DepartureCityId,
 } from "@/data/departureCities";
 import { events } from "@/data/events";
-import { resolveCalendarScope, calendarAnchorMonth } from "@/lib/calendar";
+import {
+  resolveCalendarScope,
+  calendarAnchorMonth,
+  eventAnchorMonth,
+} from "@/lib/calendar";
 import { emptyFilters, filterEvents, resolveStayDays } from "@/lib/filters";
 import {
   DEFAULT_SORT,
@@ -41,6 +45,14 @@ const MapView = dynamic(
   },
 );
 
+function findEventById(id: string, lists: WildlifeEvent[][]): WildlifeEvent | null {
+  for (const list of lists) {
+    const found = list.find((e) => e.id === id);
+    if (found) return found;
+  }
+  return null;
+}
+
 export function PlannerApp() {
   const [filters, setFilters] = useState<FilterState>(emptyFilters);
   const [departureCityId, setDepartureCityId] = useState<DepartureCityId>(
@@ -48,7 +60,8 @@ export function PlannerApp() {
   );
   const [view, setView] = useState<ViewMode>("list");
   const [sort, setSort] = useState<SortState>(DEFAULT_SORT);
-  const [selectedId, setSelectedId] = useState<string | null>(null);
+  const [selectedIds, setSelectedIds] = useState<string[]>([]);
+  const [activeId, setActiveId] = useState<string | null>(null);
   const [detailExpanded, setDetailExpanded] = useState(false);
   const now = new Date();
   const [calYear, setCalYear] = useState(now.getFullYear());
@@ -86,18 +99,68 @@ export function PlannerApp() {
     localStorage.setItem(DEPARTURE_CITY_STORAGE_KEY, departureCityId);
   }, [departureCityId]);
 
-  const selected: WildlifeEvent | null =
-    sorted.find((e) => e.id === selectedId) ??
-    filtered.find((e) => e.id === selectedId) ??
-    events.find((e) => e.id === selectedId) ??
-    null;
+  const selectedEvents = useMemo(() => {
+    return selectedIds
+      .map((id) => findEventById(id, [sorted, filtered, events]))
+      .filter((e): e is WildlifeEvent => e !== null);
+  }, [selectedIds, sorted, filtered]);
 
-  function handleSelect(id: string) {
-    setSelectedId((prev) => (prev === id ? null : id));
+  const activeIdResolved =
+    activeId && selectedIds.includes(activeId)
+      ? activeId
+      : selectedIds[selectedIds.length - 1] ?? null;
+
+  const selected: WildlifeEvent | null = activeIdResolved
+    ? findEventById(activeIdResolved, [sorted, filtered, events])
+    : null;
+
+  const calendarEvents = useMemo(() => {
+    if (selectedEvents.length === 0) return sorted;
+    return selectedEvents;
+  }, [selectedEvents, sorted]);
+
+  function jumpToEventMonth(id: string) {
+    const event = findEventById(id, [sorted, filtered, events]);
+    if (event) {
+      setCalMonth(eventAnchorMonth(event, calendarScope));
+    }
   }
 
-  function handleCloseDetail() {
-    setSelectedId(null);
+  function handleSelect(id: string) {
+    const alreadySelected = selectedIds.includes(id);
+
+    if (alreadySelected) {
+      const next = selectedIds.filter((x) => x !== id);
+      setSelectedIds(next);
+      if (activeIdResolved === id) {
+        setActiveId(next[next.length - 1] ?? null);
+      }
+      return;
+    }
+
+    setSelectedIds((prev) => [...prev, id]);
+    setActiveId(id);
+    jumpToEventMonth(id);
+  }
+
+  function handleActivate(id: string) {
+    if (!selectedIds.includes(id)) return;
+    setActiveId(id);
+    jumpToEventMonth(id);
+  }
+
+  function handleRemoveSelected(id: string) {
+    const nextIds = selectedIds.filter((x) => x !== id);
+    const nextActive =
+      activeIdResolved === id
+        ? (nextIds[nextIds.length - 1] ?? null)
+        : activeIdResolved && nextIds.includes(activeIdResolved)
+          ? activeIdResolved
+          : (nextIds[nextIds.length - 1] ?? null);
+
+    setSelectedIds(nextIds);
+    setActiveId(nextActive);
+    if (nextActive) jumpToEventMonth(nextActive);
     setDetailExpanded(false);
   }
 
@@ -228,7 +291,7 @@ export function PlannerApp() {
                     event={event}
                     departureCityId={departureCityId}
                     stayDays={stayDays}
-                    selected={selectedId === event.id}
+                    selected={selectedIds.includes(event.id)}
                     onSelect={handleSelect}
                   />
                 ))}
@@ -236,7 +299,7 @@ export function PlannerApp() {
             )
           ) : view === "calendar" ? (
             <CalendarView
-              events={sorted}
+              events={calendarEvents}
               scope={calendarScope}
               year={calYear}
               month={calMonth}
@@ -244,7 +307,7 @@ export function PlannerApp() {
                 setCalYear(y);
                 setCalMonth(m);
               }}
-              selectedId={selectedId}
+              selectedIds={selectedIds}
               onSelect={handleSelect}
             />
           ) : sorted.length === 0 ? (
@@ -257,7 +320,7 @@ export function PlannerApp() {
               filters={filters}
               departureCityId={departureCityId}
               stayDays={stayDays}
-              selectedId={selectedId}
+              selectedIds={selectedIds}
               onSelect={handleSelect}
             />
           )}
@@ -269,12 +332,14 @@ export function PlannerApp() {
             aria-label="Event detail"
           >
             <EventDetail
-              event={selected}
+              events={selectedEvents}
+              activeId={activeIdResolved}
               departureCityId={departureCityId}
               stayDays={stayDays}
               expanded={detailExpanded}
               onExpandedChange={setDetailExpanded}
-              onClose={handleCloseDetail}
+              onActivate={handleActivate}
+              onRemove={handleRemoveSelected}
             />
           </aside>
         ) : null}

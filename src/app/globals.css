@@ -142,14 +142,27 @@ input {
   display: grid;
   grid-template-columns: minmax(240px, 280px) minmax(0, 1fr);
   gap: 1.25rem;
-  max-width: 1400px;
   margin: 0 auto;
-  padding: 1.5rem;
+  padding: 1.5rem clamp(1.25rem, 2.5vw, 2.75rem);
   align-items: start;
 }
 
 .planner-shell-has-detail {
   grid-template-columns: minmax(240px, 280px) minmax(0, 1fr) minmax(260px, 320px);
+}
+
+@media (min-width: 1600px) {
+  .planner-shell {
+    grid-template-columns: minmax(260px, 300px) minmax(0, 1fr);
+  }
+
+  .planner-shell-has-detail {
+    grid-template-columns: minmax(260px, 300px) minmax(0, 1fr) minmax(280px, 360px);
+  }
+
+  .planner-shell-detail-expanded {
+    grid-template-columns: minmax(260px, 300px) minmax(0, 1fr);
+  }
 }
 
 @media (max-width: 1100px) {
@@ -642,6 +655,196 @@ input {
   overflow: hidden;
   box-shadow: var(--shadow);
   animation: rise-in 0.35s ease-out;
+}
+
+.detail-tabs-shell {
+  position: relative;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  align-items: stretch;
+  background: rgba(var(--moss-rgb), 0.06);
+  border-bottom: 1px solid var(--border);
+}
+
+.detail-tabs-shell-scrollable {
+  grid-template-columns: auto minmax(0, 1fr) auto;
+}
+
+.detail-tabs {
+  display: flex;
+  gap: 0.2rem;
+  padding: 0.4rem 0.35rem 0;
+  overflow-x: auto;
+  scrollbar-width: none;
+  scroll-behavior: smooth;
+  min-width: 0;
+}
+
+.detail-tabs::-webkit-scrollbar {
+  display: none;
+}
+
+.detail-tabs-shell::before,
+.detail-tabs-shell::after {
+  content: "";
+  position: absolute;
+  top: 0;
+  bottom: 1px;
+  width: 1.1rem;
+  pointer-events: none;
+  z-index: 1;
+  opacity: 0;
+  transition: opacity 0.15s ease;
+}
+
+.detail-tabs-shell::before {
+  left: 0;
+  background: linear-gradient(
+    to right,
+    rgba(250, 246, 240, 0.95),
+    transparent
+  );
+}
+
+.detail-tabs-shell::after {
+  right: 0;
+  background: linear-gradient(
+    to left,
+    rgba(250, 246, 240, 0.95),
+    transparent
+  );
+}
+
+.detail-tabs-shell-scrollable::before {
+  left: 1.55rem;
+}
+
+.detail-tabs-shell-scrollable::after {
+  right: 1.55rem;
+}
+
+.detail-tabs-fade-left::before,
+.detail-tabs-fade-right::after {
+  opacity: 1;
+}
+
+.detail-tabs-chevron {
+  position: relative;
+  z-index: 2;
+  border: none;
+  background: transparent;
+  color: var(--ink-muted);
+  width: 1.55rem;
+  cursor: pointer;
+  font-size: 1.1rem;
+  line-height: 1;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  transition: color 0.15s ease, background 0.15s ease;
+}
+
+.detail-tabs-chevron:hover:not(:disabled) {
+  color: var(--forest);
+  background: rgba(var(--moss-rgb), 0.1);
+}
+
+.detail-tabs-chevron:disabled {
+  opacity: 0.3;
+  cursor: default;
+}
+
+.detail-tab {
+  display: inline-flex;
+  align-items: center;
+  max-width: none;
+  flex: 0 0 auto;
+  border: 1px solid transparent;
+  border-bottom: none;
+  border-radius: 7px 7px 0 0;
+  background: transparent;
+  color: var(--ink-muted);
+  transition: background 0.15s ease, color 0.15s ease;
+}
+
+.detail-tab:hover {
+  background: rgba(255, 255, 255, 0.55);
+  color: var(--ink);
+}
+
+.detail-tab-active {
+  background: var(--surface-solid);
+  border-color: var(--border);
+  color: var(--forest);
+  box-shadow: inset 0 -2px 0 var(--moss);
+}
+
+.detail-tab-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.3rem;
+  min-width: 0;
+  border: none;
+  background: transparent;
+  color: inherit;
+  padding: 0.35rem 0.15rem 0.4rem 0.4rem;
+  cursor: pointer;
+  font: inherit;
+  font-size: 0.72rem;
+  font-weight: 600;
+  line-height: 1.2;
+  text-align: left;
+}
+
+.detail-tab-swatch {
+  width: 0.45rem;
+  height: 0.45rem;
+  border-radius: 999px;
+  flex-shrink: 0;
+}
+
+.detail-tab-label {
+  font-family: var(--font-body);
+  font-size: 0.72rem;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+}
+
+.detail-tab-close {
+  flex-shrink: 0;
+  border: none;
+  background: transparent;
+  color: var(--ink-muted);
+  width: 1.25rem;
+  height: 1.25rem;
+  margin-right: 0.1rem;
+  border-radius: 999px;
+  cursor: pointer;
+  font-size: 0.9rem;
+  line-height: 1;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.15s ease, background 0.15s ease, color 0.15s ease;
+}
+
+.detail-tab:hover .detail-tab-close,
+.detail-tab-active .detail-tab-close,
+.detail-tab-close:focus-visible {
+  opacity: 1;
+  pointer-events: auto;
+}
+
+.detail-tab-close:hover {
+  background: rgba(var(--moss-rgb), 0.14);
+  color: var(--forest);
+}
+
+.detail-tab-active .detail-tab-btn {
+  color: var(--forest);
 }
 
 .detail-panel-expanded {

@@ -2,7 +2,13 @@
 
 import dynamic from "next/dynamic";
 import Image from "next/image";
-import { useState, useEffect, type CSSProperties } from "react";
+import {
+  useState,
+  useEffect,
+  useRef,
+  useCallback,
+  type CSSProperties,
+} from "react";
 import { formatAnnualRange } from "@/lib/calendar";
 import {
   formatAccess,
@@ -18,6 +24,7 @@ import {
 import type { DepartureCityId } from "@/data/departureCities";
 import type { WildlifeEvent } from "@/lib/types";
 import { getEventImage } from "@/data/eventImages";
+import { uniqueEventAbbrevs } from "@/lib/abbrev";
 import { ImageCredit } from "./ImageCredit";
 import { ImageLightbox } from "./ImageLightbox";
 
@@ -30,13 +37,17 @@ const EventLocationMap = dynamic(
 );
 
 interface EventDetailProps {
-  event: WildlifeEvent | null;
+  events: WildlifeEvent[];
+  activeId: string | null;
   departureCityId: DepartureCityId;
   stayDays: number;
   expanded: boolean;
   onExpandedChange: (expanded: boolean) => void;
-  onClose: () => void;
+  onActivate: (id: string) => void;
+  onRemove: (id: string) => void;
 }
+
+const TAB_SCROLL_STEP = 72;
 
 function Meta({ label, value }: { label: string; value: string }) {
   return (
@@ -53,15 +64,158 @@ function formatCoords(lat: number, lng: number): string {
   return `${Math.abs(lat).toFixed(2)}°${latDir}, ${Math.abs(lng).toFixed(2)}°${lngDir}`;
 }
 
+function DetailTabs({
+  events,
+  activeId,
+  onActivate,
+  onRemove,
+}: {
+  events: WildlifeEvent[];
+  activeId: string;
+  onActivate: (id: string) => void;
+  onRemove: (id: string) => void;
+}) {
+  const stripRef = useRef<HTMLDivElement>(null);
+  const activeTabRef = useRef<HTMLDivElement>(null);
+  const [canScrollLeft, setCanScrollLeft] = useState(false);
+  const [canScrollRight, setCanScrollRight] = useState(false);
+
+  const updateOverflow = useCallback(() => {
+    const el = stripRef.current;
+    if (!el) return;
+    const maxScroll = el.scrollWidth - el.clientWidth;
+    setCanScrollLeft(el.scrollLeft > 2);
+    setCanScrollRight(maxScroll - el.scrollLeft > 2);
+  }, []);
+
+  useEffect(() => {
+    const el = stripRef.current;
+    if (!el) return;
+
+    updateOverflow();
+    el.addEventListener("scroll", updateOverflow, { passive: true });
+
+    const observer = new ResizeObserver(updateOverflow);
+    observer.observe(el);
+
+    return () => {
+      el.removeEventListener("scroll", updateOverflow);
+      observer.disconnect();
+    };
+  }, [updateOverflow, events.length]);
+
+  useEffect(() => {
+    activeTabRef.current?.scrollIntoView({
+      inline: "nearest",
+      block: "nearest",
+      behavior: "smooth",
+    });
+    // Re-check fades after scroll settles
+    const timer = window.setTimeout(updateOverflow, 280);
+    return () => window.clearTimeout(timer);
+  }, [activeId, updateOverflow]);
+
+  function scrollBy(direction: -1 | 1) {
+    stripRef.current?.scrollBy({
+      left: direction * TAB_SCROLL_STEP,
+      behavior: "smooth",
+    });
+  }
+
+  const showChevrons = canScrollLeft || canScrollRight;
+  const abbrevs = uniqueEventAbbrevs(events);
+
+  return (
+    <div
+      className={`detail-tabs-shell ${showChevrons ? "detail-tabs-shell-scrollable" : ""} ${canScrollLeft ? "detail-tabs-fade-left" : ""} ${canScrollRight ? "detail-tabs-fade-right" : ""}`}
+    >
+      {showChevrons ? (
+        <button
+          type="button"
+          className="detail-tabs-chevron detail-tabs-chevron-left"
+          onClick={() => scrollBy(-1)}
+          disabled={!canScrollLeft}
+          aria-label="Scroll tabs left"
+        >
+          ‹
+        </button>
+      ) : null}
+
+      <div
+        ref={stripRef}
+        className="detail-tabs"
+        role="tablist"
+        aria-label="Selected events"
+      >
+        {events.map((item) => {
+          const isActive = item.id === activeId;
+          return (
+            <div
+              key={item.id}
+              ref={isActive ? activeTabRef : undefined}
+              className={`detail-tab ${isActive ? "detail-tab-active" : ""}`}
+            >
+              <button
+                type="button"
+                role="tab"
+                className="detail-tab-btn"
+                aria-selected={isActive}
+                id={`detail-tab-${item.id}`}
+                onClick={() => onActivate(item.id)}
+                title={item.title}
+                aria-label={`${abbrevs[item.id]}: ${item.title}`}
+              >
+                <span
+                  className="detail-tab-swatch"
+                  style={{ background: item.atmosphere[0] }}
+                  aria-hidden="true"
+                />
+                <span className="detail-tab-label">{abbrevs[item.id]}</span>
+              </button>
+              <button
+                type="button"
+                className="detail-tab-close"
+                aria-label={`Remove ${item.title}`}
+                onClick={(e) => {
+                  e.stopPropagation();
+                  onRemove(item.id);
+                }}
+              >
+                ×
+              </button>
+            </div>
+          );
+        })}
+      </div>
+
+      {showChevrons ? (
+        <button
+          type="button"
+          className="detail-tabs-chevron detail-tabs-chevron-right"
+          onClick={() => scrollBy(1)}
+          disabled={!canScrollRight}
+          aria-label="Scroll tabs right"
+        >
+          ›
+        </button>
+      ) : null}
+    </div>
+  );
+}
+
 export function EventDetail({
-  event,
+  events,
+  activeId,
   departureCityId,
   stayDays,
   expanded,
   onExpandedChange,
-  onClose,
+  onActivate,
+  onRemove,
 }: EventDetailProps) {
   const [lightboxOpen, setLightboxOpen] = useState(false);
+  const event =
+    events.find((e) => e.id === activeId) ?? events[events.length - 1] ?? null;
 
   useEffect(() => {
     if (!expanded) setLightboxOpen(false);
@@ -97,8 +251,21 @@ export function EventDetail({
           } as CSSProperties
         }
       >
+        {events.length > 1 ? (
+          <DetailTabs
+            events={events}
+            activeId={event.id}
+            onActivate={onActivate}
+            onRemove={onRemove}
+          />
+        ) : null}
+
         <div
           className={`detail-hero ${expanded ? "detail-hero-expanded" : ""} ${image ? "detail-hero-has-photo" : ""}`}
+          role="tabpanel"
+          aria-labelledby={
+            events.length > 1 ? `detail-tab-${event.id}` : undefined
+          }
         >
           {image ? (
             expanded ? (
@@ -142,7 +309,7 @@ export function EventDetail({
             <button
               type="button"
               className="detail-close"
-              onClick={onClose}
+              onClick={() => onRemove(event.id)}
               aria-label="Close detail"
             >
               ×
