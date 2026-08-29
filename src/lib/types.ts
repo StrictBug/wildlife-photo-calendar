@@ -56,6 +56,19 @@ export type AnimalType =
   | "insects"
   | "amphibians";
 
+/** Climate / biome of the destination. Events may have several. */
+export type Climate =
+  | "alpine"
+  | "polar"
+  | "boreal"
+  | "temperate"
+  | "mediterranean"
+  | "desert"
+  | "savanna"
+  | "tropical"
+  | "subtropical"
+  | "rainforest";
+
 export interface WildlifeEvent {
   id: string;
   title: string;
@@ -71,6 +84,8 @@ export interface WildlifeEvent {
   typicalTripDays?: number;
   animals: AnimalType[];
   animalLabels: string[];
+  /** One or more climate / biome tags for filtering. */
+  climates: Climate[];
   styles: PhotoStyle[];
   access: AccessMode;
   accommodation: AccommodationStyle;
@@ -95,6 +110,7 @@ export interface FilterState {
   /** Planned stay length when not using specific dates (days). */
   tripDays: number;
   styles: PhotoStyle[];
+  climates: Climate[];
   access: AccessMode[];
   accommodation: AccommodationStyle[];
   tourAccess: TourAccess[];
@@ -103,6 +119,8 @@ export interface FilterState {
   dangers: Danger[];
   animals: AnimalType[];
   budgetBands: BudgetBand[];
+  /** Free-text search across title, place, animals, etc. */
+  query: string;
 }
 
 export type ViewMode = "list" | "calendar" | "map";

@@ -99,8 +99,15 @@ const BY_COUNTRY: Record<string, Gateway> = {
   Singapore: { airport: "SIN", lat: 1.36, lng: 103.99 },
 };
 
+/** Prefer a nearer hub when the country default is a poor fit. */
+const BY_EVENT: Record<string, Gateway> = {
+  "philippines-thresher-sharks": { airport: "CEB", lat: 10.31, lng: 123.98 },
+  "cocos-hammerheads": { airport: "SJO", lat: 9.99, lng: -84.21 },
+};
+
 export function getGateway(event: WildlifeEvent): Gateway {
   return (
+    BY_EVENT[event.id] ??
     BY_COUNTRY[event.country] ?? {
       airport: "—",
       lat: event.lat,

@@ -1,7 +1,9 @@
 import type { WildlifeEvent } from "@/lib/types";
 
+type EventDraft = Omit<WildlifeEvent, "climates">;
+
 /** Additional destinations expanding regional coverage. */
-export const extraEvents: WildlifeEvent[] = [
+export const extraEvents: EventDraft[] = [
   {
     id: "rottnest-quokkas",
     title: "Rottnest Island Quokkas",
@@ -2317,5 +2319,61 @@ export const extraEvents: WildlifeEvent[] = [
       "Wide and macro housings; 5–7mm wetsuit for winter Spencer Gulf; shore entry at Point Lowly / False Bay.",
     peakTip: "Late May through July for densest congregations and peak breeding displays.",
     atmosphere: ["#1a4a5a", "#6a8a7a"],
+  },
+  {
+    id: "philippines-thresher-sharks",
+    title: "Malapascua Thresher Sharks",
+    location: "Monad Shoal, Malapascua Island",
+    country: "Philippines",
+    region: "Asia",
+    lat: 11.33,
+    lng: 124.12,
+    startDate: "2026-11-01",
+    endDate: "2027-05-31",
+    animals: ["marine"],
+    animalLabels: ["pelagic thresher shark", "manta ray", "frogfish"],
+    styles: ["underwater", "wide-angle", "telephoto"],
+    access: "boat-access",
+    accommodation: "hotel",
+    tourAccess: "optional-tour",
+    difficulty: "moderate",
+    pace: "intense",
+    danger: "moderate",
+    budgetBand: "mid",
+    fromAUD: 3200,
+    description:
+      "Dawn cleaning-station dives on Monad Shoal — the world's most reliable place to photograph pelagic thresher sharks circling cleaning wrasse in blue water.",
+    gearNotes:
+      "Fast wide-angle or mid-range zoom in housing; strobes optional in clear blue; early boat call for first light.",
+    peakTip: "November–May for calmer seas and more consistent thresher attendance at first light.",
+    atmosphere: ["#062a4a", "#3a7088"],
+  },
+  {
+    id: "cocos-hammerheads",
+    title: "Cocos Island Hammerhead Schools",
+    location: "Isla del Coco",
+    country: "Costa Rica",
+    region: "Central America",
+    lat: 5.53,
+    lng: -87.07,
+    startDate: "2026-12-01",
+    endDate: "2027-05-31",
+    animals: ["marine"],
+    animalLabels: ["scalloped hammerhead", "silky shark", "manta ray"],
+    styles: ["underwater", "wide-angle"],
+    access: "boat-access",
+    accommodation: "liveaboard",
+    tourAccess: "mandatory-tour",
+    difficulty: "expert",
+    pace: "intense",
+    danger: "high",
+    budgetBand: "high",
+    fromAUD: 9800,
+    description:
+      "Remote Pacific seamount diving where scalloped hammerheads form legendary mid-water schools — liveaboard-only UNESCO World Heritage site.",
+    gearNotes:
+      "Wide-angle primary; strong-current and deep-blue experience essential; nitrox and reef hooks for cleaning stations.",
+    peakTip: "December–May dry season for peak hammerhead numbers and better surface conditions.",
+    atmosphere: ["#041828", "#1a5a70"],
   },
 ];

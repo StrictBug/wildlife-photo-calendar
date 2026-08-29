@@ -13,6 +13,7 @@ import { formatAnnualRange } from "@/lib/calendar";
 import {
   formatAccess,
   formatAccommodation,
+  formatClimate,
   formatTourAccess,
   labelize,
 } from "@/lib/filters";
@@ -392,6 +393,17 @@ export function EventDetail({
                 </div>
 
                 <div className="detail-section">
+                  <h3>Climate</h3>
+                  <div className="tag-row">
+                    {event.climates.map((c) => (
+                      <span key={c} className="tag tag-muted">
+                        {formatClimate(c)}
+                      </span>
+                    ))}
+                  </div>
+                </div>
+
+                <div className="detail-section">
                   <h3>Photography styles</h3>
                   <div className="tag-row">
                     {event.styles.map((s) => (
@@ -458,6 +470,17 @@ export function EventDetail({
                 <div className="tag-row">
                   {event.animalLabels.map((a) => (
                     <span key={a} className="tag">{a}</span>
+                  ))}
+                </div>
+              </div>
+
+              <div className="detail-section">
+                <h3>Climate</h3>
+                <div className="tag-row">
+                  {event.climates.map((c) => (
+                    <span key={c} className="tag tag-muted">
+                      {formatClimate(c)}
+                    </span>
                   ))}
                 </div>
               </div>

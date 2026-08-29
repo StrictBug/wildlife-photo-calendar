@@ -8,6 +8,7 @@ import type {
   AccessMode,
   AccommodationStyle,
   BudgetBand,
+  Climate,
   Danger,
   Difficulty,
   FilterState,
@@ -105,6 +106,32 @@ export const ANIMALS: AnimalType[] = [
   "amphibians",
 ];
 
+export const CLIMATES: Climate[] = [
+  "alpine",
+  "polar",
+  "boreal",
+  "temperate",
+  "mediterranean",
+  "desert",
+  "savanna",
+  "tropical",
+  "subtropical",
+  "rainforest",
+];
+
+export const CLIMATE_LABELS: Record<Climate, string> = {
+  alpine: "Alpine",
+  polar: "Polar",
+  boreal: "Boreal",
+  temperate: "Temperate",
+  mediterranean: "Mediterranean",
+  desert: "Desert",
+  savanna: "Savanna",
+  tropical: "Tropical",
+  subtropical: "Subtropical",
+  rainforest: "Rainforest",
+};
+
 export const BUDGET_BANDS: BudgetBand[] = ["low", "mid", "high"];
 
 export const TRIP_LENGTH_OPTIONS = [7, 14, 21, 28] as const;
@@ -131,6 +158,7 @@ export const emptyFilters = (): FilterState => ({
   dateTo: "",
   tripDays: DEFAULT_TYPICAL_TRIP_DAYS,
   styles: [],
+  climates: [],
   access: [],
   accommodation: [],
   tourAccess: [],
@@ -139,6 +167,7 @@ export const emptyFilters = (): FilterState => ({
   dangers: [],
   animals: [],
   budgetBands: [],
+  query: "",
 });
 
 function parseDate(iso: string): Date {
@@ -213,14 +242,36 @@ function includesAny<T>(selected: T[], value: T | T[]): boolean {
   return selected.some((s) => values.includes(s));
 }
 
+function matchesQuery(event: WildlifeEvent, query: string): boolean {
+  const q = query.trim().toLowerCase();
+  if (!q) return true;
+  const haystack = [
+    event.title,
+    event.location,
+    event.country,
+    event.region,
+    event.description,
+    event.peakTip,
+    ...event.animalLabels,
+    ...event.animals,
+    ...event.climates,
+    ...event.styles,
+  ]
+    .join(" ")
+    .toLowerCase();
+  return q.split(/\s+/).every((token) => haystack.includes(token));
+}
+
 export function matchesFilters(
   event: WildlifeEvent,
   filters: FilterState,
   departureIata: string = DEFAULT_DEPARTURE_IATA,
   stayDays: number = resolveStayDays(filters),
 ): boolean {
+  if (!matchesQuery(event, filters.query)) return false;
   if (!includesAny(filters.regions, event.region)) return false;
   if (!includesAny(filters.styles, event.styles)) return false;
+  if (!includesAny(filters.climates, event.climates)) return false;
   if (!includesAny(filters.access, event.access)) return false;
   if (!includesAny(filters.accommodation, event.accommodation)) return false;
   if (!includesAny(filters.tourAccess, event.tourAccess)) return false;
@@ -265,6 +316,7 @@ export function activeFilterCount(filters: FilterState): number {
   n += filters.regions.length;
   n += filters.months.length;
   n += filters.styles.length;
+  n += filters.climates.length;
   n += filters.access.length;
   n += filters.accommodation.length;
   n += filters.tourAccess.length;
@@ -273,6 +325,7 @@ export function activeFilterCount(filters: FilterState): number {
   n += filters.dangers.length;
   n += filters.animals.length;
   n += filters.budgetBands.length;
+  if (filters.query.trim()) n += 1;
   if (filters.dateFrom) n += 1;
   if (filters.dateTo) n += 1;
   if (
@@ -301,4 +354,8 @@ export function formatAccommodation(style: AccommodationStyle): string {
 
 export function formatTourAccess(access: TourAccess): string {
   return TOUR_ACCESS_LABELS[access];
+}
+
+export function formatClimate(climate: Climate): string {
+  return CLIMATE_LABELS[climate];
 }

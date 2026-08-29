@@ -321,10 +321,11 @@ input {
   color: var(--ink-muted);
 }
 
-/* Shared control chrome for airport, currency, and date fields */
+/* Shared control chrome for airport, currency, search, and date fields */
 .filter-control,
 .airport-picker-field input,
 .select-field select,
+.search-field input,
 .date-field input {
   box-sizing: border-box;
   display: block;
@@ -738,6 +739,9 @@ input {
 .detail-aside {
   position: sticky;
   top: 1rem;
+  max-height: calc(100vh - 2rem);
+  align-self: start;
+  min-height: 0;
 }
 
 .detail-aside-expanded {
@@ -760,6 +764,9 @@ input {
 }
 
 .detail-panel {
+  display: flex;
+  flex-direction: column;
+  max-height: calc(100vh - 2rem);
   background: var(--surface-solid);
   border: 1px solid var(--border);
   border-radius: var(--radius);
@@ -773,6 +780,7 @@ input {
   grid-template-columns: minmax(0, 1fr) auto;
   align-items: stretch;
   gap: 0;
+  flex-shrink: 0;
   background: rgba(var(--moss-rgb), 0.06);
   border-bottom: 1px solid var(--border);
 }
@@ -991,19 +999,19 @@ input {
 
 .detail-panel-expanded {
   max-height: calc(100vh - 2rem);
-  overflow-y: auto;
 }
 
 .detail-hero {
   position: relative;
-  height: 110px;
+  flex-shrink: 0;
+  height: 72px;
   background:
     radial-gradient(circle at 70% 30%, rgba(255, 255, 255, 0.2), transparent 40%),
     linear-gradient(135deg, var(--atm-a), var(--atm-b));
 }
 
 .detail-hero-expanded {
-  height: clamp(240px, 36vh, 400px);
+  height: clamp(160px, 22vh, 260px);
 }
 
 .detail-hero-expanded .detail-hero-photo {
@@ -1076,9 +1084,9 @@ input {
 }
 
 .image-credit {
-  margin: 0.65rem 0 0;
-  font-size: 0.72rem;
-  line-height: 1.45;
+  margin: 0.4rem 0 0;
+  font-size: 0.68rem;
+  line-height: 1.35;
   color: var(--ink-muted);
 }
 
@@ -1218,12 +1226,16 @@ input {
 }
 
 .detail-content {
-  padding: 1.1rem 1.15rem 1.35rem;
+  flex: 1;
+  min-height: 0;
+  overflow-y: auto;
+  padding: 0.75rem 0.9rem 0.9rem;
+  overscroll-behavior: contain;
 }
 
 .detail-eyebrow {
-  margin: 0 0 0.35rem;
-  font-size: 0.72rem;
+  margin: 0 0 0.2rem;
+  font-size: 0.68rem;
   font-weight: 650;
   letter-spacing: 0.06em;
   text-transform: uppercase;
@@ -1231,9 +1243,9 @@ input {
 }
 
 .detail-title {
-  margin: 0 0 0.25rem;
+  margin: 0 0 0.15rem;
   font-family: var(--font-display);
-  font-size: 1.45rem;
+  font-size: 1.2rem;
   font-weight: 560;
   line-height: 1.2;
 }
@@ -1242,12 +1254,12 @@ input {
 .detail-dates,
 .detail-budget {
   margin: 0;
-  font-size: 0.88rem;
+  font-size: 0.82rem;
   color: var(--ink-muted);
 }
 
 .detail-budget {
-  margin-top: 0.35rem;
+  margin-top: 0.25rem;
   color: var(--forest);
   font-weight: 650;
 }
@@ -1259,70 +1271,70 @@ input {
 }
 
 .detail-budget-breakdown {
-  margin: 0.35rem 0 0;
+  margin: 0.25rem 0 0;
   padding-left: 1.1rem;
-  font-size: 0.82rem;
+  font-size: 0.78rem;
   font-weight: 400;
   color: var(--ink-muted);
-  line-height: 1.45;
+  line-height: 1.4;
 }
 
 .detail-budget-note {
-  margin: 0.35rem 0 0;
-  font-size: 0.75rem;
+  margin: 0.25rem 0 0;
+  font-size: 0.72rem;
   font-weight: 400;
   color: var(--ink-muted);
 }
 
 .detail-desc {
-  margin: 0.9rem 0 0;
-  font-size: 0.95rem;
-  line-height: 1.55;
+  margin: 0.55rem 0 0;
+  font-size: 0.88rem;
+  line-height: 1.45;
 }
 
 .detail-meta {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
-  gap: 0.5rem;
-  margin: 1rem 0 0;
+  gap: 0.35rem;
+  margin: 0.65rem 0 0;
 }
 
 .detail-meta-item {
-  padding: 0.55rem 0.45rem;
+  padding: 0.4rem 0.35rem;
   background: rgba(var(--moss-rgb), 0.07);
   border-radius: 8px;
   text-align: center;
 }
 
 .detail-meta-item dt {
-  font-size: 0.65rem;
+  font-size: 0.6rem;
   letter-spacing: 0.05em;
   text-transform: uppercase;
   color: var(--ink-muted);
 }
 
 .detail-meta-item dd {
-  margin: 0.2rem 0 0;
-  font-size: 0.85rem;
+  margin: 0.15rem 0 0;
+  font-size: 0.78rem;
   font-weight: 650;
   color: var(--forest);
 }
 
 .detail-section {
-  margin-top: 1rem;
+  margin-top: 0.65rem;
 }
 
 .detail-section h3 {
-  margin: 0 0 0.35rem;
+  margin: 0 0 0.25rem;
   font-family: var(--font-display);
-  font-size: 1rem;
+  font-size: 0.92rem;
   font-weight: 550;
 }
 
 .detail-section p {
   margin: 0;
-  font-size: 0.9rem;
-  line-height: 1.5;
+  font-size: 0.84rem;
+  line-height: 1.45;
   color: var(--ink-muted);
 }
 
@@ -1365,7 +1377,7 @@ input {
 }
 
 .detail-map-container {
-  height: 300px;
+  height: 220px;
   width: 100%;
   margin-top: 0.5rem;
   border-radius: var(--radius);

@@ -743,10 +743,10 @@ const EVENT_IMAGES: Record<string, EventImage> = {
   },
   "raja-ampat-reefs": {
     imagePath: "/images/events/raja-ampat-reefs.v3.jpg",
-    credit: "Arturo de Frias Marques / Wikimedia Commons",
-    license: "CC BY-SA 4.0",
+    credit: "Caparbio / Wikimedia Commons",
+    license: "CC BY-SA 3.0",
     sourceUrl:
-      "https://commons.wikimedia.org/wiki/File:Giant_Manta_AdF.jpg",
+      "https://commons.wikimedia.org/wiki/File:Pygmy_seahorse.jpg",
   },
   "similan-diving": {
     imagePath: "/images/events/similan-diving.v3.jpg",
@@ -1174,6 +1174,20 @@ const EVENT_IMAGES: Record<string, EventImage> = {
     license: "CC BY 2.0",
     sourceUrl:
       "https://commons.wikimedia.org/wiki/File:Sepia_apama_2.jpg",
+  },
+  "philippines-thresher-sharks": {
+    imagePath: "/images/events/philippines-thresher-sharks.jpg",
+    credit: "Jun V Lao / Wikimedia Commons",
+    license: "CC BY-SA 4.0",
+    sourceUrl:
+      "https://commons.wikimedia.org/wiki/File:Thresher_Shark_at_Monad_Shoal.png",
+  },
+  "cocos-hammerheads": {
+    imagePath: "/images/events/cocos-hammerheads.jpg",
+    credit: "Wikimedia Commons",
+    license: "Public domain",
+    sourceUrl:
+      "https://commons.wikimedia.org/wiki/File:Sphyrna_lewini.jpg",
   },
 };
 

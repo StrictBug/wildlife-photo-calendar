@@ -4,6 +4,8 @@ import { AirportPicker } from "./AirportPicker";
 import {
   ANIMALS,
   BUDGET_BANDS,
+  CLIMATES,
+  CLIMATE_LABELS,
   DANGERS,
   DIFFICULTIES,
   MONTHS,
@@ -117,6 +119,24 @@ export function FilterBar({
           </button>
         )}
       </div>
+
+      <fieldset className="filter-group">
+        <legend className="filter-legend">Search</legend>
+        <label className="search-field">
+          <span className="sr-only">Search destinations</span>
+          <input
+            type="search"
+            className="filter-control"
+            placeholder="Place, animal, destination…"
+            value={filters.query}
+            onChange={(e) =>
+              onChange({ ...filters, query: e.target.value })
+            }
+            autoComplete="off"
+            spellCheck={false}
+          />
+        </label>
+      </fieldset>
 
       <fieldset className="filter-group">
         <legend className="filter-legend">Departing from</legend>
@@ -247,6 +267,19 @@ export function FilterBar({
         onToggle={(v) =>
           onChange({ ...filters, styles: toggleInList(filters.styles, v) })
         }
+      />
+
+      <ChipGroup
+        label="Climate"
+        options={CLIMATES}
+        selected={filters.climates}
+        onToggle={(v) =>
+          onChange({
+            ...filters,
+            climates: toggleInList(filters.climates, v),
+          })
+        }
+        format={(v) => CLIMATE_LABELS[v]}
       />
 
       <ChipGroup
