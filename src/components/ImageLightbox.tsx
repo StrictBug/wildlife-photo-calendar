@@ -68,6 +68,7 @@ export function ImageLightbox({ image, alt, onClose }: ImageLightboxProps) {
             sizes="90vw"
             className="image-lightbox-image"
             priority
+            unoptimized
           />
         </div>
         <ImageCredit image={image} className="image-lightbox-credit" />

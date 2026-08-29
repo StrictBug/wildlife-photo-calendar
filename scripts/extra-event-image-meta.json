@@ -1,0 +1,530 @@
+{
+  "rottnest-quokkas": {
+    "thumbUrl": "https://upload.wikimedia.org/wikipedia/commons/thumb/d/d7/Quokka_with_joey_on_Rottnest_Island%2C_April_2026_01.jpg/960px-Quokka_with_joey_on_Rottnest_Island%2C_April_2026_01.jpg",
+    "sourceUrl": "https://commons.wikimedia.org/wiki/File:Quokka_with_joey_on_Rottnest_Island,_April_2026_01.jpg",
+    "credit": "Calistemon / Wikimedia Commons",
+    "license": "CC BY-SA 4.0"
+  },
+  "port-lincoln-great-whites": {
+    "thumbUrl": "https://upload.wikimedia.org/wikipedia/commons/thumb/0/08/Guadalupe_Island_Great_White_Shark_Cage_Diving_Adventures.jpg/960px-Guadalupe_Island_Great_White_Shark_Cage_Diving_Adventures.jpg",
+    "sourceUrl": "https://commons.wikimedia.org/wiki/File:Guadalupe_Island_Great_White_Shark_Cage_Diving_Adventures.jpg",
+    "credit": "Sharkcrew / Wikimedia Commons",
+    "license": "CC BY-SA 4.0"
+  },
+  "phillip-island-penguins": {
+    "thumbUrl": "https://upload.wikimedia.org/wikipedia/commons/thumb/6/6f/Eudyptula_novaehollandiae_family_exiting_burrow.jpg/960px-Eudyptula_novaehollandiae_family_exiting_burrow.jpg",
+    "sourceUrl": "https://commons.wikimedia.org/wiki/File:Eudyptula_novaehollandiae_family_exiting_burrow.jpg",
+    "credit": "JJ Harrison (https://www.jjharrison.com.au/) / Wikimedia Commons",
+    "license": "CC BY-SA 3.0"
+  },
+  "montague-island-seals": {
+    "thumbUrl": "https://upload.wikimedia.org/wikipedia/commons/thumb/4/4c/Australian_fur_seals_male_colony_-_Pennicott_Bruny_Island_cruise_%2833758000792%29.jpg/960px-Australian_fur_seals_male_colony_-_Pennicott_Bruny_Island_cruise_%2833758000792%29.jpg",
+    "sourceUrl": "https://commons.wikimedia.org/wiki/File:Australian_fur_seals_male_colony_-_Pennicott_Bruny_Island_cruise_(33758000792).jpg",
+    "credit": "Takver from Australia / Wikimedia Commons",
+    "license": "CC BY-SA 2.0"
+  },
+  "maria-island-wombats": {
+    "thumbUrl": "https://upload.wikimedia.org/wikipedia/commons/thumb/8/83/Common_wombat_%28Vombatus_ursinus_tasmaniensis%29_juvenile_Maria_Island.jpg/960px-Common_wombat_%28Vombatus_ursinus_tasmaniensis%29_juvenile_Maria_Island.jpg",
+    "sourceUrl": "https://commons.wikimedia.org/wiki/File:Common_wombat_(Vombatus_ursinus_tasmaniensis)_juvenile_Maria_Island.jpg",
+    "credit": "Charles J. Sharp / Wikimedia Commons",
+    "license": "CC BY-SA 4.0"
+  },
+  "kakadu-crocodiles": {
+    "thumbUrl": "https://upload.wikimedia.org/wikipedia/commons/thumb/b/bb/Saltwater_Crocodile_at_sunset%2C_Kakadu_National_Park.png/960px-Saltwater_Crocodile_at_sunset%2C_Kakadu_National_Park.png",
+    "sourceUrl": "https://commons.wikimedia.org/wiki/File:Saltwater_Crocodile_at_sunset,_Kakadu_National_Park.png",
+    "credit": "S.miller.1994 / Wikimedia Commons",
+    "license": "CC BY-SA 4.0"
+  },
+  "mon-repos-turtles": {
+    "thumbUrl": "https://upload.wikimedia.org/wikipedia/commons/thumb/f/f1/Loggerhead_Sunrise_%2818423413069%29.jpg/960px-Loggerhead_Sunrise_%2818423413069%29.jpg",
+    "sourceUrl": "https://commons.wikimedia.org/wiki/File:Loggerhead_Sunrise_(18423413069).jpg",
+    "credit": "NOAA's National Ocean Service / Wikimedia Commons",
+    "license": "CC BY 2.0"
+  },
+  "shark-bay-dugongs": {
+    "thumbUrl": "https://upload.wikimedia.org/wikipedia/commons/thumb/2/20/Dugong_dugon_fin_egypt.jpg/960px-Dugong_dugon_fin_egypt.jpg",
+    "sourceUrl": "https://commons.wikimedia.org/wiki/File:Dugong_dugon_fin_egypt.jpg",
+    "credit": "Sebastian Gerhard Venturemedia / Wikimedia Commons",
+    "license": "GFDL"
+  },
+  "houtman-abrolhos-seals": {
+    "thumbUrl": "https://upload.wikimedia.org/wikipedia/commons/thumb/e/e3/Sea_lions_at_a_beach_on_Kangaroo_Island.jpg/960px-Sea_lions_at_a_beach_on_Kangaroo_Island.jpg",
+    "sourceUrl": "https://commons.wikimedia.org/wiki/File:Sea_lions_at_a_beach_on_Kangaroo_Island.jpg",
+    "credit": "Phil Whitehouse from London, United Kingdom / Wikimedia Commons",
+    "license": "CC BY 2.0"
+  },
+  "heron-island-reef": {
+    "thumbUrl": "https://upload.wikimedia.org/wikipedia/commons/thumb/8/83/Green_Turtle_taking_a_breath.jpg/960px-Green_Turtle_taking_a_breath.jpg",
+    "sourceUrl": "https://commons.wikimedia.org/wiki/File:Green_Turtle_taking_a_breath.jpg",
+    "credit": "Holobionics / Wikimedia Commons",
+    "license": "CC BY-SA 4.0"
+  },
+  "magnetic-island-koalas": {
+    "thumbUrl": "https://upload.wikimedia.org/wikipedia/commons/thumb/f/f5/Koala_in_eucalyptus.jpg/960px-Koala_in_eucalyptus.jpg",
+    "sourceUrl": "https://commons.wikimedia.org/wiki/File:Koala_in_eucalyptus.jpg",
+    "credit": "KobiWiki / Wikimedia Commons",
+    "license": "CC BY-SA 4.0"
+  },
+  "eungella-platypus": {
+    "thumbUrl": "https://upload.wikimedia.org/wikipedia/commons/thumb/1/1a/Duck-billed_platypus_%28Ornithorhynchus_anatinus%29_Scottsdale.jpg/960px-Duck-billed_platypus_%28Ornithorhynchus_anatinus%29_Scottsdale.jpg",
+    "sourceUrl": "https://commons.wikimedia.org/wiki/File:Duck-billed_platypus_(Ornithorhynchus_anatinus)_Scottsdale.jpg",
+    "credit": "Charles J. Sharp / Wikimedia Commons",
+    "license": "CC BY-SA 4.0"
+  },
+  "christmas-island-crabs": {
+    "thumbUrl": "https://upload.wikimedia.org/wikipedia/commons/thumb/a/a0/Christmas_Island_Red_Crab.jpg/960px-Christmas_Island_Red_Crab.jpg",
+    "sourceUrl": "https://commons.wikimedia.org/wiki/File:Christmas_Island_Red_Crab.jpg",
+    "credit": "ChrisBrayPhotography / Wikimedia Commons",
+    "license": "CC BY-SA 4.0"
+  },
+  "kaikoura-sperm-whales": {
+    "thumbUrl": "https://upload.wikimedia.org/wikipedia/commons/thumb/f/fc/Destination_Kaikoura-513966-sperm-whale-diving.jpg/960px-Destination_Kaikoura-513966-sperm-whale-diving.jpg",
+    "sourceUrl": "https://commons.wikimedia.org/wiki/File:Destination_Kaikoura-513966-sperm-whale-diving.jpg",
+    "credit": "Whale Watch Kaikoura / Destination Kaikōura / Wikimedia Commons",
+    "license": "CC BY 4.0"
+  },
+  "stewart-island-kiwi": {
+    "thumbUrl": "https://upload.wikimedia.org/wikipedia/commons/2/2a/Okarito_kiwi_2.jpg",
+    "sourceUrl": "https://commons.wikimedia.org/wiki/File:Okarito_kiwi_2.jpg",
+    "credit": "Mark Anderson / Wikimedia Commons",
+    "license": "CC BY-SA 4.0"
+  },
+  "poor-knights-diving": {
+    "thumbUrl": "https://upload.wikimedia.org/wikipedia/commons/thumb/2/2c/Myliobatis_tenuicaudatus_186845675.jpg/960px-Myliobatis_tenuicaudatus_186845675.jpg",
+    "sourceUrl": "https://commons.wikimedia.org/wiki/File:Myliobatis_tenuicaudatus_186845675.jpg",
+    "credit": "Oscar Dove / Wikimedia Commons",
+    "license": "CC BY 4.0"
+  },
+  "bay-of-islands-dolphins": {
+    "thumbUrl": "https://upload.wikimedia.org/wikipedia/commons/thumb/9/95/Common_Bottlenose_Dolphins%2C_near_Santa_Cruz_Island%2C_Channel_Islands_National_Park%2C_California_%2812%29_%284080034896%29.jpg/960px-Common_Bottlenose_Dolphins%2C_near_Santa_Cruz_Island%2C_Channel_Islands_National_Park%2C_California_%2812%29_%284080034896%29.jpg",
+    "sourceUrl": "https://commons.wikimedia.org/wiki/File:Common_Bottlenose_Dolphins,_near_Santa_Cruz_Island,_Channel_Islands_National_Park,_California_(12)_(4080034896).jpg",
+    "credit": "Ken Lund from Reno, Nevada, USA / Wikimedia Commons",
+    "license": "CC BY-SA 2.0"
+  },
+  "new-caledonia-lagoon": {
+    "thumbUrl": "https://upload.wikimedia.org/wikipedia/commons/thumb/5/50/Sunrise_Green_turtle.jpg/960px-Sunrise_Green_turtle.jpg",
+    "sourceUrl": "https://commons.wikimedia.org/wiki/File:Sunrise_Green_turtle.jpg",
+    "credit": "Ppmh21 / Wikimedia Commons",
+    "license": "CC BY-SA 4.0"
+  },
+  "egypt-ras-mohammed": {
+    "thumbUrl": "https://upload.wikimedia.org/wikipedia/commons/thumb/0/0a/Pez_%C3%A1ngel_real_%28Pygoplites_diacanthus%29%2C_parque_nacional_Ras_Muhammad%2C_Egipto%2C_2022-03-26%2C_DD_155.jpg/960px-Pez_%C3%A1ngel_real_%28Pygoplites_diacanthus%29%2C_parque_nacional_Ras_Muhammad%2C_Egipto%2C_2022-03-26%2C_DD_155.jpg",
+    "sourceUrl": "https://commons.wikimedia.org/wiki/File:Pez_%C3%A1ngel_real_(Pygoplites_diacanthus),_parque_nacional_Ras_Muhammad,_Egipto,_2022-03-26,_DD_155.jpg",
+    "credit": "Diego Delso / Wikimedia Commons",
+    "license": "CC BY-SA 4.0"
+  },
+  "morocco-atlas-macaques": {
+    "thumbUrl": "https://upload.wikimedia.org/wikipedia/commons/thumb/6/63/Barbary_macaque_in_Morocco.jpg/960px-Barbary_macaque_in_Morocco.jpg",
+    "sourceUrl": "https://commons.wikimedia.org/wiki/File:Barbary_macaque_in_Morocco.jpg",
+    "credit": "Merbivore / Wikimedia Commons",
+    "license": "CC BY-SA 4.0"
+  },
+  "mauritania-banc-darguin": {
+    "thumbUrl": "https://upload.wikimedia.org/wikipedia/commons/5/5a/Greater_Flamingo_%28Phoenicopterus_roseus%29_-_Flickr_-_Lip_Kee_%282%29.jpg",
+    "sourceUrl": "https://commons.wikimedia.org/wiki/File:Greater_Flamingo_(Phoenicopterus_roseus)_-_Flickr_-_Lip_Kee_(2).jpg",
+    "credit": "Lip Kee from Singapore, Republic of Singapore / Wikimedia Commons",
+    "license": "CC BY-SA 2.0"
+  },
+  "ghana-mole-elephants": {
+    "thumbUrl": "https://upload.wikimedia.org/wikipedia/commons/thumb/9/9a/Loxodonta_africana_South_Luangwa_National_Park_%281%29.jpg/960px-Loxodonta_africana_South_Luangwa_National_Park_%281%29.jpg",
+    "sourceUrl": "https://commons.wikimedia.org/wiki/File:Loxodonta_africana_South_Luangwa_National_Park_(1).jpg",
+    "credit": "Geoff Gallice / Wikimedia Commons",
+    "license": "CC BY 2.0"
+  },
+  "mozambique-ponta-turtles": {
+    "thumbUrl": "https://upload.wikimedia.org/wikipedia/commons/thumb/d/de/Caretta_Shiodome_Blue_Ocean.jpg/960px-Caretta_Shiodome_Blue_Ocean.jpg",
+    "sourceUrl": "https://commons.wikimedia.org/wiki/File:Caretta_Shiodome_Blue_Ocean.jpg",
+    "credit": "カイロス / Wikimedia Commons",
+    "license": "Public domain"
+  },
+  "south-africa-hermanus-whales": {
+    "thumbUrl": "https://upload.wikimedia.org/wikipedia/commons/thumb/6/6b/HER_-_Breaching_southern_right_whale_near_Hermanus%2C_South_Africa%2C_2017.jpg/960px-HER_-_Breaching_southern_right_whale_near_Hermanus%2C_South_Africa%2C_2017.jpg",
+    "sourceUrl": "https://commons.wikimedia.org/wiki/File:HER_-_Breaching_southern_right_whale_near_Hermanus,_South_Africa,_2017.jpg",
+    "credit": "Josep M. Gracia / Wikimedia Commons",
+    "license": "CC BY-SA 4.0"
+  },
+  "kenya-samburu-special-five": {
+    "thumbUrl": "https://upload.wikimedia.org/wikipedia/commons/thumb/0/05/The_Reticulated_Giraffe_from_Samburu.jpg/960px-The_Reticulated_Giraffe_from_Samburu.jpg",
+    "sourceUrl": "https://commons.wikimedia.org/wiki/File:The_Reticulated_Giraffe_from_Samburu.jpg",
+    "credit": "Sourish Trivedy / Wikimedia Commons",
+    "license": "CC BY-SA 4.0"
+  },
+  "tanzania-nyerere-wild-dogs": {
+    "thumbUrl": "https://upload.wikimedia.org/wikipedia/commons/thumb/a/af/African_wild_dog_%28Lycaon_pictus_pictus%29_head.jpg/960px-African_wild_dog_%28Lycaon_pictus_pictus%29_head.jpg",
+    "sourceUrl": "https://commons.wikimedia.org/wiki/File:African_wild_dog_(Lycaon_pictus_pictus)_head.jpg",
+    "credit": "Charles J. Sharp / Wikimedia Commons",
+    "license": "CC BY-SA 4.0"
+  },
+  "seychelles-aldabra-tortoises": {
+    "thumbUrl": "https://upload.wikimedia.org/wikipedia/commons/thumb/b/b4/Aldabra_Giant_Tortoise_Geochelone_gigantea_edit1.jpg/960px-Aldabra_Giant_Tortoise_Geochelone_gigantea_edit1.jpg",
+    "sourceUrl": "https://commons.wikimedia.org/wiki/File:Aldabra_Giant_Tortoise_Geochelone_gigantea_edit1.jpg",
+    "credit": "Muhammad Mahdi Karim / Wikimedia Commons",
+    "license": "GFDL 1.2"
+  },
+  "raja-ampat-reefs": {
+    "thumbUrl": "https://upload.wikimedia.org/wikipedia/commons/thumb/f/fc/Giant_Manta_AdF.jpg/960px-Giant_Manta_AdF.jpg",
+    "sourceUrl": "https://commons.wikimedia.org/wiki/File:Giant_Manta_AdF.jpg",
+    "credit": "Arturo de Frias Marques / Wikimedia Commons",
+    "license": "CC BY-SA 4.0"
+  },
+  "similan-diving": {
+    "thumbUrl": "https://upload.wikimedia.org/wikipedia/commons/thumb/2/29/Colorful_life_in_the_busy_reef%2C_Similan_Island_THAILAND.jpg/960px-Colorful_life_in_the_busy_reef%2C_Similan_Island_THAILAND.jpg",
+    "sourceUrl": "https://commons.wikimedia.org/wiki/File:Colorful_life_in_the_busy_reef,_Similan_Island_THAILAND.jpg",
+    "credit": "Supachaiv / Wikimedia Commons",
+    "license": "CC BY-SA 4.0"
+  },
+  "kamchatka-brown-bears": {
+    "thumbUrl": "https://upload.wikimedia.org/wikipedia/commons/thumb/d/d7/Bear_and_Salmon.jpg/960px-Bear_and_Salmon.jpg",
+    "sourceUrl": "https://commons.wikimedia.org/wiki/File:Bear_and_Salmon.jpg",
+    "credit": "Kirill.uyutnov / Wikimedia Commons",
+    "license": "CC BY-SA 4.0"
+  },
+  "baikal-nerpa-seals": {
+    "thumbUrl": "https://upload.wikimedia.org/wikipedia/commons/thumb/2/24/Nerpa_%28Pusa_sibirica%29_%283635255975%29.jpg/960px-Nerpa_%28Pusa_sibirica%29_%283635255975%29.jpg",
+    "sourceUrl": "https://commons.wikimedia.org/wiki/File:Nerpa_(Pusa_sibirica)_(3635255975).jpg",
+    "credit": "Sergey Gabdurakhmanov from Mountain View, USA / Wikimedia Commons",
+    "license": "CC BY 2.0"
+  },
+  "india-gir-lions": {
+    "thumbUrl": "https://upload.wikimedia.org/wikipedia/commons/thumb/3/38/Portrait_of_an_Asiatic_lion_at_Gir_National_Park_02.jpg/960px-Portrait_of_an_Asiatic_lion_at_Gir_National_Park_02.jpg",
+    "sourceUrl": "https://commons.wikimedia.org/wiki/File:Portrait_of_an_Asiatic_lion_at_Gir_National_Park_02.jpg",
+    "credit": "Rohit Sharma / Wikimedia Commons",
+    "license": "CC BY-SA 4.0"
+  },
+  "bangladesh-sundarbans": {
+    "thumbUrl": "https://upload.wikimedia.org/wikipedia/commons/thumb/c/c6/Tourist_Boat_in_Sundarbans%2C_West_Bengal%2C_India_03.jpg/960px-Tourist_Boat_in_Sundarbans%2C_West_Bengal%2C_India_03.jpg",
+    "sourceUrl": "https://commons.wikimedia.org/wiki/File:Tourist_Boat_in_Sundarbans,_West_Bengal,_India_03.jpg",
+    "credit": "Kingshuk Mondal / Wikimedia Commons",
+    "license": "CC BY 4.0"
+  },
+  "cambodia-mekong-dolphins": {
+    "thumbUrl": "https://upload.wikimedia.org/wikipedia/commons/a/ae/Irrawaddy_dolphin-Orcaella_brevirostris_by_2eight.jpg",
+    "sourceUrl": "https://commons.wikimedia.org/wiki/File:Irrawaddy_dolphin-Orcaella_brevirostris_by_2eight.jpg",
+    "credit": "Stefan Brending (2eight) / Wikimedia Commons",
+    "license": "CC BY-SA 3.0 de"
+  },
+  "vietnam-cat-ba-langurs": {
+    "thumbUrl": "https://upload.wikimedia.org/wikipedia/commons/thumb/4/42/Cat_Ba_Langur_8.jpg/960px-Cat_Ba_Langur_8.jpg",
+    "sourceUrl": "https://commons.wikimedia.org/wiki/File:Cat_Ba_Langur_8.jpg",
+    "credit": "ALOnIShOnETH / Wikimedia Commons",
+    "license": "CC BY-SA 4.0"
+  },
+  "philippines-apo-turtles": {
+    "thumbUrl": "https://upload.wikimedia.org/wikipedia/commons/thumb/2/2d/Our_friend_from_Pandan_Island_near_Apo_Reef.jpg/960px-Our_friend_from_Pandan_Island_near_Apo_Reef.jpg",
+    "sourceUrl": "https://commons.wikimedia.org/wiki/File:Our_friend_from_Pandan_Island_near_Apo_Reef.jpg",
+    "credit": "Wiki.mjmasangkay / Wikimedia Commons",
+    "license": "CC BY-SA 4.0"
+  },
+  "derawan-mantas": {
+    "thumbUrl": "https://upload.wikimedia.org/wikipedia/commons/thumb/f/fc/Giant_Manta_AdF.jpg/960px-Giant_Manta_AdF.jpg",
+    "sourceUrl": "https://commons.wikimedia.org/wiki/File:Giant_Manta_AdF.jpg",
+    "credit": "Arturo de Frias Marques / Wikimedia Commons",
+    "license": "CC BY-SA 4.0"
+  },
+  "bhutan-black-necked-cranes": {
+    "thumbUrl": "https://upload.wikimedia.org/wikipedia/commons/0/0a/Black-necked_Crane_Phobjika_Bhutan_November_2018.jpg",
+    "sourceUrl": "https://commons.wikimedia.org/wiki/File:Black-necked_Crane_Phobjika_Bhutan_November_2018.jpg",
+    "credit": "Dibyendu Ash / Wikimedia Commons",
+    "license": "CC BY 4.0"
+  },
+  "mongolia-khustain-takhi": {
+    "thumbUrl": "https://upload.wikimedia.org/wikipedia/commons/thumb/5/54/2026-06-07_D500-97590M_Achim-Lammerts_Karlsruhe-Oberwald_Equus-przewalskii.jpg/960px-2026-06-07_D500-97590M_Achim-Lammerts_Karlsruhe-Oberwald_Equus-przewalskii.jpg",
+    "sourceUrl": "https://commons.wikimedia.org/wiki/File:2026-06-07_D500-97590M_Achim-Lammerts_Karlsruhe-Oberwald_Equus-przewalskii.jpg",
+    "credit": "Achim Lammerts (Syntaxys) / Wikimedia Commons",
+    "license": "CC BY-SA 4.0"
+  },
+  "china-crested-ibis": {
+    "thumbUrl": "https://upload.wikimedia.org/wikipedia/commons/b/b6/Crested_Ibis_%28Nipponia_nippon%29.jpg",
+    "sourceUrl": "https://commons.wikimedia.org/wiki/File:Crested_Ibis_(Nipponia_nippon).jpg",
+    "credit": "Ron Knight / Wikimedia Commons",
+    "license": "CC BY 2.0"
+  },
+  "sri-lanka-udawalawe-elephants": {
+    "thumbUrl": "https://upload.wikimedia.org/wikipedia/commons/thumb/1/16/A_herd_of_spotted_deers_spotted_with_a_beautiful_Asian_elephant_near_the_Udawalawe_reservoir%2C_in_Sri_Lanka.jpg/960px-A_herd_of_spotted_deers_spotted_with_a_beautiful_Asian_elephant_near_the_Udawalawe_reservoir%2C_in_Sri_Lanka.jpg",
+    "sourceUrl": "https://commons.wikimedia.org/wiki/File:A_herd_of_spotted_deers_spotted_with_a_beautiful_Asian_elephant_near_the_Udawalawe_reservoir,_in_Sri_Lanka.jpg",
+    "credit": "Kavishka Kulathilaka / Wikimedia Commons",
+    "license": "CC BY-SA 4.0"
+  },
+  "france-camargue-flamingos": {
+    "thumbUrl": "https://upload.wikimedia.org/wikipedia/commons/thumb/6/6b/005c_Greater_flamingos_courtship_display_in_the_Camargue_during_mating_season_Photo_by_Giles_Laurent.jpg/960px-005c_Greater_flamingos_courtship_display_in_the_Camargue_during_mating_season_Photo_by_Giles_Laurent.jpg",
+    "sourceUrl": "https://commons.wikimedia.org/wiki/File:005c_Greater_flamingos_courtship_display_in_the_Camargue_during_mating_season_Photo_by_Giles_Laurent.jpg",
+    "credit": "Giles Laurent / Wikimedia Commons",
+    "license": "CC BY-SA 4.0"
+  },
+  "switzerland-alpine-ibex": {
+    "thumbUrl": "https://upload.wikimedia.org/wikipedia/commons/thumb/5/5d/Alpensteinbock_Capra_ibex-0801.jpg/960px-Alpensteinbock_Capra_ibex-0801.jpg",
+    "sourceUrl": "https://commons.wikimedia.org/wiki/File:Alpensteinbock_Capra_ibex-0801.jpg",
+    "credit": "Isiwal / Wikimedia Commons",
+    "license": "CC BY-SA 4.0"
+  },
+  "italy-abruzzo-bears": {
+    "thumbUrl": "https://upload.wikimedia.org/wikipedia/commons/thumb/5/58/Casual_Forest_Bear_%28141013759%29.jpeg/960px-Casual_Forest_Bear_%28141013759%29.jpeg",
+    "sourceUrl": "https://commons.wikimedia.org/wiki/File:Casual_Forest_Bear_(141013759).jpeg",
+    "credit": "George Wheelhouse / Wikimedia Commons",
+    "license": "CC BY 3.0"
+  },
+  "netherlands-wadden-seals": {
+    "thumbUrl": "https://upload.wikimedia.org/wikipedia/commons/thumb/a/a2/Tertius_seehundbank_22.08.2011_15-49-53.jpg/960px-Tertius_seehundbank_22.08.2011_15-49-53.jpg",
+    "sourceUrl": "https://commons.wikimedia.org/wiki/File:Tertius_seehundbank_22.08.2011_15-49-53.jpg",
+    "credit": "Dirk Ingo Franke / Wikimedia Commons",
+    "license": "CC BY-SA 3.0"
+  },
+  "scotland-mull-eagles": {
+    "thumbUrl": "https://upload.wikimedia.org/wikipedia/commons/thumb/6/61/White-tailed_eagle_%28Haliaeetus_albicilla%29_in_flight_3.jpg/960px-White-tailed_eagle_%28Haliaeetus_albicilla%29_in_flight_3.jpg",
+    "sourceUrl": "https://commons.wikimedia.org/wiki/File:White-tailed_eagle_(Haliaeetus_albicilla)_in_flight_3.jpg",
+    "credit": "Charles J. Sharp / Wikimedia Commons",
+    "license": "CC BY-SA 4.0"
+  },
+  "germany-bavarian-lynx": {
+    "thumbUrl": "https://upload.wikimedia.org/wikipedia/commons/thumb/8/8d/Lynx_lynx%2C_Luchs_02.JPG/960px-Lynx_lynx%2C_Luchs_02.JPG",
+    "sourceUrl": "https://commons.wikimedia.org/wiki/File:Lynx_lynx,_Luchs_02.JPG",
+    "credit": "Böhringer Friedrich / Wikimedia Commons",
+    "license": "CC BY-SA 2.5"
+  },
+  "canary-islands-pilot-whales": {
+    "thumbUrl": "https://upload.wikimedia.org/wikipedia/commons/thumb/2/27/Globicephala_macrorhynchus_Tenerife_2012.jpg/960px-Globicephala_macrorhynchus_Tenerife_2012.jpg",
+    "sourceUrl": "https://commons.wikimedia.org/wiki/File:Globicephala_macrorhynchus_Tenerife_2012.jpg",
+    "credit": "Cayambe / Wikimedia Commons",
+    "license": "CC BY-SA 3.0"
+  },
+  "cape-cod-humpbacks": {
+    "thumbUrl": "https://upload.wikimedia.org/wikipedia/commons/thumb/9/9e/Humpback_stellwagen_edit.jpg/960px-Humpback_stellwagen_edit.jpg",
+    "sourceUrl": "https://commons.wikimedia.org/wiki/File:Humpback_stellwagen_edit.jpg",
+    "credit": "Whit Welles Wwelles14 / Wikimedia Commons",
+    "license": "CC BY 3.0"
+  },
+  "florida-keys-reef": {
+    "thumbUrl": "https://upload.wikimedia.org/wikipedia/commons/thumb/3/3a/Black_sand_snooze_%284099169497%29.jpg/960px-Black_sand_snooze_%284099169497%29.jpg",
+    "sourceUrl": "https://commons.wikimedia.org/wiki/File:Black_sand_snooze_(4099169497).jpg",
+    "credit": "Matt MacGillivray from Toronto, Canada / Wikimedia Commons",
+    "license": "CC BY 2.0"
+  },
+  "louisiana-alligator-swamps": {
+    "thumbUrl": "https://upload.wikimedia.org/wikipedia/commons/thumb/5/54/Alligator_mississippiensis_113744549.jpg/960px-Alligator_mississippiensis_113744549.jpg",
+    "sourceUrl": "https://commons.wikimedia.org/wiki/File:Alligator_mississippiensis_113744549.jpg",
+    "credit": "Zygy / Wikimedia Commons",
+    "license": "CC0"
+  },
+  "south-texas-birds": {
+    "thumbUrl": "https://upload.wikimedia.org/wikipedia/commons/thumb/5/53/Green_jay_%28Cyanocorax_luxuosus%29_in_Mission%2C_Texas%2C_USA.png/960px-Green_jay_%28Cyanocorax_luxuosus%29_in_Mission%2C_Texas%2C_USA.png",
+    "sourceUrl": "https://commons.wikimedia.org/wiki/File:Green_jay_(Cyanocorax_luxuosus)_in_Mission,_Texas,_USA.png",
+    "credit": "Chuck Homler, Focus On Wildlife / Wikimedia Commons",
+    "license": "CC BY-SA 4.0"
+  },
+  "great-smoky-bears": {
+    "thumbUrl": "https://upload.wikimedia.org/wikipedia/commons/thumb/7/7c/Black_bear_sitting_upright_at_Great_Smoky_Mountains_National_Park%2C_Tennessee_and_North_Carolina_%28d846aeb0-01e0-4bb5-801c-d6bb26d13f85%29.jpg/960px-Black_bear_sitting_upright_at_Great_Smoky_Mountains_National_Park%2C_Tennessee_and_North_Carolina_%28d846aeb0-01e0-4bb5-801c-d6bb26d13f85%29.jpg",
+    "sourceUrl": "https://commons.wikimedia.org/wiki/File:Black_bear_sitting_upright_at_Great_Smoky_Mountains_National_Park,_Tennessee_and_North_Carolina_(d846aeb0-01e0-4bb5-801c-d6bb26d13f85).jpg",
+    "credit": "NPS staff / Wikimedia Commons",
+    "license": "Public domain"
+  },
+  "newfoundland-seabirds": {
+    "thumbUrl": "https://upload.wikimedia.org/wikipedia/commons/thumb/d/d1/Atlantic_Puffin%2C_Elliston%2C_Newfoundland_%2835538418614%29.jpg/960px-Atlantic_Puffin%2C_Elliston%2C_Newfoundland_%2835538418614%29.jpg",
+    "sourceUrl": "https://commons.wikimedia.org/wiki/File:Atlantic_Puffin,_Elliston,_Newfoundland_(35538418614).jpg",
+    "credit": "tsaiproject from Canada / Wikimedia Commons",
+    "license": "CC BY 2.0"
+  },
+  "quebec-saguenay-belugas": {
+    "thumbUrl": "https://upload.wikimedia.org/wikipedia/commons/thumb/4/43/Beluga_Whale_Tadoussac_Quebec_Canada_Luca_Galuzzi_2005.jpg/960px-Beluga_Whale_Tadoussac_Quebec_Canada_Luca_Galuzzi_2005.jpg",
+    "sourceUrl": "https://commons.wikimedia.org/wiki/File:Beluga_Whale_Tadoussac_Quebec_Canada_Luca_Galuzzi_2005.jpg",
+    "credit": "Luca Galuzzi (Lucag) / Wikimedia Commons",
+    "license": "CC BY-SA 2.5"
+  },
+  "yucatan-whale-sharks": {
+    "thumbUrl": "https://upload.wikimedia.org/wikipedia/commons/thumb/9/9d/Only_Whale_Shark_of_the_trip_%28Season_starts_in_June%29_Isla_Mujeres.jpg/960px-Only_Whale_Shark_of_the_trip_%28Season_starts_in_June%29_Isla_Mujeres.jpg",
+    "sourceUrl": "https://commons.wikimedia.org/wiki/File:Only_Whale_Shark_of_the_trip_(Season_starts_in_June)_Isla_Mujeres.jpg",
+    "credit": "Bernard DUPONT / Wikimedia Commons",
+    "license": "CC BY-SA 2.0"
+  },
+  "channel-islands-marine": {
+    "thumbUrl": "https://upload.wikimedia.org/wikipedia/commons/thumb/b/b0/HERD_OF_CALIFORNIA_SEA_LIONS_OFF_ANACAPA_ISLAND%2C_CA.jpg/960px-HERD_OF_CALIFORNIA_SEA_LIONS_OFF_ANACAPA_ISLAND%2C_CA.jpg",
+    "sourceUrl": "https://commons.wikimedia.org/wiki/File:HERD_OF_CALIFORNIA_SEA_LIONS_OFF_ANACAPA_ISLAND,_CA.jpg",
+    "credit": "JEERRYE AND ROY KLOTZ MD / Wikimedia Commons",
+    "license": "CC BY-SA 3.0"
+  },
+  "pribilof-seabirds": {
+    "thumbUrl": "https://upload.wikimedia.org/wikipedia/commons/thumb/2/2c/Seals_and_Sea_Lions--St._Paul_-_DPLA_-_187797f9df8ddf9b4ccbd40fd38f5cf4.jpg/960px-Seals_and_Sea_Lions--St._Paul_-_DPLA_-_187797f9df8ddf9b4ccbd40fd38f5cf4.jpg",
+    "sourceUrl": "https://commons.wikimedia.org/wiki/File:Seals_and_Sea_Lions--St._Paul_-_DPLA_-_187797f9df8ddf9b4ccbd40fd38f5cf4.jpg",
+    "credit": "Department of Commerce. National Oceanic and Atmospheric Administration. National Ocean Service. Office of Response and Restoration. Pribilof Islands Restoration Project Office. 1996-9/2008 / Wikimedia Commons",
+    "license": "Public domain"
+  },
+  "arizona-desert-wildlife": {
+    "thumbUrl": "https://upload.wikimedia.org/wikipedia/commons/thumb/6/61/Collared_Peccary_crossing_the_road.jpg/960px-Collared_Peccary_crossing_the_road.jpg",
+    "sourceUrl": "https://commons.wikimedia.org/wiki/File:Collared_Peccary_crossing_the_road.jpg",
+    "credit": "Alan Vernon / Wikimedia Commons",
+    "license": "CC BY 2.0"
+  },
+  "costa-rica-corcovado": {
+    "thumbUrl": "https://upload.wikimedia.org/wikipedia/commons/thumb/a/af/Scarlet_macaw_in_Costa_Rica.jpg/960px-Scarlet_macaw_in_Costa_Rica.jpg",
+    "sourceUrl": "https://commons.wikimedia.org/wiki/File:Scarlet_macaw_in_Costa_Rica.jpg",
+    "credit": "Bernard Gagnon / Wikimedia Commons",
+    "license": "CC0"
+  },
+  "nicaragua-la-flor-turtles": {
+    "thumbUrl": "https://upload.wikimedia.org/wikipedia/commons/thumb/f/fd/Olive_Ridley_hatchlings_in_Chennai.jpg/960px-Olive_Ridley_hatchlings_in_Chennai.jpg",
+    "sourceUrl": "https://commons.wikimedia.org/wiki/File:Olive_Ridley_hatchlings_in_Chennai.jpg",
+    "credit": "Sundar / Wikimedia Commons",
+    "license": "CC BY-SA 3.0"
+  },
+  "brazil-fernando-noronha": {
+    "thumbUrl": "https://upload.wikimedia.org/wikipedia/commons/thumb/b/be/Spinner_Dolphin%2C_Fernando_de_Noronha%2C_Fernando_de_Noronha%2C_BR-RN%2C_BR_imported_from_iNaturalist_photo_102003461.jpg/960px-Spinner_Dolphin%2C_Fernando_de_Noronha%2C_Fernando_de_Noronha%2C_BR-RN%2C_BR_imported_from_iNaturalist_photo_102003461.jpg",
+    "sourceUrl": "https://commons.wikimedia.org/wiki/File:Spinner_Dolphin,_Fernando_de_Noronha,_Fernando_de_Noronha,_BR-RN,_BR_imported_from_iNaturalist_photo_102003461.jpg",
+    "credit": "(c) Jon Robson, some rights reserved (CC BY-SA) / Wikimedia Commons",
+    "license": "CC BY-SA 4.0"
+  },
+  "brazil-amazon-anavilhanas": {
+    "thumbUrl": "https://upload.wikimedia.org/wikipedia/commons/thumb/b/b7/Boto_cor-de-rosa_-_Pink_dolphin_%2846314897644%29.jpg/960px-Boto_cor-de-rosa_-_Pink_dolphin_%2846314897644%29.jpg",
+    "sourceUrl": "https://commons.wikimedia.org/wiki/File:Boto_cor-de-rosa_-_Pink_dolphin_(46314897644).jpg",
+    "credit": "Just a Brazilian man from Brazil / Wikimedia Commons",
+    "license": "CC BY 2.0"
+  },
+  "argentina-ibera-wildlife": {
+    "thumbUrl": "https://upload.wikimedia.org/wikipedia/commons/thumb/b/bf/Capybara_%28Hydrochoerus_hydrochaeris%29.jpg/960px-Capybara_%28Hydrochoerus_hydrochaeris%29.jpg",
+    "sourceUrl": "https://commons.wikimedia.org/wiki/File:Capybara_(Hydrochoerus_hydrochaeris).jpg",
+    "credit": "Charles J. Sharp / Wikimedia Commons",
+    "license": "CC BY-SA 4.0"
+  },
+  "peru-ballestas-seabirds": {
+    "thumbUrl": "https://upload.wikimedia.org/wikipedia/commons/thumb/b/b3/15-Islas_Ballestas-nX-42.jpg/960px-15-Islas_Ballestas-nX-42.jpg",
+    "sourceUrl": "https://commons.wikimedia.org/wiki/File:15-Islas_Ballestas-nX-42.jpg",
+    "credit": "PsamatheM / Wikimedia Commons",
+    "license": "CC BY-SA 4.0"
+  },
+  "chile-humboldt-penguins": {
+    "thumbUrl": "https://upload.wikimedia.org/wikipedia/commons/thumb/a/ad/Humboldt_penguin_%28Spheniscus_humboldti%29_Chiloe.jpg/960px-Humboldt_penguin_%28Spheniscus_humboldti%29_Chiloe.jpg",
+    "sourceUrl": "https://commons.wikimedia.org/wiki/File:Humboldt_penguin_(Spheniscus_humboldti)_Chiloe.jpg",
+    "credit": "Charles J. Sharp / Wikimedia Commons",
+    "license": "CC BY-SA 4.0"
+  },
+  "colombia-pacific-whales": {
+    "thumbUrl": "https://upload.wikimedia.org/wikipedia/commons/thumb/e/e0/Ballena_jorobada_o_ballena_yubarta_%28Megaptera_novaeangliae%29.jpg/960px-Ballena_jorobada_o_ballena_yubarta_%28Megaptera_novaeangliae%29.jpg",
+    "sourceUrl": "https://commons.wikimedia.org/wiki/File:Ballena_jorobada_o_ballena_yubarta_(Megaptera_novaeangliae).jpg",
+    "credit": "MemoOssa / Wikimedia Commons",
+    "license": "CC BY-SA 4.0"
+  },
+  "guyana-iwokrama-rainforest": {
+    "thumbUrl": "https://upload.wikimedia.org/wikipedia/commons/thumb/e/e9/Jaguar_%28Panthera_onca_palustris%29_female_Piquiri_River_2.JPG/960px-Jaguar_%28Panthera_onca_palustris%29_female_Piquiri_River_2.JPG",
+    "sourceUrl": "https://commons.wikimedia.org/wiki/File:Jaguar_(Panthera_onca_palustris)_female_Piquiri_River_2.JPG",
+    "credit": "Charles J. Sharp / Wikimedia Commons",
+    "license": "CC BY-SA 4.0"
+  },
+  "cuba-zapata-wildlife": {
+    "thumbUrl": "https://upload.wikimedia.org/wikipedia/commons/thumb/b/bf/Bee_hummingbird_%28Mellisuga_helenae%29_immature_male.jpg/960px-Bee_hummingbird_%28Mellisuga_helenae%29_immature_male.jpg",
+    "sourceUrl": "https://commons.wikimedia.org/wiki/File:Bee_hummingbird_(Mellisuga_helenae)_immature_male.jpg",
+    "credit": "Charles J. Sharp / Wikimedia Commons",
+    "license": "CC BY-SA 4.0"
+  },
+  "cayman-stingray-city": {
+    "thumbUrl": "https://upload.wikimedia.org/wikipedia/commons/thumb/9/97/Southern_Stingrays_At_Stingray_City_Grand_Cayman.jpg/960px-Southern_Stingrays_At_Stingray_City_Grand_Cayman.jpg",
+    "sourceUrl": "https://commons.wikimedia.org/wiki/File:Southern_Stingrays_At_Stingray_City_Grand_Cayman.jpg",
+    "credit": "Lhb1239 / Wikimedia Commons",
+    "license": "CC BY-SA 3.0"
+  },
+  "puerto-rico-mona-iguanas": {
+    "thumbUrl": "https://upload.wikimedia.org/wikipedia/commons/thumb/d/df/Mona_ground_Iguana_Iguana_de_Mona_en_la_playa_%285839983809%29.jpg/960px-Mona_ground_Iguana_Iguana_de_Mona_en_la_playa_%285839983809%29.jpg",
+    "sourceUrl": "https://commons.wikimedia.org/wiki/File:Mona_ground_Iguana_Iguana_de_Mona_en_la_playa_(5839983809).jpg",
+    "credit": "U.S. Fish and Wildlife Service Southeast Region / Wikimedia Commons",
+    "license": "Public domain"
+  },
+  "turks-caicos-reef": {
+    "thumbUrl": "https://upload.wikimedia.org/wikipedia/commons/thumb/2/2a/Spotted_Eagle_Ray_%28Aetobatus_narinari%292.jpg/960px-Spotted_Eagle_Ray_%28Aetobatus_narinari%292.jpg",
+    "sourceUrl": "https://commons.wikimedia.org/wiki/File:Spotted_Eagle_Ray_(Aetobatus_narinari)2.jpg",
+    "credit": "john norton / Wikimedia Commons",
+    "license": "CC BY 2.0"
+  },
+  "south-georgia-king-penguins": {
+    "thumbUrl": "https://upload.wikimedia.org/wikipedia/commons/thumb/b/bf/Colony_of_aptenodytes_patagonicus.jpg/960px-Colony_of_aptenodytes_patagonicus.jpg",
+    "sourceUrl": "https://commons.wikimedia.org/wiki/File:Colony_of_aptenodytes_patagonicus.jpg",
+    "credit": "User:Pismire / Wikimedia Commons",
+    "license": "CC BY-SA 3.0"
+  },
+  "greenland-diskos-icebergs": {
+    "thumbUrl": "https://upload.wikimedia.org/wikipedia/commons/thumb/c/cb/Tail_of_Humpback_Whale_Megaptera_novaeangliae_in_Disko_Bay_Greenland_-_Buiobuone_02.jpg/960px-Tail_of_Humpback_Whale_Megaptera_novaeangliae_in_Disko_Bay_Greenland_-_Buiobuone_02.jpg",
+    "sourceUrl": "https://commons.wikimedia.org/wiki/File:Tail_of_Humpback_Whale_Megaptera_novaeangliae_in_Disko_Bay_Greenland_-_Buiobuone_02.jpg",
+    "credit": "Buiobuione / Wikimedia Commons",
+    "license": "CC BY-SA 4.0"
+  },
+  "daintree-rainforest": {
+    "thumbUrl": "https://upload.wikimedia.org/wikipedia/commons/thumb/b/b0/Southern_Cassowary_near_Etty_Bay.jpg/960px-Southern_Cassowary_near_Etty_Bay.jpg",
+    "sourceUrl": "https://commons.wikimedia.org/wiki/File:Southern_Cassowary_near_Etty_Bay.jpg",
+    "credit": "Tiaangobius20 / Wikimedia Commons",
+    "license": "CC BY-SA 4.0"
+  },
+  "vanuatu-coolidge-wreck": {
+    "thumbUrl": "https://upload.wikimedia.org/wikipedia/commons/thumb/2/24/Growing_Habitat_%28220482421%29.jpeg/960px-Growing_Habitat_%28220482421%29.jpeg",
+    "sourceUrl": "https://commons.wikimedia.org/wiki/File:Growing_Habitat_(220482421).jpeg",
+    "credit": "Tilonaut / Wikimedia Commons",
+    "license": "CC BY 3.0"
+  },
+  "gabon-loango-hippos": {
+    "thumbUrl": "https://upload.wikimedia.org/wikipedia/commons/thumb/7/71/Hipop%C3%B3tamos_%28Hippopotamus_amphibius%29%2C_parque_nacional_de_Chobe%2C_Botsuana%2C_2018-07-28%2C_DD_79.jpg/960px-Hipop%C3%B3tamos_%28Hippopotamus_amphibius%29%2C_parque_nacional_de_Chobe%2C_Botsuana%2C_2018-07-28%2C_DD_79.jpg",
+    "sourceUrl": "https://commons.wikimedia.org/wiki/File:Hipop%C3%B3tamos_(Hippopotamus_amphibius),_parque_nacional_de_Chobe,_Botsuana,_2018-07-28,_DD_79.jpg",
+    "credit": "Diego Delso / Wikimedia Commons",
+    "license": "CC BY-SA 4.0"
+  },
+  "senegal-djoudj-pelicans": {
+    "thumbUrl": "https://upload.wikimedia.org/wikipedia/commons/thumb/8/8b/White_pelicans_%28Pelecanus_onocrotalus%29_Danube_delta.jpg/960px-White_pelicans_%28Pelecanus_onocrotalus%29_Danube_delta.jpg",
+    "sourceUrl": "https://commons.wikimedia.org/wiki/File:White_pelicans_(Pelecanus_onocrotalus)_Danube_delta.jpg",
+    "credit": "Charles J. Sharp / Wikimedia Commons",
+    "license": "CC BY-SA 4.0"
+  },
+  "sipadan-diving": {
+    "thumbUrl": "https://upload.wikimedia.org/wikipedia/commons/thumb/d/d7/Banco_de_gran_barracudas_%28Sphyraena_barracuda%29%2C_parque_nacional_Ras_Muhammad%2C_Egipto%2C_2022-03-27%2C_DD_115.jpg/960px-Banco_de_gran_barracudas_%28Sphyraena_barracuda%29%2C_parque_nacional_Ras_Muhammad%2C_Egipto%2C_2022-03-27%2C_DD_115.jpg",
+    "sourceUrl": "https://commons.wikimedia.org/wiki/File:Banco_de_gran_barracudas_(Sphyraena_barracuda),_parque_nacional_Ras_Muhammad,_Egipto,_2022-03-27,_DD_115.jpg",
+    "credit": "Diego Delso / Wikimedia Commons",
+    "license": "CC BY-SA 4.0"
+  },
+  "maldives-hanifaru-mantas": {
+    "thumbUrl": "https://upload.wikimedia.org/wikipedia/commons/thumb/f/fc/Giant_Manta_AdF.jpg/960px-Giant_Manta_AdF.jpg",
+    "sourceUrl": "https://commons.wikimedia.org/wiki/File:Giant_Manta_AdF.jpg",
+    "credit": "Arturo de Frias Marques / Wikimedia Commons",
+    "license": "CC BY-SA 4.0"
+  },
+  "japan-yakushima-monkeys": {
+    "thumbUrl": "https://upload.wikimedia.org/wikipedia/commons/thumb/2/26/Japanese_macaque_sitting_on_rock_with_offspring_-_DPLA_-_7a425842286a9a9e2cd9545c99ab5a60.jpg/960px-Japanese_macaque_sitting_on_rock_with_offspring_-_DPLA_-_7a425842286a9a9e2cd9545c99ab5a60.jpg",
+    "sourceUrl": "https://commons.wikimedia.org/wiki/File:Japanese_macaque_sitting_on_rock_with_offspring_-_DPLA_-_7a425842286a9a9e2cd9545c99ab5a60.jpg",
+    "credit": "Garst, Warren, 1922-2016, photographer / Wikimedia Commons",
+    "license": "CC BY-SA 4.0"
+  },
+  "spain-donana-wetlands": {
+    "thumbUrl": "https://upload.wikimedia.org/wikipedia/commons/thumb/4/40/Paisaje_en_el_Parque_de_Do%C3%B1ana%2C_Espa%C3%B1a%2C_2015-12-07%2C_DD_18.JPG/960px-Paisaje_en_el_Parque_de_Do%C3%B1ana%2C_Espa%C3%B1a%2C_2015-12-07%2C_DD_18.JPG",
+    "sourceUrl": "https://commons.wikimedia.org/wiki/File:Paisaje_en_el_Parque_de_Do%C3%B1ana,_Espa%C3%B1a,_2015-12-07,_DD_18.JPG",
+    "credit": "Diego Delso / Wikimedia Commons",
+    "license": "CC BY-SA 4.0"
+  },
+  "sweden-boreal-bears": {
+    "thumbUrl": "https://upload.wikimedia.org/wikipedia/commons/thumb/5/58/Casual_Forest_Bear_%28141013759%29.jpeg/960px-Casual_Forest_Bear_%28141013759%29.jpeg",
+    "sourceUrl": "https://commons.wikimedia.org/wiki/File:Casual_Forest_Bear_(141013759).jpeg",
+    "credit": "George Wheelhouse / Wikimedia Commons",
+    "license": "CC BY 3.0"
+  },
+  "honduras-utila-diving": {
+    "thumbUrl": "https://upload.wikimedia.org/wikipedia/commons/3/3a/Snorkeling_whale_shark_4.JPG",
+    "sourceUrl": "https://commons.wikimedia.org/wiki/File:Snorkeling_whale_shark_4.JPG",
+    "credit": "Jaontiveros / Wikimedia Commons",
+    "license": "CC BY-SA 4.0"
+  },
+  "panama-bocas-dolphins": {
+    "thumbUrl": "https://upload.wikimedia.org/wikipedia/commons/thumb/7/7e/Common_Bottlenose_Dolphins%2C_near_Santa_Cruz_Island%2C_Channel_Islands_National_Park%2C_California_%2814%29_%284079271233%29.jpg/960px-Common_Bottlenose_Dolphins%2C_near_Santa_Cruz_Island%2C_Channel_Islands_National_Park%2C_California_%2814%29_%284079271233%29.jpg",
+    "sourceUrl": "https://commons.wikimedia.org/wiki/File:Common_Bottlenose_Dolphins,_near_Santa_Cruz_Island,_Channel_Islands_National_Park,_California_(14)_(4079271233).jpg",
+    "credit": "Ken Lund from Reno, Nevada, USA / Wikimedia Commons",
+    "license": "CC BY-SA 2.0"
+  },
+  "belize-hol-chan-diving": {
+    "thumbUrl": "https://upload.wikimedia.org/wikipedia/commons/thumb/5/53/Yellow_Stingray%2C_Belize%2C_2007-09.jpg/960px-Yellow_Stingray%2C_Belize%2C_2007-09.jpg",
+    "sourceUrl": "https://commons.wikimedia.org/wiki/File:Yellow_Stingray,_Belize,_2007-09.jpg",
+    "credit": "MattWright / Wikimedia Commons",
+    "license": "CC BY-SA 3.0"
+  },
+  "argentina-valdes-orcas": {
+    "thumbUrl": "https://upload.wikimedia.org/wikipedia/commons/c/c4/Orcas_in_Punta_Norte_Valdes_Peninsula_-_panoramio_-_Ecohotel.jpg",
+    "sourceUrl": "https://commons.wikimedia.org/wiki/File:Orcas_in_Punta_Norte_Valdes_Peninsula_-_panoramio_-_Ecohotel.jpg",
+    "credit": "Ecohotel / Wikimedia Commons",
+    "license": "CC BY-SA 3.0"
+  },
+  "brazil-bonito-snorkel": {
+    "thumbUrl": "https://upload.wikimedia.org/wikipedia/commons/thumb/a/af/Brycon_hilarii_-_Piraputanga_no_Monumento_Natural_do_Rio_Formoso.jpg/960px-Brycon_hilarii_-_Piraputanga_no_Monumento_Natural_do_Rio_Formoso.jpg",
+    "sourceUrl": "https://commons.wikimedia.org/wiki/File:Brycon_hilarii_-_Piraputanga_no_Monumento_Natural_do_Rio_Formoso.jpg",
+    "credit": "BRASIL AQUA / Wikimedia Commons",
+    "license": "CC BY-SA 4.0"
+  }
+}

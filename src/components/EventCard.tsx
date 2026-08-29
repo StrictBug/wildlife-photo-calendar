@@ -6,31 +6,31 @@ import { formatAnnualRange } from "@/lib/calendar";
 import {
   computeEventBudget,
   formatTotalBudget,
-  getDepartureLabel,
 } from "@/lib/budget";
-import type { DepartureCityId } from "@/data/departureCities";
+import type { DisplayCurrency } from "@/lib/currency";
 import { labelize } from "@/lib/filters";
 import type { WildlifeEvent } from "@/lib/types";
 import { getEventImage } from "@/data/eventImages";
 
 interface EventCardProps {
   event: WildlifeEvent;
-  departureCityId: DepartureCityId;
+  departureIata: string;
   stayDays: number;
+  currency: DisplayCurrency;
   selected: boolean;
   onSelect: (id: string) => void;
 }
 
 export function EventCard({
   event,
-  departureCityId,
+  departureIata,
   stayDays,
+  currency,
   selected,
   onSelect,
 }: EventCardProps) {
   const image = getEventImage(event.id);
-  const budget = computeEventBudget(event, departureCityId, stayDays);
-  const departureLabel = getDepartureLabel(departureCityId);
+  const budget = computeEventBudget(event, departureIata, stayDays);
 
   return (
     <article
@@ -50,12 +50,13 @@ export function EventCard({
       >
         <div className="event-card-visual" aria-hidden="true">
           {image ? (
-            <Image
+              <Image
               src={image.imagePath}
               alt=""
               fill
               sizes="(max-width: 768px) 100vw, 320px"
               className="event-card-photo"
+              unoptimized
             />
           ) : (
             <div className="event-card-visual-inner" />
@@ -68,7 +69,9 @@ export function EventCard({
           <p className="event-card-place">
             {event.location}, {event.country}
           </p>
-          <p className="event-card-dates">{formatAnnualRange(event)}</p>
+          <p className="event-card-dates">
+            {formatAnnualRange(event, { yearly: false })}
+          </p>
           <div className="tag-row">
             {event.styles.slice(0, 2).map((s) => (
               <span key={s} className="tag">
@@ -82,7 +85,7 @@ export function EventCard({
             ))}
           </div>
           <p className="event-card-budget">
-            {formatTotalBudget(budget, departureLabel)}
+            {formatTotalBudget(budget, departureIata, currency)}
           </p>
         </div>
       </button>

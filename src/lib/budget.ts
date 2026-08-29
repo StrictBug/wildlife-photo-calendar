@@ -1,7 +1,14 @@
-import type { DepartureCityId } from "@/data/departureCities";
-import { getDepartureCity } from "@/data/departureCities";
+import type { DepartureAirport } from "@/data/airports";
+import { formatAirportLabel, requireAirport } from "@/data/airports";
+import {
+  DEFAULT_CURRENCY,
+  formatMoney,
+  fromAUD,
+  type DisplayCurrency,
+} from "@/lib/currency";
 import { estimateFlightAUD } from "@/lib/flightCost";
 import type { BudgetBand, WildlifeEvent } from "@/lib/types";
+
 export const REFERENCE_TRIP_DAYS = 14;
 
 /** Total-cost band ceilings at the reference length (trip + est. flights). */
@@ -44,14 +51,25 @@ export interface EventBudget {
   band: BudgetBand;
 }
 
+/**
+ * Coarse estimate rounding in display currency:
+ * nearest 200 below 2000, nearest 500 below 10000, nearest 1000 at 10000+.
+ */
+export function roundCostEstimate(amount: number): number {
+  const abs = Math.abs(amount);
+  const step = abs >= 10000 ? 1000 : abs >= 2000 ? 500 : 200;
+  return Math.round(amount / step) * step;
+}
+
 export function computeEventBudget(
   event: WildlifeEvent,
-  departureId: DepartureCityId,
+  departureIata: string,
   stayDays: number = DEFAULT_TYPICAL_TRIP_DAYS,
 ): EventBudget {
-  const flightAUD = estimateFlightAUD(departureId, event);
+  const origin = requireAirport(departureIata);
+  const flightAUD = estimateFlightAUD(origin, event);
   const baseTripDays = planningTripDays(event);
-  const tripAUD = Math.round(event.fromAUD * (stayDays / baseTripDays));
+  const tripAUD = event.fromAUD * (stayDays / baseTripDays);
   const totalAUD = tripAUD + flightAUD;
   return {
     tripAUD,
@@ -62,38 +80,53 @@ export function computeEventBudget(
   };
 }
 
+/** Convert an AUD amount, then apply estimate rounding. */
+export function displayCost(
+  amountAUD: number,
+  currency: DisplayCurrency = DEFAULT_CURRENCY,
+): number {
+  return roundCostEstimate(fromAUD(amountAUD, currency));
+}
+
 export function formatAUD(amount: number): string {
-  return new Intl.NumberFormat("en-AU", {
-    style: "currency",
-    currency: "AUD",
-    maximumFractionDigits: 0,
-  }).format(amount);
+  return formatMoney(amount, "AUD");
 }
 
 /** Compact line for cards and map popups. */
 export function formatTotalBudget(
   budget: EventBudget,
-  departureLabel: string,
+  departureIata: string,
+  currency: DisplayCurrency = DEFAULT_CURRENCY,
 ): string {
-  return `from ${formatAUD(budget.totalAUD)} inc. flights from ${departureLabel}`;
+  const total = displayCost(budget.totalAUD, currency);
+  return `from ${formatMoney(total, currency)} inc. est. flights from ${departureIata.toUpperCase()}`;
 }
 
-/** Detail breakdown lines. */
+/** Detail breakdown lines. Total is summed in AUD first, then converted & rounded. */
 export function formatBudgetBreakdown(
   budget: EventBudget,
   departureLabel: string,
+  currency: DisplayCurrency = DEFAULT_CURRENCY,
 ): {
   headline: string;
   trip: string;
   flights: string;
 } {
+  const total = displayCost(budget.totalAUD, currency);
+  const trip = Math.round(fromAUD(budget.tripAUD, currency));
+  // Flights absorb total rounding so the printed lines still add up.
+  const flights = Math.max(0, total - trip);
   return {
-    headline: `${formatAUD(budget.totalAUD)} estimated total from ${departureLabel}`,
-    trip: `${formatAUD(budget.tripAUD)} on-trip (lodging, tours, park fees)`,
-    flights: `${formatAUD(budget.flightAUD)} est. return flights (economy)`,
+    headline: `${formatMoney(total, currency)} estimated total from ${departureLabel}`,
+    trip: `${formatMoney(trip, currency)} on-trip (lodging, tours, park fees)`,
+    flights: `${formatMoney(flights, currency)} est. return flights to gateway (economy)`,
   };
 }
 
-export function getDepartureLabel(departureId: DepartureCityId): string {
-  return getDepartureCity(departureId).label;
+export function getDepartureLabel(departureIata: string): string {
+  return formatAirportLabel(requireAirport(departureIata));
+}
+
+export function getDepartureAirport(departureIata: string): DepartureAirport {
+  return requireAirport(departureIata);
 }

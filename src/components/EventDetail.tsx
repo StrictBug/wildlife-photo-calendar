@@ -21,7 +21,7 @@ import {
   formatBudgetBreakdown,
   getDepartureLabel,
 } from "@/lib/budget";
-import type { DepartureCityId } from "@/data/departureCities";
+import type { DisplayCurrency } from "@/lib/currency";
 import type { WildlifeEvent } from "@/lib/types";
 import { getEventImage } from "@/data/eventImages";
 import { uniqueEventAbbrevs } from "@/lib/abbrev";
@@ -39,12 +39,14 @@ const EventLocationMap = dynamic(
 interface EventDetailProps {
   events: WildlifeEvent[];
   activeId: string | null;
-  departureCityId: DepartureCityId;
+  departureIata: string;
   stayDays: number;
+  currency: DisplayCurrency;
   expanded: boolean;
   onExpandedChange: (expanded: boolean) => void;
   onActivate: (id: string) => void;
   onRemove: (id: string) => void;
+  onClearOthers: () => void;
 }
 
 const TAB_SCROLL_STEP = 72;
@@ -69,11 +71,13 @@ function DetailTabs({
   activeId,
   onActivate,
   onRemove,
+  onClearOthers,
 }: {
   events: WildlifeEvent[];
   activeId: string;
   onActivate: (id: string) => void;
   onRemove: (id: string) => void;
+  onClearOthers: () => void;
 }) {
   const stripRef = useRef<HTMLDivElement>(null);
   const activeTabRef = useRef<HTMLDivElement>(null);
@@ -126,79 +130,91 @@ function DetailTabs({
   const abbrevs = uniqueEventAbbrevs(events);
 
   return (
-    <div
-      className={`detail-tabs-shell ${showChevrons ? "detail-tabs-shell-scrollable" : ""} ${canScrollLeft ? "detail-tabs-fade-left" : ""} ${canScrollRight ? "detail-tabs-fade-right" : ""}`}
-    >
-      {showChevrons ? (
-        <button
-          type="button"
-          className="detail-tabs-chevron detail-tabs-chevron-left"
-          onClick={() => scrollBy(-1)}
-          disabled={!canScrollLeft}
-          aria-label="Scroll tabs left"
-        >
-          ‹
-        </button>
-      ) : null}
-
+    <div className="detail-tabs-row">
       <div
-        ref={stripRef}
-        className="detail-tabs"
-        role="tablist"
-        aria-label="Selected events"
+        className={`detail-tabs-shell ${showChevrons ? "detail-tabs-shell-scrollable" : ""} ${canScrollLeft ? "detail-tabs-fade-left" : ""} ${canScrollRight ? "detail-tabs-fade-right" : ""}`}
       >
-        {events.map((item) => {
-          const isActive = item.id === activeId;
-          return (
-            <div
-              key={item.id}
-              ref={isActive ? activeTabRef : undefined}
-              className={`detail-tab ${isActive ? "detail-tab-active" : ""}`}
-            >
-              <button
-                type="button"
-                role="tab"
-                className="detail-tab-btn"
-                aria-selected={isActive}
-                id={`detail-tab-${item.id}`}
-                onClick={() => onActivate(item.id)}
-                title={item.title}
-                aria-label={`${abbrevs[item.id]}: ${item.title}`}
+        {showChevrons ? (
+          <button
+            type="button"
+            className="detail-tabs-chevron detail-tabs-chevron-left"
+            onClick={() => scrollBy(-1)}
+            disabled={!canScrollLeft}
+            aria-label="Scroll tabs left"
+          >
+            ‹
+          </button>
+        ) : null}
+
+        <div
+          ref={stripRef}
+          className="detail-tabs"
+          role="tablist"
+          aria-label="Selected events"
+        >
+          {events.map((item) => {
+            const isActive = item.id === activeId;
+            return (
+              <div
+                key={item.id}
+                ref={isActive ? activeTabRef : undefined}
+                className={`detail-tab ${isActive ? "detail-tab-active" : ""}`}
               >
-                <span
-                  className="detail-tab-swatch"
-                  style={{ background: item.atmosphere[0] }}
-                  aria-hidden="true"
-                />
-                <span className="detail-tab-label">{abbrevs[item.id]}</span>
-              </button>
-              <button
-                type="button"
-                className="detail-tab-close"
-                aria-label={`Remove ${item.title}`}
-                onClick={(e) => {
-                  e.stopPropagation();
-                  onRemove(item.id);
-                }}
-              >
-                ×
-              </button>
-            </div>
-          );
-        })}
+                <button
+                  type="button"
+                  role="tab"
+                  className="detail-tab-btn"
+                  aria-selected={isActive}
+                  id={`detail-tab-${item.id}`}
+                  onClick={() => onActivate(item.id)}
+                  title={item.title}
+                  aria-label={`${abbrevs[item.id]}: ${item.title}`}
+                >
+                  <span
+                    className="detail-tab-swatch"
+                    style={{ background: item.atmosphere[0] }}
+                    aria-hidden="true"
+                  />
+                  <span className="detail-tab-label">{abbrevs[item.id]}</span>
+                </button>
+                <button
+                  type="button"
+                  className="detail-tab-close"
+                  aria-label={`Remove ${item.title}`}
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    onRemove(item.id);
+                  }}
+                >
+                  ×
+                </button>
+              </div>
+            );
+          })}
+        </div>
+
+        {showChevrons ? (
+          <button
+            type="button"
+            className="detail-tabs-chevron detail-tabs-chevron-right"
+            onClick={() => scrollBy(1)}
+            disabled={!canScrollRight}
+            aria-label="Scroll tabs right"
+          >
+            ›
+          </button>
+        ) : null}
       </div>
 
-      {showChevrons ? (
-        <button
-          type="button"
-          className="detail-tabs-chevron detail-tabs-chevron-right"
-          onClick={() => scrollBy(1)}
-          disabled={!canScrollRight}
-          aria-label="Scroll tabs right"
-        >
-          ›
-        </button>
-      ) : null}
+      <button
+        type="button"
+        className="detail-tabs-clear-others"
+        onClick={onClearOthers}
+        aria-label="Clear other tabs"
+        title="Close all tabs except the current one"
+      >
+        Clear
+      </button>
     </div>
   );
 }
@@ -206,12 +222,14 @@ function DetailTabs({
 export function EventDetail({
   events,
   activeId,
-  departureCityId,
+  departureIata,
   stayDays,
+  currency,
   expanded,
   onExpandedChange,
   onActivate,
   onRemove,
+  onClearOthers,
 }: EventDetailProps) {
   const [lightboxOpen, setLightboxOpen] = useState(false);
   const event =
@@ -234,9 +252,13 @@ export function EventDetail({
   }
 
   const image = getEventImage(event.id);
-  const budget = computeEventBudget(event, departureCityId, stayDays);
-  const departureLabel = getDepartureLabel(departureCityId);
-  const budgetBreakdown = formatBudgetBreakdown(budget, departureLabel);
+  const budget = computeEventBudget(event, departureIata, stayDays);
+  const departureLabel = getDepartureLabel(departureIata);
+  const budgetBreakdown = formatBudgetBreakdown(
+    budget,
+    departureLabel,
+    currency,
+  );
   const osmUrl = `https://www.openstreetmap.org/?mlat=${event.lat}&mlon=${event.lng}#map=8/${event.lat}/${event.lng}`;
   const photoAlt = `${event.title} — ${event.location}, ${event.country}`;
 
@@ -257,6 +279,7 @@ export function EventDetail({
             activeId={event.id}
             onActivate={onActivate}
             onRemove={onRemove}
+            onClearOthers={onClearOthers}
           />
         ) : null}
 
@@ -282,6 +305,7 @@ export function EventDetail({
                   sizes="(max-width: 768px) 100vw, 900px"
                   className="detail-hero-photo"
                   priority
+                  unoptimized
                 />
                 <span className="detail-hero-zoom-hint">Click to enlarge</span>
               </button>
@@ -293,6 +317,7 @@ export function EventDetail({
                 sizes="(max-width: 768px) 100vw, 400px"
                 className="detail-hero-photo"
                 priority
+                unoptimized
               />
             )
           ) : null}
@@ -364,9 +389,6 @@ export function EventDetail({
                       <span key={a} className="tag">{a}</span>
                     ))}
                   </div>
-                  <p className="detail-submeta">
-                    Categories: {event.animals.map(labelize).join(", ")}
-                  </p>
                 </div>
 
                 <div className="detail-section">

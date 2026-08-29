@@ -257,12 +257,16 @@ export function eventOverlapsMonth(
   return false;
 }
 
-export function formatAnnualRange(event: WildlifeEvent): string {
+export function formatAnnualRange(
+  event: WildlifeEvent,
+  options?: { yearly?: boolean },
+): string {
   const w = annualWindow(event);
   const fmt = (month: number, day: number) =>
     new Date(2024, month - 1, day).toLocaleDateString("en-AU", {
       day: "numeric",
       month: "short",
     });
-  return `${fmt(w.startMonth, w.startDay)} – ${fmt(w.endMonth, w.endDay)} · yearly`;
+  const range = `${fmt(w.startMonth, w.startDay)} – ${fmt(w.endMonth, w.endDay)}`;
+  return options?.yearly === false ? range : `${range} · yearly`;
 }

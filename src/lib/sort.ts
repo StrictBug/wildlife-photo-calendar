@@ -1,4 +1,3 @@
-import type { DepartureCityId } from "@/data/departureCities";
 import { computeEventBudget } from "@/lib/budget";
 import type { Danger, Difficulty, Pace, WildlifeEvent } from "@/lib/types";
 
@@ -45,14 +44,14 @@ function compareByField(
   a: WildlifeEvent,
   b: WildlifeEvent,
   field: SortField,
-  departureCityId: DepartureCityId,
+  departureIata: string,
   stayDays: number,
 ): number {
   switch (field) {
     case "price":
       return (
-        computeEventBudget(a, departureCityId, stayDays).totalAUD -
-        computeEventBudget(b, departureCityId, stayDays).totalAUD
+        computeEventBudget(a, departureIata, stayDays).totalAUD -
+        computeEventBudget(b, departureIata, stayDays).totalAUD
       );
     case "difficulty":
       return DIFFICULTY_ORDER[a.difficulty] - DIFFICULTY_ORDER[b.difficulty];
@@ -66,12 +65,12 @@ function compareByField(
 export function sortEvents(
   events: WildlifeEvent[],
   sort: SortState,
-  departureCityId: DepartureCityId,
+  departureIata: string,
   stayDays: number,
 ): WildlifeEvent[] {
   const dir = sort.direction === "asc" ? 1 : -1;
   return [...events].sort(
-    (a, b) => compareByField(a, b, sort.field, departureCityId, stayDays) * dir,
+    (a, b) => compareByField(a, b, sort.field, departureIata, stayDays) * dir,
   );
 }
 

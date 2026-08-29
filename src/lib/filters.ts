@@ -1,10 +1,9 @@
 import { eventOverlapsMonth } from "./calendar";
+import { DEFAULT_DEPARTURE_IATA } from "@/data/airports";
 import {
   computeEventBudget,
   DEFAULT_TYPICAL_TRIP_DAYS,
 } from "./budget";
-import type { DepartureCityId } from "@/data/departureCities";
-import { DEFAULT_DEPARTURE_CITY_ID } from "@/data/departureCities";
 import type {
   AccessMode,
   AccommodationStyle,
@@ -83,7 +82,7 @@ export const TOUR_ACCESS: TourAccess[] = [
 export const TOUR_ACCESS_LABELS: Record<TourAccess, string> = {
   "mandatory-tour": "Tour only",
   "optional-tour": "Optional tour",
-  "self-guided-only": "Self guided only",
+  "self-guided-only": "Self guided",
 };
 
 export const DIFFICULTIES: Difficulty[] = [
@@ -217,7 +216,7 @@ function includesAny<T>(selected: T[], value: T | T[]): boolean {
 export function matchesFilters(
   event: WildlifeEvent,
   filters: FilterState,
-  departureCityId: DepartureCityId = DEFAULT_DEPARTURE_CITY_ID,
+  departureIata: string = DEFAULT_DEPARTURE_IATA,
   stayDays: number = resolveStayDays(filters),
 ): boolean {
   if (!includesAny(filters.regions, event.region)) return false;
@@ -232,7 +231,7 @@ export function matchesFilters(
   if (
     !includesAny(
       filters.budgetBands,
-      computeEventBudget(event, departureCityId, stayDays).band,
+      computeEventBudget(event, departureIata, stayDays).band,
     )
   ) {
     return false;
@@ -253,11 +252,11 @@ export function matchesFilters(
 export function filterEvents(
   all: WildlifeEvent[],
   filters: FilterState,
-  departureCityId: DepartureCityId = DEFAULT_DEPARTURE_CITY_ID,
+  departureIata: string = DEFAULT_DEPARTURE_IATA,
   stayDays: number = resolveStayDays(filters),
 ): WildlifeEvent[] {
   return all.filter((e) =>
-    matchesFilters(e, filters, departureCityId, stayDays),
+    matchesFilters(e, filters, departureIata, stayDays),
   );
 }
 

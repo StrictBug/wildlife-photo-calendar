@@ -14,9 +14,8 @@ import { formatAnnualRange } from "@/lib/calendar";
 import {
   computeEventBudget,
   formatTotalBudget,
-  getDepartureLabel,
 } from "@/lib/budget";
-import type { DepartureCityId } from "@/data/departureCities";
+import type { DisplayCurrency } from "@/lib/currency";
 import { fitMapToEvents, fitMapToRegions } from "@/lib/mapFraming";
 import type { FilterState, WildlifeEvent } from "@/lib/types";
 import { RegionLandmasses } from "./RegionLandmasses";
@@ -24,8 +23,9 @@ import { RegionLandmasses } from "./RegionLandmasses";
 interface MapViewProps {
   events: WildlifeEvent[];
   filters: FilterState;
-  departureCityId: DepartureCityId;
+  departureIata: string;
   stayDays: number;
+  currency: DisplayCurrency;
   selectedIds: string[];
   onSelect: (id: string) => void;
   /** Bumps to replay the locate pulse on a selected event. */
@@ -99,13 +99,13 @@ function createMarkerIcon(event: WildlifeEvent, selected: boolean) {
 export function MapView({
   events,
   filters,
-  departureCityId,
+  departureIata,
   stayDays,
+  currency,
   selectedIds,
   onSelect,
   pulseTarget,
 }: MapViewProps) {
-  const departureLabel = getDepartureLabel(departureCityId);
   const pulseEvent =
     pulseTarget != null
       ? (events.find((e) => e.id === pulseTarget.id) ?? null)
@@ -151,8 +151,9 @@ export function MapView({
                 </p>
                 <p className="map-popup-budget">
                   {formatTotalBudget(
-                    computeEventBudget(event, departureCityId, stayDays),
-                    departureLabel,
+                    computeEventBudget(event, departureIata, stayDays),
+                    departureIata,
+                    currency,
                   )}
                 </p>
                 <button

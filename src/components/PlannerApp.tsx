@@ -4,9 +4,13 @@ import dynamic from "next/dynamic";
 import Image from "next/image";
 import { useEffect, useMemo, useState } from "react";
 import {
-  DEFAULT_DEPARTURE_CITY_ID,
+  DEFAULT_DEPARTURE_IATA,
+  getAirport,
+} from "@/data/airports";
+import type { DepartureCityId } from "@/data/departureCities";
+import {
+  getDepartureCity,
   isDepartureCityId,
-  type DepartureCityId,
 } from "@/data/departureCities";
 import { events } from "@/data/events";
 import {
@@ -16,6 +20,11 @@ import {
 } from "@/lib/calendar";
 import { emptyFilters, filterEvents, resolveStayDays } from "@/lib/filters";
 import {
+  DEFAULT_CURRENCY,
+  isDisplayCurrency,
+  type DisplayCurrency,
+} from "@/lib/currency";
+import {
   DEFAULT_SORT,
   SORT_FIELDS,
   sortEvents,
@@ -23,19 +32,35 @@ import {
   type SortState,
 } from "@/lib/sort";
 import type { FilterState, ViewMode, WildlifeEvent } from "@/lib/types";
-
-const DEPARTURE_CITY_STORAGE_KEY = "wildseason-departure-city";
-
-function readStoredDepartureCity(): DepartureCityId {
-  if (typeof window === "undefined") return DEFAULT_DEPARTURE_CITY_ID;
-  const stored = localStorage.getItem(DEPARTURE_CITY_STORAGE_KEY);
-  if (stored && isDepartureCityId(stored)) return stored;
-  return DEFAULT_DEPARTURE_CITY_ID;
-}
 import { CalendarView } from "./CalendarView";
 import { EventCard } from "./EventCard";
 import { EventDetail } from "./EventDetail";
 import { FilterBar } from "./FilterBar";
+
+const DEPARTURE_IATA_STORAGE_KEY = "wildseason-departure-airport";
+const LEGACY_DEPARTURE_CITY_STORAGE_KEY = "wildseason-departure-city";
+const CURRENCY_STORAGE_KEY = "wildseason-currency";
+
+function readStoredDepartureIata(): string {
+  if (typeof window === "undefined") return DEFAULT_DEPARTURE_IATA;
+
+  const storedIata = localStorage.getItem(DEPARTURE_IATA_STORAGE_KEY);
+  if (storedIata && getAirport(storedIata)) return storedIata.toUpperCase();
+
+  const legacy = localStorage.getItem(LEGACY_DEPARTURE_CITY_STORAGE_KEY);
+  if (legacy && isDepartureCityId(legacy)) {
+    return getDepartureCity(legacy as DepartureCityId).airport;
+  }
+
+  return DEFAULT_DEPARTURE_IATA;
+}
+
+function readStoredCurrency(): DisplayCurrency {
+  if (typeof window === "undefined") return DEFAULT_CURRENCY;
+  const stored = localStorage.getItem(CURRENCY_STORAGE_KEY);
+  if (stored && isDisplayCurrency(stored)) return stored;
+  return DEFAULT_CURRENCY;
+}
 
 const MapView = dynamic(
   () => import("./MapView").then((m) => m.MapView),
@@ -55,9 +80,8 @@ function findEventById(id: string, lists: WildlifeEvent[][]): WildlifeEvent | nu
 
 export function PlannerApp() {
   const [filters, setFilters] = useState<FilterState>(emptyFilters);
-  const [departureCityId, setDepartureCityId] = useState<DepartureCityId>(
-    DEFAULT_DEPARTURE_CITY_ID,
-  );
+  const [departureIata, setDepartureIata] = useState(DEFAULT_DEPARTURE_IATA);
+  const [currency, setCurrency] = useState<DisplayCurrency>(DEFAULT_CURRENCY);
   const [view, setView] = useState<ViewMode>("list");
   const [sort, setSort] = useState<SortState>(DEFAULT_SORT);
   const [selectedIds, setSelectedIds] = useState<string[]>([]);
@@ -73,13 +97,13 @@ export function PlannerApp() {
   const stayDays = useMemo(() => resolveStayDays(filters), [filters]);
 
   const filtered = useMemo(
-    () => filterEvents(events, filters, departureCityId, stayDays),
-    [filters, departureCityId, stayDays],
+    () => filterEvents(events, filters, departureIata, stayDays),
+    [filters, departureIata, stayDays],
   );
 
   const sorted = useMemo(
-    () => sortEvents(filtered, sort, departureCityId, stayDays),
-    [filtered, sort, departureCityId, stayDays],
+    () => sortEvents(filtered, sort, departureIata, stayDays),
+    [filtered, sort, departureIata, stayDays],
   );
 
   const calendarScope = useMemo(
@@ -95,12 +119,17 @@ export function PlannerApp() {
   }, [timeFilterKey, calendarScope]);
 
   useEffect(() => {
-    setDepartureCityId(readStoredDepartureCity());
+    setDepartureIata(readStoredDepartureIata());
+    setCurrency(readStoredCurrency());
   }, []);
 
   useEffect(() => {
-    localStorage.setItem(DEPARTURE_CITY_STORAGE_KEY, departureCityId);
-  }, [departureCityId]);
+    localStorage.setItem(DEPARTURE_IATA_STORAGE_KEY, departureIata);
+  }, [departureIata]);
+
+  useEffect(() => {
+    localStorage.setItem(CURRENCY_STORAGE_KEY, currency);
+  }, [currency]);
 
   const selectedEvents = useMemo(() => {
     return selectedIds
@@ -130,6 +159,9 @@ export function PlannerApp() {
   }
 
   function handleSelect(id: string) {
+    // Map/list selection must not replay the tab pulse animation.
+    setMapPulse(null);
+
     const alreadySelected = selectedIds.includes(id);
 
     if (alreadySelected) {
@@ -155,6 +187,9 @@ export function PlannerApp() {
         id,
         key: (prev?.key ?? 0) + 1,
       }));
+      window.setTimeout(() => {
+        setMapPulse((current) => (current?.id === id ? null : current));
+      }, 1200);
     }
   }
 
@@ -171,6 +206,12 @@ export function PlannerApp() {
     setActiveId(nextActive);
     if (nextActive) jumpToEventMonth(nextActive);
     setDetailExpanded(false);
+  }
+
+  function handleClearOtherTabs() {
+    if (!activeIdResolved) return;
+    setSelectedIds([activeIdResolved]);
+    setActiveId(activeIdResolved);
   }
 
   const hasSelection = selected !== null;
@@ -202,7 +243,7 @@ export function PlannerApp() {
           <p className="hero-sub">
             Find the right place, month, and style — from telephoto safaris to
             underwater reefs — with rough totals including estimated flights from
-            your city.
+            your airport.
           </p>
         </div>
       </header>
@@ -211,15 +252,17 @@ export function PlannerApp() {
         <FilterBar
           filters={filters}
           onChange={setFilters}
-          departureCityId={departureCityId}
-          onDepartureCityChange={setDepartureCityId}
+          departureIata={departureIata}
+          onDepartureIataChange={setDepartureIata}
+          currency={currency}
+          onCurrencyChange={setCurrency}
         />
 
         <main className="results">
           <div className="results-toolbar">
             <p className="results-count">
               <strong>{sorted.length}</strong>{" "}
-              {sorted.length === 1 ? "window" : "windows"}
+              {sorted.length === 1 ? "destination" : "destinations"}
             </p>
             <div className="results-toolbar-actions">
               <div className="sort-control">
@@ -298,8 +341,9 @@ export function PlannerApp() {
                   <EventCard
                     key={event.id}
                     event={event}
-                    departureCityId={departureCityId}
+                    departureIata={departureIata}
                     stayDays={stayDays}
+                    currency={currency}
                     selected={selectedIds.includes(event.id)}
                     onSelect={handleSelect}
                   />
@@ -327,8 +371,9 @@ export function PlannerApp() {
             <MapView
               events={sorted}
               filters={filters}
-              departureCityId={departureCityId}
+              departureIata={departureIata}
               stayDays={stayDays}
+              currency={currency}
               selectedIds={selectedIds}
               onSelect={handleSelect}
               pulseTarget={mapPulse}
@@ -344,12 +389,14 @@ export function PlannerApp() {
             <EventDetail
               events={selectedEvents}
               activeId={activeIdResolved}
-              departureCityId={departureCityId}
+              departureIata={departureIata}
               stayDays={stayDays}
+              currency={currency}
               expanded={detailExpanded}
               onExpandedChange={setDetailExpanded}
               onActivate={handleActivate}
               onRemove={handleRemoveSelected}
+              onClearOthers={handleClearOtherTabs}
             />
           </aside>
         ) : null}

@@ -1,9 +1,6 @@
 "use client";
 
-import {
-  DEPARTURE_CITIES,
-  type DepartureCityId,
-} from "@/data/departureCities";
+import { AirportPicker } from "./AirportPicker";
 import {
   ANIMALS,
   BUDGET_BANDS,
@@ -25,13 +22,20 @@ import {
   labelize,
 } from "@/lib/filters";
 import { DEFAULT_TYPICAL_TRIP_DAYS } from "@/lib/budget";
+import {
+  CURRENCY_LABELS,
+  DISPLAY_CURRENCIES,
+  type DisplayCurrency,
+} from "@/lib/currency";
 import type { FilterState } from "@/lib/types";
 
 interface FilterBarProps {
   filters: FilterState;
   onChange: (next: FilterState) => void;
-  departureCityId: DepartureCityId;
-  onDepartureCityChange: (id: DepartureCityId) => void;
+  departureIata: string;
+  onDepartureIataChange: (iata: string) => void;
+  currency: DisplayCurrency;
+  onCurrencyChange: (currency: DisplayCurrency) => void;
 }
 
 function toggleInList<T>(list: T[], value: T): T[] {
@@ -88,8 +92,10 @@ function ChipGroup<T extends string>({
 export function FilterBar({
   filters,
   onChange,
-  departureCityId,
-  onDepartureCityChange,
+  departureIata,
+  onDepartureIataChange,
+  currency,
+  onCurrencyChange,
 }: FilterBarProps) {
   const count = activeFilterCount(filters);
   const monthsActive = filters.months.length > 0;
@@ -114,17 +120,22 @@ export function FilterBar({
 
       <fieldset className="filter-group">
         <legend className="filter-legend">Departing from</legend>
-        <label className="select-field">
-          <span className="sr-only">Departure city</span>
+        <AirportPicker value={departureIata} onChange={onDepartureIataChange} />
+      </fieldset>
+
+      <fieldset className="filter-group">
+        <legend className="filter-legend">Currency</legend>
+        <label className="select-field select-field-inline">
+          <span className="sr-only">Currency</span>
           <select
-            value={departureCityId}
+            value={currency}
             onChange={(e) =>
-              onDepartureCityChange(e.target.value as DepartureCityId)
+              onCurrencyChange(e.target.value as DisplayCurrency)
             }
           >
-            {DEPARTURE_CITIES.map((city) => (
-              <option key={city.id} value={city.id}>
-                {city.label} ({city.airport})
+            {DISPLAY_CURRENCIES.map((code) => (
+              <option key={code} value={code}>
+                {CURRENCY_LABELS[code]}
               </option>
             ))}
           </select>
