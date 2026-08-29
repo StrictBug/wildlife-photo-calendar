@@ -62,6 +62,9 @@ export function PlannerApp() {
   const [sort, setSort] = useState<SortState>(DEFAULT_SORT);
   const [selectedIds, setSelectedIds] = useState<string[]>([]);
   const [activeId, setActiveId] = useState<string | null>(null);
+  const [mapPulse, setMapPulse] = useState<{ id: string; key: number } | null>(
+    null,
+  );
   const [detailExpanded, setDetailExpanded] = useState(false);
   const now = new Date();
   const [calYear, setCalYear] = useState(now.getFullYear());
@@ -147,6 +150,12 @@ export function PlannerApp() {
     if (!selectedIds.includes(id)) return;
     setActiveId(id);
     jumpToEventMonth(id);
+    if (view === "map") {
+      setMapPulse((prev) => ({
+        id,
+        key: (prev?.key ?? 0) + 1,
+      }));
+    }
   }
 
   function handleRemoveSelected(id: string) {
@@ -322,6 +331,7 @@ export function PlannerApp() {
               stayDays={stayDays}
               selectedIds={selectedIds}
               onSelect={handleSelect}
+              pulseTarget={mapPulse}
             />
           )}
         </main>

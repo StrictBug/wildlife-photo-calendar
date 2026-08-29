@@ -10,7 +10,6 @@ import {
   TileLayer,
   useMap,
 } from "react-leaflet";
-import { MAP_REGIONS, REGION_COLORS } from "@/data/regionBounds";
 import { formatAnnualRange } from "@/lib/calendar";
 import {
   computeEventBudget,
@@ -29,6 +28,8 @@ interface MapViewProps {
   stayDays: number;
   selectedIds: string[];
   onSelect: (id: string) => void;
+  /** Bumps to replay the locate pulse on a selected event. */
+  pulseTarget: { id: string; key: number } | null;
 }
 
 const FIT_PADDING: [number, number] = [56, 56];
@@ -54,6 +55,37 @@ function FitBounds({
   return null;
 }
 
+function PulseRing({
+  event,
+  pulseKey,
+}: {
+  event: WildlifeEvent;
+  pulseKey: number;
+}) {
+  const map = useMap();
+
+  useEffect(() => {
+    map.panTo([event.lat, event.lng], { animate: true });
+  }, [map, event.lat, event.lng, pulseKey]);
+
+  const color = event.atmosphere[1] || event.atmosphere[0];
+
+  return (
+    <Marker
+      key={`pulse-${event.id}-${pulseKey}`}
+      position={[event.lat, event.lng]}
+      interactive={false}
+      zIndexOffset={1000}
+      icon={L.divIcon({
+        className: "map-pulse-icon",
+        html: `<span class="map-pulse-ring" style="--pulse-color:${color}"></span>`,
+        iconSize: [64, 64],
+        iconAnchor: [32, 32],
+      })}
+    />
+  );
+}
+
 function createMarkerIcon(event: WildlifeEvent, selected: boolean) {
   const size = selected ? 18 : 14;
   return L.divIcon({
@@ -71,10 +103,13 @@ export function MapView({
   stayDays,
   selectedIds,
   onSelect,
+  pulseTarget,
 }: MapViewProps) {
-  const highlightedRegions =
-    filters.regions.length > 0 ? filters.regions : null;
   const departureLabel = getDepartureLabel(departureCityId);
+  const pulseEvent =
+    pulseTarget != null
+      ? (events.find((e) => e.id === pulseTarget.id) ?? null)
+      : null;
 
   return (
     <div className="map-wrap">
@@ -132,34 +167,12 @@ export function MapView({
           </Marker>
         ))}
 
+        {pulseEvent && pulseTarget ? (
+          <PulseRing event={pulseEvent} pulseKey={pulseTarget.key} />
+        ) : null}
+
         <FitBounds events={events} filters={filters} />
       </MapContainer>
-
-      <div className="map-legend" aria-label="Map legend">
-        <p className="map-legend-title">
-          {highlightedRegions
-            ? `Highlighted: ${highlightedRegions.join(", ")}`
-            : "All regions shown — filter by region to focus landmasses"}
-        </p>
-        <div className="map-legend-chips">
-          {MAP_REGIONS.map((region) => {
-            const active =
-              !highlightedRegions || highlightedRegions.includes(region);
-            return (
-              <span
-                key={region}
-                className={`map-legend-chip ${active ? "" : "map-legend-chip-dim"}`}
-              >
-                <span
-                  className="map-legend-swatch"
-                  style={{ background: REGION_COLORS[region] }}
-                />
-                {region}
-              </span>
-            );
-          })}
-        </div>
-      </div>
     </div>
   );
 }
