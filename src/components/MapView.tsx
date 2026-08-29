@@ -34,6 +34,34 @@ interface MapViewProps {
 
 const FIT_PADDING: [number, number] = [56, 56];
 
+function InvalidateSize() {
+  const map = useMap();
+
+  useEffect(() => {
+    const invalidate = () => map.invalidateSize({ animate: false });
+    const frame = window.requestAnimationFrame(invalidate);
+    const timer = window.setTimeout(invalidate, 50);
+    const onResize = () => invalidate();
+    window.addEventListener("resize", onResize);
+
+    const parent = map.getContainer().parentElement;
+    const observer =
+      parent && typeof ResizeObserver !== "undefined"
+        ? new ResizeObserver(() => invalidate())
+        : null;
+    observer?.observe(parent ?? map.getContainer());
+
+    return () => {
+      window.cancelAnimationFrame(frame);
+      window.clearTimeout(timer);
+      window.removeEventListener("resize", onResize);
+      observer?.disconnect();
+    };
+  }, [map]);
+
+  return null;
+}
+
 function FitBounds({
   events,
   filters,
@@ -121,6 +149,7 @@ export function MapView({
         maxZoom={12}
         scrollWheelZoom
         worldCopyJump
+        style={{ width: "100%", height: "100%" }}
       >
         <TileLayer
           attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>'
@@ -128,6 +157,7 @@ export function MapView({
           noWrap={false}
         />
 
+        <InvalidateSize />
         <RegionLandmasses filters={filters} />
 
         {events.map((event) => (

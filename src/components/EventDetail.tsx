@@ -48,6 +48,9 @@ interface EventDetailProps {
   onActivate: (id: string) => void;
   onRemove: (id: string) => void;
   onClearOthers: () => void;
+  /** Mobile sheet: show Back and call when leaving the sheet. */
+  sheetMode?: boolean;
+  onBack?: () => void;
 }
 
 const TAB_SCROLL_STEP = 72;
@@ -231,14 +234,17 @@ export function EventDetail({
   onActivate,
   onRemove,
   onClearOthers,
+  sheetMode = false,
+  onBack,
 }: EventDetailProps) {
   const [lightboxOpen, setLightboxOpen] = useState(false);
   const event =
     events.find((e) => e.id === activeId) ?? events[events.length - 1] ?? null;
+  const showExpanded = sheetMode || expanded;
 
   useEffect(() => {
-    if (!expanded) setLightboxOpen(false);
-  }, [expanded]);
+    if (!showExpanded) setLightboxOpen(false);
+  }, [showExpanded]);
 
   useEffect(() => {
     setLightboxOpen(false);
@@ -266,7 +272,7 @@ export function EventDetail({
   return (
     <>
       <div
-        className={`detail-panel ${expanded ? "detail-panel-expanded" : ""}`}
+        className={`detail-panel ${showExpanded ? "detail-panel-expanded" : ""}`}
         style={
           {
             "--atm-a": event.atmosphere[0],
@@ -285,14 +291,14 @@ export function EventDetail({
         ) : null}
 
         <div
-          className={`detail-hero ${expanded ? "detail-hero-expanded" : ""} ${image ? "detail-hero-has-photo" : ""}`}
+          className={`detail-hero ${showExpanded ? "detail-hero-expanded" : ""} ${image ? "detail-hero-has-photo" : ""}`}
           role="tabpanel"
           aria-labelledby={
             events.length > 1 ? `detail-tab-${event.id}` : undefined
           }
         >
           {image ? (
-            expanded ? (
+            showExpanded ? (
               <button
                 type="button"
                 className="detail-hero-photo-btn"
@@ -324,18 +330,31 @@ export function EventDetail({
           ) : null}
           <div className="detail-hero-scrim" aria-hidden="true" />
           <div className="detail-actions">
-            <button
-              type="button"
-              className="detail-action-btn"
-              onClick={() => onExpandedChange(!expanded)}
-              aria-expanded={expanded}
-            >
-              {expanded ? "Collapse" : "Expand"}
-            </button>
+            {sheetMode && onBack ? (
+              <button
+                type="button"
+                className="detail-action-btn"
+                onClick={onBack}
+              >
+                Back
+              </button>
+            ) : null}
+            {!sheetMode ? (
+              <button
+                type="button"
+                className="detail-action-btn"
+                onClick={() => onExpandedChange(!expanded)}
+                aria-expanded={expanded}
+              >
+                {expanded ? "Collapse" : "Expand"}
+              </button>
+            ) : null}
             <button
               type="button"
               className="detail-close"
-              onClick={() => onRemove(event.id)}
+              onClick={() =>
+                sheetMode && onBack ? onBack() : onRemove(event.id)
+              }
               aria-label="Close detail"
             >
               ×
@@ -360,7 +379,7 @@ export function EventDetail({
 
           {image ? <ImageCredit image={image} /> : null}
 
-          {expanded ? (
+          {showExpanded ? (
             <div className="detail-expanded-body">
               <div className="detail-expanded-main">
                 <p className="detail-desc">{event.description}</p>

@@ -38,6 +38,8 @@ interface FilterBarProps {
   onDepartureIataChange: (iata: string) => void;
   currency: DisplayCurrency;
   onCurrencyChange: (currency: DisplayCurrency) => void;
+  /** Hide chrome when embedded in a mobile sheet. */
+  embedded?: boolean;
 }
 
 function toggleInList<T>(list: T[], value: T): T[] {
@@ -98,6 +100,7 @@ export function FilterBar({
   onDepartureIataChange,
   currency,
   onCurrencyChange,
+  embedded = false,
 }: FilterBarProps) {
   const count = activeFilterCount(filters);
   const monthsActive = filters.months.length > 0;
@@ -106,19 +109,24 @@ export function FilterBar({
   const datesDisabled = monthsActive || tripLengthActive;
 
   return (
-    <aside className="filter-bar" aria-label="Trip filters">
-      <div className="filter-bar-header">
-        <h2 className="filter-title">Filters</h2>
-        {count > 0 && (
-          <button
-            type="button"
-            className="clear-btn"
-            onClick={() => onChange(emptyFilters())}
-          >
-            Clear ({count})
-          </button>
-        )}
-      </div>
+    <aside
+      className={`filter-bar ${embedded ? "filter-bar-embedded" : ""}`}
+      aria-label="Trip filters"
+    >
+      {!embedded ? (
+        <div className="filter-bar-header">
+          <h2 className="filter-title">Filters</h2>
+          {count > 0 && (
+            <button
+              type="button"
+              className="clear-btn"
+              onClick={() => onChange(emptyFilters())}
+            >
+              Clear ({count})
+            </button>
+          )}
+        </div>
+      ) : null}
 
       <fieldset className="filter-group">
         <legend className="filter-legend">Search</legend>

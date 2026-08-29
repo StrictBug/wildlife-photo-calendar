@@ -130,7 +130,7 @@ function YearView({
   );
 
   return (
-    <>
+    <div className="calendar-year-body">
       {scopedMonths.length === 0 ? (
         <p className="calendar-empty">No months in the selected time range.</p>
       ) : (
@@ -184,7 +184,7 @@ function YearView({
           )}
         </>
       )}
-    </>
+    </div>
   );
 }
 
@@ -341,11 +341,7 @@ export function CalendarView({
       ) : !scope.months.includes(month) ? (
         <p className="calendar-empty">This month is outside the selected range.</p>
       ) : (
-        <>
-          <p className="calendar-hint">
-            Windows repeat every year. Click a day to see all matching windows.
-          </p>
-
+        <div className="calendar-month-body">
           {monthEvents.length > 0 && (
             <p className="calendar-month-count">
               <strong>{monthEvents.length}</strong>{" "}
@@ -354,16 +350,19 @@ export function CalendarView({
             </p>
           )}
 
-          <div
-            className="calendar-grid"
-            role="grid"
-            aria-label={monthLabel(month)}
-          >
+          <div className="calendar-weekdays" role="row">
             {WEEKDAYS.map((d) => (
               <div key={d} className="cal-weekday" role="columnheader">
                 {d}
               </div>
             ))}
+          </div>
+
+          <div
+            className="calendar-grid"
+            role="grid"
+            aria-label={monthLabel(month)}
+          >
             {cells.map((day, i) => {
               if (day === null) {
                 return <div key={`e-${i}`} className="cal-cell cal-empty" />;
@@ -450,7 +449,7 @@ export function CalendarView({
           {monthEvents.length === 0 && (
             <p className="calendar-empty">No matching windows in this month.</p>
           )}
-        </>
+        </div>
       )}
     </div>
   );

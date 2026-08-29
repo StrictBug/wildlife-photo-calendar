@@ -18,7 +18,12 @@ import {
   calendarAnchorMonth,
   eventAnchorMonth,
 } from "@/lib/calendar";
-import { emptyFilters, filterEvents, resolveStayDays } from "@/lib/filters";
+import {
+  activeFilterCount,
+  emptyFilters,
+  filterEvents,
+  resolveStayDays,
+} from "@/lib/filters";
 import {
   DEFAULT_CURRENCY,
   isDisplayCurrency,
@@ -40,6 +45,7 @@ import { FilterBar } from "./FilterBar";
 const DEPARTURE_IATA_STORAGE_KEY = "wildseason-departure-airport";
 const LEGACY_DEPARTURE_CITY_STORAGE_KEY = "wildseason-departure-city";
 const CURRENCY_STORAGE_KEY = "wildseason-currency";
+const MOBILE_MQ = "(max-width: 899px)";
 
 function readStoredDepartureIata(): string {
   if (typeof window === "undefined") return DEFAULT_DEPARTURE_IATA;
@@ -78,7 +84,22 @@ function findEventById(id: string, lists: WildlifeEvent[][]): WildlifeEvent | nu
   return null;
 }
 
+function useIsMobile() {
+  const [isMobile, setIsMobile] = useState(false);
+
+  useEffect(() => {
+    const mq = window.matchMedia(MOBILE_MQ);
+    const update = () => setIsMobile(mq.matches);
+    update();
+    mq.addEventListener("change", update);
+    return () => mq.removeEventListener("change", update);
+  }, []);
+
+  return isMobile;
+}
+
 export function PlannerApp() {
+  const isMobile = useIsMobile();
   const [filters, setFilters] = useState<FilterState>(emptyFilters);
   const [departureIata, setDepartureIata] = useState(DEFAULT_DEPARTURE_IATA);
   const [currency, setCurrency] = useState<DisplayCurrency>(DEFAULT_CURRENCY);
@@ -90,11 +111,13 @@ export function PlannerApp() {
     null,
   );
   const [detailExpanded, setDetailExpanded] = useState(false);
+  const [filtersOpen, setFiltersOpen] = useState(false);
   const now = new Date();
   const [calYear, setCalYear] = useState(now.getFullYear());
   const [calMonth, setCalMonth] = useState(now.getMonth() + 1);
 
   const stayDays = useMemo(() => resolveStayDays(filters), [filters]);
+  const filterCount = activeFilterCount(filters);
 
   const filtered = useMemo(
     () => filterEvents(events, filters, departureIata, stayDays),
@@ -131,6 +154,10 @@ export function PlannerApp() {
     localStorage.setItem(CURRENCY_STORAGE_KEY, currency);
   }, [currency]);
 
+  useEffect(() => {
+    if (!isMobile) setFiltersOpen(false);
+  }, [isMobile]);
+
   const selectedEvents = useMemo(() => {
     return selectedIds
       .map((id) => findEventById(id, [sorted, filtered, events]))
@@ -146,6 +173,37 @@ export function PlannerApp() {
     ? findEventById(activeIdResolved, [sorted, filtered, events])
     : null;
 
+  const hasSelection = selected !== null;
+  const detailSheetOpen = isMobile && hasSelection;
+  const sheetOpen = filtersOpen || detailSheetOpen;
+
+  useEffect(() => {
+    if (!sheetOpen) return;
+    const prev = document.body.style.overflow;
+    document.body.style.overflow = "hidden";
+    return () => {
+      document.body.style.overflow = prev;
+    };
+  }, [sheetOpen]);
+
+  useEffect(() => {
+    if (!sheetOpen) return;
+    function onKey(e: KeyboardEvent) {
+      if (e.key !== "Escape") return;
+      if (filtersOpen) {
+        setFiltersOpen(false);
+        return;
+      }
+      if (detailSheetOpen) {
+        setSelectedIds([]);
+        setActiveId(null);
+        setDetailExpanded(false);
+      }
+    }
+    window.addEventListener("keydown", onKey);
+    return () => window.removeEventListener("keydown", onKey);
+  }, [sheetOpen, filtersOpen, detailSheetOpen]);
+
   const calendarEvents = useMemo(() => {
     if (selectedEvents.length === 0) return sorted;
     return selectedEvents;
@@ -159,12 +217,16 @@ export function PlannerApp() {
   }
 
   function handleSelect(id: string) {
-    // Map/list selection must not replay the tab pulse animation.
     setMapPulse(null);
 
     const alreadySelected = selectedIds.includes(id);
 
     if (alreadySelected) {
+      if (isMobile) {
+        setActiveId(id);
+        jumpToEventMonth(id);
+        return;
+      }
       const next = selectedIds.filter((x) => x !== id);
       setSelectedIds(next);
       if (activeIdResolved === id) {
@@ -208,25 +270,135 @@ export function PlannerApp() {
     setDetailExpanded(false);
   }
 
+  function closeDetailSheet() {
+    setSelectedIds([]);
+    setActiveId(null);
+    setDetailExpanded(false);
+  }
+
   function handleClearOtherTabs() {
     if (!activeIdResolved) return;
     setSelectedIds([activeIdResolved]);
     setActiveId(activeIdResolved);
   }
 
-  const hasSelection = selected !== null;
-  const shellExpanded = detailExpanded && hasSelection;
+  const shellExpanded = !isMobile && detailExpanded && hasSelection;
 
   const shellClass = [
     "planner-shell",
-    hasSelection ? "planner-shell-has-detail" : "",
+    isMobile ? "planner-shell-mobile" : "",
+    !isMobile && hasSelection ? "planner-shell-has-detail" : "",
     shellExpanded ? "planner-shell-detail-expanded" : "",
   ]
     .filter(Boolean)
     .join(" ");
 
+  const filterBarProps = {
+    filters,
+    onChange: setFilters,
+    departureIata,
+    onDepartureIataChange: setDepartureIata,
+    currency,
+    onCurrencyChange: setCurrency,
+  };
+
+  const detailProps = {
+    events: selectedEvents,
+    activeId: activeIdResolved,
+    departureIata,
+    stayDays,
+    currency,
+    expanded: detailExpanded,
+    onExpandedChange: setDetailExpanded,
+    onActivate: handleActivate,
+    onRemove: handleRemoveSelected,
+    onClearOthers: handleClearOtherTabs,
+  };
+
+  function renderViewToggle(className?: string) {
+    return (
+      <div
+        className={["view-toggle", className].filter(Boolean).join(" ")}
+        role="group"
+        aria-label="View mode"
+      >
+        <button
+          type="button"
+          className={view === "list" ? "toggle-on" : ""}
+          onClick={() => setView("list")}
+        >
+          List
+        </button>
+        <button
+          type="button"
+          className={view === "calendar" ? "toggle-on" : ""}
+          onClick={() => setView("calendar")}
+        >
+          Calendar
+        </button>
+        <button
+          type="button"
+          className={view === "map" ? "toggle-on" : ""}
+          onClick={() => setView("map")}
+        >
+          Map
+        </button>
+      </div>
+    );
+  }
+
+  const sortControl = (
+    <div className="sort-control">
+      <label className="sort-field">
+        <span className="sort-label">Sort</span>
+        <select
+          className="sort-select"
+          value={sort.field}
+          onChange={(e) =>
+            setSort((prev) => ({
+              ...prev,
+              field: e.target.value as SortState["field"],
+            }))
+          }
+        >
+          {SORT_FIELDS.map(({ value, label }) => (
+            <option key={value} value={value}>
+              {label}
+            </option>
+          ))}
+        </select>
+      </label>
+      <button
+        type="button"
+        className="sort-direction"
+        onClick={() =>
+          setSort((prev) => ({
+            ...prev,
+            direction: toggleSortDirection(prev.direction),
+          }))
+        }
+        aria-label={
+          sort.direction === "asc"
+            ? "Ascending — click for descending"
+            : "Descending — click for ascending"
+        }
+        title={sort.direction === "asc" ? "Low to high" : "High to low"}
+      >
+        {sort.direction === "asc" ? "↑" : "↓"}
+      </button>
+    </div>
+  );
+
   return (
-    <div className="planner">
+    <div
+      className={[
+        "planner",
+        isMobile ? "planner-mobile" : "",
+        `planner-view-${view}`,
+      ]
+        .filter(Boolean)
+        .join(" ")}
+    >
       <header className="hero">
         <Image
           src="/images/hero-banner.png"
@@ -248,85 +420,44 @@ export function PlannerApp() {
         </div>
       </header>
 
+      <div className="mobile-chrome">
+        <div className="mobile-chrome-top">
+          <p className="mobile-chrome-brand">Wild Season</p>
+          <button
+            type="button"
+            className="mobile-filters-btn"
+            onClick={() => setFiltersOpen(true)}
+            aria-expanded={filtersOpen}
+          >
+            Filters
+            {filterCount > 0 ? (
+              <span className="mobile-filters-badge">{filterCount}</span>
+            ) : null}
+          </button>
+        </div>
+        <div className="mobile-chrome-row">
+          <p className="mobile-chrome-count">
+            <strong>{sorted.length}</strong>{" "}
+            {sorted.length === 1 ? "destination" : "destinations"}
+          </p>
+          {renderViewToggle()}
+        </div>
+      </div>
+
       <div className={shellClass}>
-        <FilterBar
-          filters={filters}
-          onChange={setFilters}
-          departureIata={departureIata}
-          onDepartureIataChange={setDepartureIata}
-          currency={currency}
-          onCurrencyChange={setCurrency}
-        />
+        <div className="filter-aside-desktop">
+          <FilterBar {...filterBarProps} />
+        </div>
 
         <main className="results">
           <div className="results-toolbar">
-            <p className="results-count">
+            <p className="results-count results-count-desktop">
               <strong>{sorted.length}</strong>{" "}
               {sorted.length === 1 ? "destination" : "destinations"}
             </p>
             <div className="results-toolbar-actions">
-              <div className="sort-control">
-                <label className="sort-field">
-                  <span className="sort-label">Sort</span>
-                  <select
-                    className="sort-select"
-                    value={sort.field}
-                    onChange={(e) =>
-                      setSort((prev) => ({
-                        ...prev,
-                        field: e.target.value as SortState["field"],
-                      }))
-                    }
-                  >
-                    {SORT_FIELDS.map(({ value, label }) => (
-                      <option key={value} value={value}>
-                        {label}
-                      </option>
-                    ))}
-                  </select>
-                </label>
-                <button
-                  type="button"
-                  className="sort-direction"
-                  onClick={() =>
-                    setSort((prev) => ({
-                      ...prev,
-                      direction: toggleSortDirection(prev.direction),
-                    }))
-                  }
-                  aria-label={
-                    sort.direction === "asc"
-                      ? "Ascending — click for descending"
-                      : "Descending — click for ascending"
-                  }
-                  title={sort.direction === "asc" ? "Low to high" : "High to low"}
-                >
-                  {sort.direction === "asc" ? "↑" : "↓"}
-                </button>
-              </div>
-              <div className="view-toggle" role="group" aria-label="View mode">
-              <button
-                type="button"
-                className={view === "list" ? "toggle-on" : ""}
-                onClick={() => setView("list")}
-              >
-                List
-              </button>
-              <button
-                type="button"
-                className={view === "calendar" ? "toggle-on" : ""}
-                onClick={() => setView("calendar")}
-              >
-                Calendar
-              </button>
-              <button
-                type="button"
-                className={view === "map" ? "toggle-on" : ""}
-                onClick={() => setView("map")}
-              >
-                Map
-              </button>
-            </div>
+              {sortControl}
+              {renderViewToggle("view-toggle-desktop")}
             </div>
           </div>
 
@@ -369,6 +500,7 @@ export function PlannerApp() {
             </p>
           ) : (
             <MapView
+              key={isMobile ? "map-mobile" : "map-desktop"}
               events={sorted}
               filters={filters}
               departureIata={departureIata}
@@ -381,26 +513,79 @@ export function PlannerApp() {
           )}
         </main>
 
-        {hasSelection ? (
+        {!isMobile && hasSelection ? (
           <aside
             className={`detail-aside ${shellExpanded ? "detail-aside-expanded" : ""}`}
             aria-label="Event detail"
           >
-            <EventDetail
-              events={selectedEvents}
-              activeId={activeIdResolved}
-              departureIata={departureIata}
-              stayDays={stayDays}
-              currency={currency}
-              expanded={detailExpanded}
-              onExpandedChange={setDetailExpanded}
-              onActivate={handleActivate}
-              onRemove={handleRemoveSelected}
-              onClearOthers={handleClearOtherTabs}
-            />
+            <EventDetail {...detailProps} />
           </aside>
         ) : null}
       </div>
+
+      {filtersOpen ? (
+        <div className="mobile-sheet" role="dialog" aria-modal="true" aria-label="Filters">
+          <button
+            type="button"
+            className="mobile-sheet-backdrop"
+            aria-label="Close filters"
+            onClick={() => setFiltersOpen(false)}
+          />
+          <div className="mobile-sheet-panel">
+            <div className="mobile-sheet-header">
+              <h2 className="mobile-sheet-title">Filters</h2>
+              <div className="mobile-sheet-header-actions">
+                {filterCount > 0 ? (
+                  <button
+                    type="button"
+                    className="clear-btn"
+                    onClick={() => setFilters(emptyFilters())}
+                  >
+                    Clear ({filterCount})
+                  </button>
+                ) : null}
+                <button
+                  type="button"
+                  className="mobile-sheet-done"
+                  onClick={() => setFiltersOpen(false)}
+                >
+                  Done
+                </button>
+              </div>
+            </div>
+            <div className="mobile-sheet-body">
+              <FilterBar {...filterBarProps} embedded />
+            </div>
+            <div className="mobile-sheet-footer">
+              <button
+                type="button"
+                className="mobile-sheet-done mobile-sheet-done-wide"
+                onClick={() => setFiltersOpen(false)}
+              >
+                Show {sorted.length}{" "}
+                {sorted.length === 1 ? "destination" : "destinations"}
+              </button>
+            </div>
+          </div>
+        </div>
+      ) : null}
+
+      {isMobile && hasSelection ? (
+        <div
+          className="mobile-sheet mobile-sheet-detail"
+          role="dialog"
+          aria-modal="true"
+          aria-label="Event detail"
+        >
+          <div className="mobile-sheet-panel mobile-sheet-panel-detail">
+            <EventDetail
+              {...detailProps}
+              sheetMode
+              onBack={closeDetailSheet}
+            />
+          </div>
+        </div>
+      ) : null}
     </div>
   );
 }
