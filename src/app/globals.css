@@ -1182,6 +1182,66 @@ input {
   color: #fff;
 }
 
+/* —— Dart randomizer —— */
+.randomizer-trigger {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  border: none;
+  border-radius: 999px;
+  padding: 0.45rem 0.9rem;
+  background: var(--forest);
+  color: #faf5ef;
+  font-size: 0.82rem;
+  font-weight: 650;
+  cursor: pointer;
+  transition: background 0.15s ease, opacity 0.15s ease;
+  white-space: nowrap;
+}
+
+.randomizer-trigger:hover:not(:disabled) {
+  background: var(--moss);
+}
+
+.randomizer-trigger:disabled {
+  opacity: 0.45;
+  cursor: not-allowed;
+}
+
+.randomizer-trigger-icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  line-height: 0;
+}
+
+.map-container-wrap {
+  position: relative;
+}
+
+.map-randomizer-status {
+  position: absolute;
+  left: 50%;
+  bottom: 1rem;
+  transform: translateX(-50%);
+  margin: 0;
+  padding: 0.45rem 0.85rem;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.92);
+  border: 1px solid var(--border);
+  box-shadow: var(--shadow);
+  font-family: var(--font-display);
+  font-size: 0.95rem;
+  font-weight: 550;
+  color: var(--forest);
+  pointer-events: none;
+  z-index: 500;
+}
+
+.map-wrap-spinning .map-container {
+  pointer-events: none;
+}
+
 .detail-actions {
   position: absolute;
   top: 0.6rem;
@@ -2366,6 +2426,7 @@ input {
     align-items: center;
     justify-content: space-between;
     gap: 0.65rem;
+    flex-wrap: wrap;
   }
 
   .mobile-chrome-count {

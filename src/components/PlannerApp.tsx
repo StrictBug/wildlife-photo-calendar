@@ -36,6 +36,10 @@ import {
   toggleSortDirection,
   type SortState,
 } from "@/lib/sort";
+import {
+  createRandomizerSpin,
+  type RandomizerSpin,
+} from "@/lib/randomizer";
 import type { FilterState, ViewMode, WildlifeEvent } from "@/lib/types";
 import { CalendarView } from "./CalendarView";
 import { EventCard } from "./EventCard";
@@ -112,6 +116,8 @@ export function PlannerApp() {
   );
   const [detailExpanded, setDetailExpanded] = useState(false);
   const [filtersOpen, setFiltersOpen] = useState(false);
+  const [randomizerSpin, setRandomizerSpin] = useState<RandomizerSpin | null>(null);
+  const [mapBusy, setMapBusy] = useState(false);
   const now = new Date();
   const [calYear, setCalYear] = useState(now.getFullYear());
   const [calMonth, setCalMonth] = useState(now.getMonth() + 1);
@@ -315,6 +321,63 @@ export function PlannerApp() {
     onClearOthers: handleClearOtherTabs,
   };
 
+  useEffect(() => {
+    if (randomizerSpin && sorted.length === 0) setRandomizerSpin(null);
+  }, [randomizerSpin, sorted.length]);
+
+  useEffect(() => {
+    if (view !== "map" && randomizerSpin) setRandomizerSpin(null);
+  }, [view, randomizerSpin]);
+
+  function startRandomizer() {
+    const spin = createRandomizerSpin(sorted);
+    if (spin) setRandomizerSpin(spin);
+  }
+
+  function completeRandomizer(winnerId: string) {
+    setRandomizerSpin(null);
+    if (!selectedIds.includes(winnerId)) {
+      setSelectedIds((prev) => [...prev, winnerId]);
+    }
+    setActiveId(winnerId);
+    jumpToEventMonth(winnerId);
+    setMapPulse({ id: winnerId, key: Date.now() });
+    window.setTimeout(() => {
+      setMapPulse((current) => (current?.id === winnerId ? null : current));
+    }, 1200);
+  }
+
+  function renderSurpriseButton(className?: string) {
+    const disabled = sorted.length === 0 || mapBusy || randomizerSpin != null;
+    return (
+      <button
+        type="button"
+        className={["randomizer-trigger", className].filter(Boolean).join(" ")}
+        disabled={disabled}
+        title={
+          sorted.length === 0
+            ? "No destinations match your filters."
+            : "Random destination"
+        }
+        onClick={startRandomizer}
+      >
+        <span className="randomizer-trigger-icon" aria-hidden="true">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none">
+            <circle cx="12" cy="12" r="9" stroke="currentColor" strokeWidth="2" />
+            <circle cx="12" cy="12" r="4" stroke="currentColor" strokeWidth="2" />
+            <path
+              d="M12 3v4M12 17v4M3 12h4M17 12h4"
+              stroke="currentColor"
+              strokeWidth="2"
+              strokeLinecap="round"
+            />
+          </svg>
+        </span>
+        Surprise me
+      </button>
+    );
+  }
+
   function renderViewToggle(className?: string) {
     return (
       <div
@@ -452,6 +515,7 @@ export function PlannerApp() {
             </p>
             <div className="results-toolbar-actions">
               {view === "list" ? sortControl : null}
+              {view === "map" ? renderSurpriseButton() : null}
               {renderViewToggle("view-toggle-desktop")}
             </div>
           </div>
@@ -505,6 +569,14 @@ export function PlannerApp() {
               onSelect={handleSelect}
               pulseTarget={mapPulse}
               showMonthScrubber={!isMobile}
+              randomizerSpin={randomizerSpin}
+              onRandomizerHop={(hopIndex) =>
+                setRandomizerSpin((spin) =>
+                  spin ? { ...spin, hopIndex } : null,
+                )
+              }
+              onRandomizerComplete={completeRandomizer}
+              onMapBusyChange={setMapBusy}
             />
           )}
         </main>

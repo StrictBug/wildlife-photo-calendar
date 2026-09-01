@@ -7,6 +7,7 @@ import { MapContainer, Marker, TileLayer, useMap } from "react-leaflet";
 import { eventOverlapsMonth } from "@/lib/calendar";
 import type { DisplayCurrency } from "@/lib/currency";
 import { fitMapToEvents, fitMapToRegions } from "@/lib/mapFraming";
+import { hopDelayMs, type RandomizerSpin } from "@/lib/randomizer";
 import type { FilterState, WildlifeEvent } from "@/lib/types";
 import { RegionLandmasses } from "./RegionLandmasses";
 
@@ -22,10 +23,16 @@ interface MapViewProps {
   pulseTarget: { id: string; key: number } | null;
   /** Desktop month movie scrubber under the map. */
   showMonthScrubber?: boolean;
+  randomizerSpin?: RandomizerSpin | null;
+  onRandomizerHop?: (hopIndex: number) => void;
+  onRandomizerComplete?: (winnerId: string) => void;
+  onMapBusyChange?: (busy: boolean) => void;
 }
 
 const FIT_PADDING: [number, number] = [56, 56];
 const PLAY_MS = 850;
+const WORLD_ZOOM = 2;
+const LANDING_ZOOM = 5;
 const MONTH_LABELS = [
   "January",
   "February",
@@ -40,6 +47,20 @@ const MONTH_LABELS = [
   "November",
   "December",
 ] as const;
+
+function usePrefersReducedMotion() {
+  const [reduced, setReduced] = useState(false);
+
+  useEffect(() => {
+    const mq = window.matchMedia("(prefers-reduced-motion: reduce)");
+    const update = () => setReduced(mq.matches);
+    update();
+    mq.addEventListener("change", update);
+    return () => mq.removeEventListener("change", update);
+  }, []);
+
+  return reduced;
+}
 
 function InvalidateSize() {
   const map = useMap();
@@ -72,20 +93,48 @@ function InvalidateSize() {
 function FitBounds({
   events,
   filters,
+  disabled,
 }: {
   events: WildlifeEvent[];
   filters: FilterState;
+  disabled: boolean;
 }) {
   const map = useMap();
 
   useEffect(() => {
+    if (disabled) return;
     if (filters.regions.length > 0) {
       fitMapToRegions(map, filters.regions, FIT_PADDING);
       return;
     }
 
     fitMapToEvents(map, events, FIT_PADDING);
-  }, [events, filters, map]);
+  }, [events, filters, map, disabled]);
+
+  return null;
+}
+
+function RandomizerFlyTo({
+  event,
+  isFinal,
+  reducedMotion,
+}: {
+  event: WildlifeEvent;
+  isFinal: boolean;
+  reducedMotion: boolean;
+}) {
+  const map = useMap();
+
+  useEffect(() => {
+    const zoom = isFinal ? LANDING_ZOOM : WORLD_ZOOM;
+    if (reducedMotion) {
+      map.setView([event.lat, event.lng], zoom, { animate: false });
+      return;
+    }
+    map.flyTo([event.lat, event.lng], zoom, {
+      duration: isFinal ? 1.2 : 0.45,
+    });
+  }, [map, event.lat, event.lng, event.id, isFinal, reducedMotion]);
 
   return null;
 }
@@ -138,6 +187,7 @@ function MapMonthScrubber({
   month,
   playing,
   visibleCount,
+  disabled,
   onEnabledChange,
   onMonthChange,
   onPlayingChange,
@@ -146,6 +196,7 @@ function MapMonthScrubber({
   month: number;
   playing: boolean;
   visibleCount: number;
+  disabled: boolean;
   onEnabledChange: (enabled: boolean) => void;
   onMonthChange: (month: number) => void;
   onPlayingChange: (playing: boolean) => void;
@@ -160,6 +211,7 @@ function MapMonthScrubber({
         <input
           type="checkbox"
           checked={enabled}
+          disabled={disabled}
           onChange={(e) => {
             const next = e.target.checked;
             onEnabledChange(next);
@@ -177,7 +229,7 @@ function MapMonthScrubber({
         aria-label={
           playing ? "Pause month animation" : "Play months through the year"
         }
-        disabled={!enabled}
+        disabled={!enabled || disabled}
       >
         {playing ? (
           <span className="map-month-play-icon" aria-hidden="true">
@@ -208,7 +260,7 @@ function MapMonthScrubber({
             max={12}
             step={1}
             value={month}
-            disabled={!enabled}
+            disabled={!enabled || disabled}
             onChange={(e) => {
               onPlayingChange(false);
               onMonthChange(Number(e.target.value));
@@ -222,7 +274,7 @@ function MapMonthScrubber({
               key={label}
               type="button"
               className={`map-month-tick ${month === i + 1 ? "map-month-tick-on" : ""}`}
-              disabled={!enabled}
+              disabled={!enabled || disabled}
               onClick={() => {
                 onPlayingChange(false);
                 onMonthChange(i + 1);
@@ -244,10 +296,23 @@ export function MapView({
   onSelect,
   pulseTarget,
   showMonthScrubber = false,
+  randomizerSpin = null,
+  onRandomizerHop,
+  onRandomizerComplete,
+  onMapBusyChange,
 }: MapViewProps) {
   const [month, setMonth] = useState(() => new Date().getMonth() + 1);
   const [playing, setPlaying] = useState(false);
   const [scrubberActive, setScrubberActive] = useState(false);
+  const [spinPulse, setSpinPulse] = useState(false);
+  const reducedMotion = usePrefersReducedMotion();
+
+  const isSpinning = randomizerSpin != null;
+  const mapBusy = isSpinning || (scrubberActive && playing);
+
+  useEffect(() => {
+    onMapBusyChange?.(mapBusy);
+  }, [mapBusy, onMapBusyChange]);
 
   useEffect(() => {
     if (!playing) return;
@@ -264,54 +329,135 @@ export function MapView({
     }
   }, [showMonthScrubber]);
 
+  useEffect(() => {
+    if (!randomizerSpin || !onRandomizerComplete) return;
+
+    const { path, hopIndex, winnerId } = randomizerSpin;
+    const isFinal = hopIndex >= path.length - 1;
+
+    if (reducedMotion || path.length <= 1) {
+      setSpinPulse(true);
+      const t = window.setTimeout(() => onRandomizerComplete(winnerId), 350);
+      return () => window.clearTimeout(t);
+    }
+
+    if (isFinal) {
+      setSpinPulse(true);
+      const t = window.setTimeout(() => onRandomizerComplete(winnerId), 900);
+      return () => window.clearTimeout(t);
+    }
+
+    const delay = hopDelayMs(hopIndex, path.length);
+    const t = window.setTimeout(() => {
+      onRandomizerHop?.(hopIndex + 1);
+    }, delay);
+
+    return () => window.clearTimeout(t);
+  }, [
+    randomizerSpin,
+    onRandomizerComplete,
+    onRandomizerHop,
+    reducedMotion,
+  ]);
+
+  useEffect(() => {
+    if (randomizerSpin) {
+      setSpinPulse(false);
+    }
+  }, [randomizerSpin?.key]);
+
   const visibleEvents = useMemo(() => {
     if (!showMonthScrubber || !scrubberActive) return events;
     return events.filter((event) => eventOverlapsMonth(event, month));
   }, [events, month, scrubberActive, showMonthScrubber]);
+
+  const spinFocusEvent = randomizerSpin
+    ? events.find(
+        (e) => e.id === (randomizerSpin.path[randomizerSpin.hopIndex] ?? randomizerSpin.winnerId),
+      )
+    : null;
+
+  const spinIsFinal =
+    randomizerSpin != null &&
+    randomizerSpin.hopIndex >= randomizerSpin.path.length - 1;
 
   const pulseEvent =
     pulseTarget != null
       ? (visibleEvents.find((e) => e.id === pulseTarget.id) ?? null)
       : null;
 
+  const spinWinner =
+    randomizerSpin != null
+      ? events.find((e) => e.id === randomizerSpin.winnerId)
+      : null;
+
   return (
-    <div className="map-wrap">
-      <MapContainer
-        className="map-container"
-        center={[20, 10]}
-        zoom={2}
-        minZoom={1}
-        maxZoom={12}
-        scrollWheelZoom
-        worldCopyJump
-      >
-        <TileLayer
-          attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>'
-          url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
-          noWrap={false}
-        />
-
-        <InvalidateSize />
-        <RegionLandmasses filters={filters} />
-
-        {visibleEvents.map((event) => (
-          <Marker
-            key={event.id}
-            position={[event.lat, event.lng]}
-            icon={createMarkerIcon(selectedIds.includes(event.id))}
-            eventHandlers={{
-              click: () => onSelect(event.id),
-            }}
+    <div className={`map-wrap ${isSpinning ? "map-wrap-spinning" : ""}`}>
+      <div className="map-container-wrap">
+        <MapContainer
+          className="map-container"
+          center={[20, 10]}
+          zoom={2}
+          minZoom={1}
+          maxZoom={12}
+          scrollWheelZoom={!isSpinning}
+          worldCopyJump
+        >
+          <TileLayer
+            attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>'
+            url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
+            noWrap={false}
           />
-        ))}
 
-        {pulseEvent && pulseTarget ? (
-          <PulseRing event={pulseEvent} pulseKey={pulseTarget.key} />
+          <InvalidateSize />
+          <RegionLandmasses filters={filters} />
+
+          {spinFocusEvent ? (
+            <RandomizerFlyTo
+              event={spinFocusEvent}
+              isFinal={spinIsFinal}
+              reducedMotion={reducedMotion}
+            />
+          ) : null}
+
+          {visibleEvents.map((event) => (
+            <Marker
+              key={event.id}
+              position={[event.lat, event.lng]}
+              icon={createMarkerIcon(
+                selectedIds.includes(event.id) ||
+                  (spinPulse && event.id === randomizerSpin?.winnerId),
+              )}
+              eventHandlers={
+                isSpinning
+                  ? undefined
+                  : {
+                      click: () => onSelect(event.id),
+                    }
+              }
+            />
+          ))}
+
+          {pulseEvent && pulseTarget ? (
+            <PulseRing event={pulseEvent} pulseKey={pulseTarget.key} />
+          ) : null}
+
+          {spinPulse && spinWinner && randomizerSpin ? (
+            <PulseRing
+              event={spinWinner}
+              pulseKey={randomizerSpin.key}
+            />
+          ) : null}
+
+          <FitBounds events={events} filters={filters} disabled={isSpinning} />
+        </MapContainer>
+
+        {isSpinning ? (
+          <p className="map-randomizer-status" aria-live="polite">
+            Throwing dart…
+          </p>
         ) : null}
-
-        {/* Frame to the full filtered set so the camera stays steady while months play. */}
-        <FitBounds events={events} filters={filters} />
-      </MapContainer>
+      </div>
 
       {showMonthScrubber ? (
         <MapMonthScrubber
@@ -319,6 +465,7 @@ export function MapView({
           month={month}
           playing={playing}
           visibleCount={visibleEvents.length}
+          disabled={isSpinning}
           onEnabledChange={setScrubberActive}
           onMonthChange={setMonth}
           onPlayingChange={setPlaying}
