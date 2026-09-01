@@ -1488,6 +1488,10 @@ input {
   margin-bottom: 0.5rem;
 }
 
+.calendar-toolbar-year {
+  justify-content: center;
+}
+
 .calendar-toolbar-secondary {
   display: flex;
   justify-content: center;

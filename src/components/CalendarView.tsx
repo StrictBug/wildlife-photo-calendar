@@ -197,7 +197,7 @@ export function CalendarView({
   selectedIds,
   onSelect,
 }: CalendarViewProps) {
-  const [mode, setMode] = useState<CalendarMode>("month");
+  const [mode, setMode] = useState<CalendarMode>("year");
   const [activeDay, setActiveDay] = useState<number | null>(null);
 
   const scopeHint = formatCalendarScopeHint(scope);
@@ -238,7 +238,6 @@ export function CalendarView({
 
   function prev() {
     setActiveDay(null);
-    if (mode === "year") return;
     const prevMonth = adjacentScopeMonth(scope, month, -1);
     if (prevMonth === null) return;
     onMonthChange(year, prevMonth);
@@ -246,7 +245,6 @@ export function CalendarView({
 
   function next() {
     setActiveDay(null);
-    if (mode === "year") return;
     const nextMonth = adjacentScopeMonth(scope, month, 1);
     if (nextMonth === null) return;
     onMonthChange(year, nextMonth);
@@ -270,26 +268,32 @@ export function CalendarView({
 
   return (
     <div className="calendar">
-      <div className="calendar-toolbar">
-        <button
-          type="button"
-          className="cal-nav"
-          onClick={prev}
-          disabled={mode === "year" || (mode === "month" && !canPrevMonth)}
-          aria-label="Previous month"
-        >
-          ‹
-        </button>
+      <div
+        className={`calendar-toolbar ${mode === "year" ? "calendar-toolbar-year" : ""}`}
+      >
+        {mode === "month" ? (
+          <button
+            type="button"
+            className="cal-nav"
+            onClick={prev}
+            disabled={!canPrevMonth}
+            aria-label="Previous month"
+          >
+            ‹
+          </button>
+        ) : null}
         <h2 className="calendar-month">{toolbarTitle}</h2>
-        <button
-          type="button"
-          className="cal-nav"
-          onClick={next}
-          disabled={mode === "year" || (mode === "month" && !canNextMonth)}
-          aria-label="Next month"
-        >
-          ›
-        </button>
+        {mode === "month" ? (
+          <button
+            type="button"
+            className="cal-nav"
+            onClick={next}
+            disabled={!canNextMonth}
+            aria-label="Next month"
+          >
+            ›
+          </button>
+        ) : null}
       </div>
 
       <div className="calendar-toolbar-secondary">
@@ -298,6 +302,16 @@ export function CalendarView({
           role="group"
           aria-label="Calendar view"
         >
+          <button
+            type="button"
+            className={mode === "year" ? "toggle-on" : ""}
+            onClick={() => {
+              setMode("year");
+              setActiveDay(null);
+            }}
+          >
+            Year
+          </button>
           <button
             type="button"
             className={mode === "month" ? "toggle-on" : ""}
@@ -310,16 +324,6 @@ export function CalendarView({
             }}
           >
             Month
-          </button>
-          <button
-            type="button"
-            className={mode === "year" ? "toggle-on" : ""}
-            onClick={() => {
-              setMode("year");
-              setActiveDay(null);
-            }}
-          >
-            Year
           </button>
         </div>
       </div>

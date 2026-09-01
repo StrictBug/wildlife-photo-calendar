@@ -18,11 +18,11 @@ export function pickRandomEvent(
   return candidates[index] ?? null;
 }
 
-/** Hop count scales with pool size (plan: 1 → skip, 2 → 3, else 6). */
+/** Hop count scales with pool size (1 → skip, 2 → 5, else 9). */
 export function spinHopCount(poolSize: number): number {
   if (poolSize <= 1) return 0;
-  if (poolSize === 2) return 3;
-  return 6;
+  const base = poolSize === 2 ? 3 : 6;
+  return Math.round(base * 1.5);
 }
 
 /**
