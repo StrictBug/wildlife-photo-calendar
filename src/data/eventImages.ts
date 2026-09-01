@@ -1189,6 +1189,174 @@ const EVENT_IMAGES: Record<string, EventImage> = {
     sourceUrl:
       "https://commons.wikimedia.org/wiki/File:Sphyrna_lewini.jpg",
   },
+  "hervey-bay-humpbacks": {
+    imagePath: "/images/events/hervey-bay-humpbacks.jpg",
+    credit: "National Marine Sanctuaries / Wikimedia Commons",
+    license: "CC BY 2.0",
+    sourceUrl:
+      "https://commons.wikimedia.org/wiki/File:Humpback_whale_with_her_calf.jpg",
+  },
+  "head-of-bight-right-whales": {
+    imagePath: "/images/events/head-of-bight-right-whales.jpg",
+    credit: "Olga Ernst / Wikimedia Commons",
+    license: "CC BY-SA 4.0",
+    sourceUrl:
+      "https://commons.wikimedia.org/wiki/File:Southern_right_whale_breaching,_South_Africa.jpg",
+  },
+  "flinders-ranges-rock-wallabies": {
+    imagePath: "/images/events/flinders-ranges-rock-wallabies.jpg",
+    credit: "Afisch80 / Wikimedia Commons",
+    license: "CC BY-SA 4.0",
+    sourceUrl:
+      "https://commons.wikimedia.org/wiki/File:Pair_of_Yellow-Footed_Rock_Wallabies_in_Ikara-Flinders_Ranges_National_Park.jpg",
+  },
+  "lake-mungo-wildlife": {
+    imagePath: "/images/events/lake-mungo-wildlife.jpg",
+    credit: "Cataloging Nature / Wikimedia Commons",
+    license: "CC BY 2.0",
+    sourceUrl:
+      "https://commons.wikimedia.org/wiki/File:Macropodiformes_Macropus_rufus_rufus_(Red_Kangaroo)_(30991978074).jpg",
+  },
+  "lamington-lyrebirds": {
+    imagePath: "/images/events/lamington-lyrebirds.jpg",
+    credit: "gwynmwilliams / Wikimedia Commons",
+    license: "CC BY 4.0",
+    sourceUrl:
+      "https://commons.wikimedia.org/wiki/File:Albert%27s_Lyrebird_(Menura_alberti)_Lamington.jpg",
+  },
+  "capertee-valley-birds": {
+    imagePath: "/images/events/capertee-valley-birds.jpg",
+    credit: "Mark Gillow / Wikimedia Commons",
+    license: "CC BY 2.0",
+    sourceUrl:
+      "https://commons.wikimedia.org/wiki/File:Regent_Honeyeater_1.jpg",
+  },
+  "ord-river-wetlands": {
+    imagePath: "/images/events/ord-river-wetlands.jpg",
+    credit: "Graham Winterflood / Wikimedia Commons",
+    license: "CC BY-SA 2.0",
+    sourceUrl:
+      "https://commons.wikimedia.org/wiki/File:Black-necked_Stork,_Jabiru,_(Ephippiorhynchus_asiaticus),_Gilbert_River,_Queensland,_20_July_2016.jpg",
+  },
+  "lacepede-islands-rookery": {
+    imagePath: "/images/events/lacepede-islands-rookery.jpg",
+    credit: "Charles J. Sharp / Wikimedia Commons",
+    license: "CC BY-SA 4.0",
+    sourceUrl:
+      "https://commons.wikimedia.org/wiki/File:Brown_booby_(Sula_leucogaster_plotus)_pair_Michaelmas_Cay.jpg",
+  },
+  "iron-range-parrots": {
+    imagePath: "/images/events/iron-range-parrots.jpg",
+    credit: "Jim Bendon / Wikimedia Commons",
+    license: "CC BY-SA 2.0",
+    sourceUrl:
+      "https://commons.wikimedia.org/wiki/File:Probosciger_aterrimus,_Cape_York_1.jpg",
+  },
+  "bruny-island-wildlife": {
+    imagePath: "/images/events/bruny-island-wildlife.jpg",
+    credit: "Charles J. Sharp / Wikimedia Commons",
+    license: "CC BY-SA 4.0",
+    sourceUrl:
+      "https://commons.wikimedia.org/wiki/File:White_wallaby_(Notamacropus_rufogriseus_rufogriseus)_female_South_Bruny.jpg",
+  },
+  "victorian-alps-wombats": {
+    imagePath: "/images/events/victorian-alps-wombats.jpg",
+    credit: "Dmitry Brant / Wikimedia Commons",
+    license: "CC BY-SA 4.0",
+    sourceUrl:
+      "https://commons.wikimedia.org/wiki/File:Common_wombat_4.jpg",
+  },
+  "port-stephens-dolphins": {
+    imagePath: "/images/events/port-stephens-dolphins.jpg",
+    credit: "Bernard DUPONT / Wikimedia Commons",
+    license: "CC BY-SA 2.0",
+    sourceUrl:
+      "https://commons.wikimedia.org/wiki/File:Indo-Pacific_Bottlenose_Dolphins_(Tursiops_aduncus).jpg",
+  },
+  "boodjamulla-lawn-hill": {
+    imagePath: "/images/events/boodjamulla-lawn-hill.jpg",
+    credit: "DavidB601 / Wikimedia Commons",
+    license: "CC BY-SA 3.0",
+    sourceUrl:
+      "https://commons.wikimedia.org/wiki/File:Indarri_Falls_at_Lawn_Hill_National_Park.JPG",
+  },
+  "rowley-shoals-reef": {
+    imagePath: "/images/events/rowley-shoals-reef.jpg",
+    credit: "Angelo DeSantis / Wikimedia Commons",
+    license: "CC BY 2.0",
+    sourceUrl:
+      "https://commons.wikimedia.org/wiki/File:Fish_in_the_Ningaloo_reef_(368690753).jpg",
+  },
+  "dryandra-numbats": {
+    imagePath: "/images/events/dryandra-numbats.jpg",
+    credit: "Martybugs / Wikimedia Commons",
+    license: "CC BY 3.0",
+    sourceUrl:
+      "https://commons.wikimedia.org/wiki/File:Numbat.jpg",
+  },
+  "wilsons-prom-wildlife": {
+    imagePath: "/images/events/wilsons-prom-wildlife.jpg",
+    credit: "Phil Whitehouse / Wikimedia Commons",
+    license: "CC BY 2.0",
+    sourceUrl:
+      "https://commons.wikimedia.org/wiki/File:Wombat_Wilsons_Promontory.jpg",
+  },
+  "warrnambool-right-whales": {
+    imagePath: "/images/events/warrnambool-right-whales.jpg",
+    credit: "Olga Ernst / Wikimedia Commons",
+    license: "CC BY-SA 4.0",
+    sourceUrl:
+      "https://commons.wikimedia.org/wiki/File:Southern_Right_Whale,_Hermanus_(South_Africa).jpg",
+  },
+  "raymond-island-koalas": {
+    imagePath: "/images/events/raymond-island-koalas.jpg",
+    credit: "John Robert McPherson / Wikimedia Commons",
+    license: "CC BY-SA 4.0",
+    sourceUrl:
+      "https://commons.wikimedia.org/wiki/File:Koala_Pine_Ridge_Conservation_Park,_Queensland_IMG_0062.jpg",
+  },
+  "snowy-mountains-dingoes": {
+    imagePath: "/images/events/snowy-mountains-dingoes.jpg",
+    credit: "brett / Wikimedia Commons",
+    license: "CC BY 2.0",
+    sourceUrl:
+      "https://commons.wikimedia.org/wiki/File:Canis_lupus_dingo_-Healesville_Sanctuary,_Victoria,_Australia-8a.jpg",
+  },
+  "west-macdonnell-wedgetails": {
+    imagePath: "/images/events/west-macdonnell-wedgetails.jpg",
+    credit: "XiscoNL / Wikimedia Commons",
+    license: "CC BY-SA 3.0",
+    sourceUrl:
+      "https://commons.wikimedia.org/wiki/File:Wedge-tailed_Eagle_at_Territory_Wildlife_Park.JPG",
+  },
+  "daintree-night-tree-frogs": {
+    imagePath: "/images/events/daintree-night-tree-frogs.jpg",
+    credit: "Charles J. Sharp / Wikimedia Commons",
+    license: "CC BY-SA 4.0",
+    sourceUrl:
+      "https://commons.wikimedia.org/wiki/File:White-lipped_tree_frog_(Nyctimystes_infrafrenatus)_Daintree.jpg",
+  },
+  "costa-rica-red-eyed-tree-frogs": {
+    imagePath: "/images/events/costa-rica-red-eyed-tree-frogs.jpg",
+    credit: "Bernard DUPONT / Wikimedia Commons",
+    license: "CC BY-SA 2.0",
+    sourceUrl:
+      "https://commons.wikimedia.org/wiki/File:Red-eyed_Tree_Frog_(Agalychnis_callidryas)_(6941168748).jpg",
+  },
+  "ecuador-amazon-glass-frogs": {
+    imagePath: "/images/events/ecuador-amazon-glass-frogs.jpg",
+    credit: "bgv23 / Lycaon / Wikimedia Commons",
+    license: "CC BY 2.0",
+    sourceUrl:
+      "https://commons.wikimedia.org/wiki/File:Hyalinobatrachium_colymbiphyllum_edit.jpg",
+  },
+  "madagascar-mantella-jewels": {
+    imagePath: "/images/events/madagascar-mantella-jewels.jpg",
+    credit: "Charles J. Sharp / Wikimedia Commons",
+    license: "CC BY-SA 4.0",
+    sourceUrl:
+      "https://commons.wikimedia.org/wiki/File:Variegated_golden_frog_(Mantella_baroni)_Ranomafana.jpg",
+  },
 };
 
 export function getEventImage(eventId: string): EventImage | undefined {

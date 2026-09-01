@@ -134,31 +134,63 @@ function createMarkerIcon(selected: boolean) {
 }
 
 function MapMonthScrubber({
+  enabled,
   month,
   playing,
   visibleCount,
+  onEnabledChange,
   onMonthChange,
   onPlayingChange,
 }: {
+  enabled: boolean;
   month: number;
   playing: boolean;
   visibleCount: number;
+  onEnabledChange: (enabled: boolean) => void;
   onMonthChange: (month: number) => void;
   onPlayingChange: (playing: boolean) => void;
 }) {
   return (
-    <div className="map-month-scrubber" aria-label="Month timeline">
+    <div
+      className={`map-month-scrubber ${enabled ? "map-month-scrubber-on" : "map-month-scrubber-off"}`}
+      aria-label="Month timeline"
+    >
+      <label className="map-month-toggle">
+        <span className="sr-only">Year movie</span>
+        <input
+          type="checkbox"
+          checked={enabled}
+          onChange={(e) => {
+            const next = e.target.checked;
+            onEnabledChange(next);
+            if (!next) onPlayingChange(false);
+          }}
+        />
+        <span className="map-month-toggle-ui" aria-hidden="true" />
+      </label>
+
       <button
         type="button"
         className="map-month-play"
         onClick={() => onPlayingChange(!playing)}
         aria-pressed={playing}
-        aria-label={playing ? "Pause month animation" : "Play months through the year"}
+        aria-label={
+          playing ? "Pause month animation" : "Play months through the year"
+        }
+        disabled={!enabled}
       >
-        {playing ? "Pause" : "Play"}
+        {playing ? (
+          <span className="map-month-play-icon" aria-hidden="true">
+            ⏸
+          </span>
+        ) : (
+          <span className="map-month-play-icon map-month-play-icon-play" aria-hidden="true">
+            ▶
+          </span>
+        )}
       </button>
 
-      <div className="map-month-scrubber-main">
+      <div className="map-month-scrubber-main" aria-disabled={!enabled}>
         <div className="map-month-scrubber-meta">
           <p className="map-month-label">{MONTH_LABELS[month - 1]}</p>
           <p className="map-month-count">
@@ -176,6 +208,7 @@ function MapMonthScrubber({
             max={12}
             step={1}
             value={month}
+            disabled={!enabled}
             onChange={(e) => {
               onPlayingChange(false);
               onMonthChange(Number(e.target.value));
@@ -189,6 +222,7 @@ function MapMonthScrubber({
               key={label}
               type="button"
               className={`map-month-tick ${month === i + 1 ? "map-month-tick-on" : ""}`}
+              disabled={!enabled}
               onClick={() => {
                 onPlayingChange(false);
                 onMonthChange(i + 1);
@@ -213,6 +247,7 @@ export function MapView({
 }: MapViewProps) {
   const [month, setMonth] = useState(() => new Date().getMonth() + 1);
   const [playing, setPlaying] = useState(false);
+  const [scrubberActive, setScrubberActive] = useState(false);
 
   useEffect(() => {
     if (!playing) return;
@@ -223,13 +258,16 @@ export function MapView({
   }, [playing]);
 
   useEffect(() => {
-    if (!showMonthScrubber) setPlaying(false);
+    if (!showMonthScrubber) {
+      setPlaying(false);
+      setScrubberActive(false);
+    }
   }, [showMonthScrubber]);
 
   const visibleEvents = useMemo(() => {
-    if (!showMonthScrubber) return events;
+    if (!showMonthScrubber || !scrubberActive) return events;
     return events.filter((event) => eventOverlapsMonth(event, month));
-  }, [events, month, showMonthScrubber]);
+  }, [events, month, scrubberActive, showMonthScrubber]);
 
   const pulseEvent =
     pulseTarget != null
@@ -277,9 +315,11 @@ export function MapView({
 
       {showMonthScrubber ? (
         <MapMonthScrubber
+          enabled={scrubberActive}
           month={month}
           playing={playing}
           visibleCount={visibleEvents.length}
+          onEnabledChange={setScrubberActive}
           onMonthChange={setMonth}
           onPlayingChange={setPlaying}
         />

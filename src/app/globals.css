@@ -1920,19 +1920,102 @@ input {
   box-shadow: var(--shadow);
 }
 
+.map-month-scrubber-off .map-month-play,
+.map-month-scrubber-off .map-month-scrubber-main {
+  opacity: 0.42;
+  filter: grayscale(0.35);
+  pointer-events: none;
+}
+
+.map-month-toggle {
+  display: inline-flex;
+  align-items: center;
+  align-self: center;
+  flex-shrink: 0;
+  cursor: pointer;
+  user-select: none;
+}
+
+.map-month-toggle input {
+  position: absolute;
+  opacity: 0;
+  width: 1px;
+  height: 1px;
+  pointer-events: none;
+}
+
+.map-month-toggle-ui {
+  position: relative;
+  display: block;
+  width: 2.4rem;
+  height: 1.35rem;
+  border-radius: 999px;
+  background: rgba(var(--forest-rgb), 0.18);
+  transition: background 0.15s ease;
+  flex-shrink: 0;
+}
+
+.map-month-toggle-ui::after {
+  content: "";
+  position: absolute;
+  top: 0.15rem;
+  left: 0.15rem;
+  width: 1.05rem;
+  height: 1.05rem;
+  border-radius: 999px;
+  background: #faf5ef;
+  box-shadow: 0 1px 3px rgba(var(--forest-rgb), 0.25);
+  transition: transform 0.15s ease;
+}
+
+.map-month-toggle input:checked + .map-month-toggle-ui {
+  background: var(--forest);
+}
+
+.map-month-toggle input:checked + .map-month-toggle-ui::after {
+  transform: translateX(1.05rem);
+}
+
+.map-month-toggle input:focus-visible + .map-month-toggle-ui {
+  outline: 2px solid var(--moss);
+  outline-offset: 2px;
+}
+
 .map-month-play {
   flex-shrink: 0;
   align-self: center;
-  min-width: 4.5rem;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 2.5rem;
+  height: 2.5rem;
+  min-width: 0;
+  padding: 0;
   border: none;
   border-radius: 999px;
-  padding: 0.55rem 0.95rem;
   background: var(--forest);
   color: #faf5ef;
   font-size: 0.85rem;
   font-weight: 650;
   cursor: pointer;
-  transition: background 0.15s ease;
+  transition: background 0.15s ease, opacity 0.15s ease;
+}
+
+.map-month-play:disabled {
+  cursor: default;
+}
+
+.map-month-play-icon {
+  display: block;
+  line-height: 1;
+  font-size: 0.78rem;
+  letter-spacing: 0.05em;
+}
+
+.map-month-play-icon-play {
+  margin-left: 0.12rem;
+  font-size: 0.9rem;
+  letter-spacing: 0;
 }
 
 .map-month-play:hover {

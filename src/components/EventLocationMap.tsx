@@ -6,11 +6,13 @@ import "leaflet/dist/leaflet.css";
 import { MapContainer, Marker, TileLayer, useMap } from "react-leaflet";
 import type { WildlifeEvent } from "@/lib/types";
 
+const DETAIL_MAP_ZOOM = 4;
+
 function SetView({ lat, lng }: { lat: number; lng: number }) {
   const map = useMap();
 
   useEffect(() => {
-    map.setView([lat, lng], 7);
+    map.setView([lat, lng], DETAIL_MAP_ZOOM);
   }, [lat, lng, map]);
 
   return null;
@@ -30,7 +32,7 @@ export function EventLocationMap({ event }: { event: WildlifeEvent }) {
     <MapContainer
       className="detail-map-container"
       center={[event.lat, event.lng]}
-      zoom={7}
+      zoom={DETAIL_MAP_ZOOM}
       scrollWheelZoom={false}
       dragging
     >

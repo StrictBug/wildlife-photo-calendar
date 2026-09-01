@@ -411,12 +411,7 @@ export function PlannerApp() {
         <div className="hero-mist" aria-hidden="true" />
         <div className="hero-inner">
           <p className="brand">Wild Season</p>
-          <h1 className="hero-title">Plan holidays around wildlife photography</h1>
-          <p className="hero-sub">
-            Find the right place, month, and style — from telephoto safaris to
-            underwater reefs — with rough totals including estimated flights from
-            your airport.
-          </p>
+          <h1 className="hero-title">Holiday planning for wildlife and nature photography.</h1>
         </div>
       </header>
 
