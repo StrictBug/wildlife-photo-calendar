@@ -1,20 +1,10 @@
 "use client";
 
-import { useEffect } from "react";
+import { useEffect, useMemo, useState } from "react";
 import L from "leaflet";
 import "leaflet/dist/leaflet.css";
-import {
-  MapContainer,
-  Marker,
-  Popup,
-  TileLayer,
-  useMap,
-} from "react-leaflet";
-import { formatAnnualRange } from "@/lib/calendar";
-import {
-  computeEventBudget,
-  formatTotalBudget,
-} from "@/lib/budget";
+import { MapContainer, Marker, TileLayer, useMap } from "react-leaflet";
+import { eventOverlapsMonth } from "@/lib/calendar";
 import type { DisplayCurrency } from "@/lib/currency";
 import { fitMapToEvents, fitMapToRegions } from "@/lib/mapFraming";
 import type { FilterState, WildlifeEvent } from "@/lib/types";
@@ -30,9 +20,26 @@ interface MapViewProps {
   onSelect: (id: string) => void;
   /** Bumps to replay the locate pulse on a selected event. */
   pulseTarget: { id: string; key: number } | null;
+  /** Desktop month movie scrubber under the map. */
+  showMonthScrubber?: boolean;
 }
 
 const FIT_PADDING: [number, number] = [56, 56];
+const PLAY_MS = 850;
+const MONTH_LABELS = [
+  "January",
+  "February",
+  "March",
+  "April",
+  "May",
+  "June",
+  "July",
+  "August",
+  "September",
+  "October",
+  "November",
+  "December",
+] as const;
 
 function InvalidateSize() {
   const map = useMap();
@@ -96,8 +103,6 @@ function PulseRing({
     map.panTo([event.lat, event.lng], { animate: true });
   }, [map, event.lat, event.lng, pulseKey]);
 
-  const color = event.atmosphere[1] || event.atmosphere[0];
-
   return (
     <Marker
       key={`pulse-${event.id}-${pulseKey}`}
@@ -106,7 +111,7 @@ function PulseRing({
       zIndexOffset={1000}
       icon={L.divIcon({
         className: "map-pulse-icon",
-        html: `<span class="map-pulse-ring" style="--pulse-color:${color}"></span>`,
+        html: `<span class="map-pulse-ring" style="--pulse-color:${MARKER_FILL}"></span>`,
         iconSize: [64, 64],
         iconAnchor: [32, 32],
       })}
@@ -114,29 +119,121 @@ function PulseRing({
   );
 }
 
-function createMarkerIcon(event: WildlifeEvent, selected: boolean) {
+/** Shared marker palette — softer navy fill + light blue rim. */
+const MARKER_FILL = "#2f5f9e";
+const MARKER_BORDER = "#8ec5eb";
+
+function createMarkerIcon(selected: boolean) {
   const size = selected ? 18 : 14;
   return L.divIcon({
     className: "map-marker-icon",
-    html: `<span class="map-marker ${selected ? "map-marker-on" : ""}" style="background:${event.atmosphere[0]};border-color:${event.atmosphere[1]}"></span>`,
+    html: `<span class="map-marker ${selected ? "map-marker-on" : ""}" style="background:${MARKER_FILL};border-color:${MARKER_BORDER}"></span>`,
     iconSize: [size, size],
     iconAnchor: [size / 2, size / 2],
   });
 }
 
+function MapMonthScrubber({
+  month,
+  playing,
+  visibleCount,
+  onMonthChange,
+  onPlayingChange,
+}: {
+  month: number;
+  playing: boolean;
+  visibleCount: number;
+  onMonthChange: (month: number) => void;
+  onPlayingChange: (playing: boolean) => void;
+}) {
+  return (
+    <div className="map-month-scrubber" aria-label="Month timeline">
+      <button
+        type="button"
+        className="map-month-play"
+        onClick={() => onPlayingChange(!playing)}
+        aria-pressed={playing}
+        aria-label={playing ? "Pause month animation" : "Play months through the year"}
+      >
+        {playing ? "Pause" : "Play"}
+      </button>
+
+      <div className="map-month-scrubber-main">
+        <div className="map-month-scrubber-meta">
+          <p className="map-month-label">{MONTH_LABELS[month - 1]}</p>
+          <p className="map-month-count">
+            <strong>{visibleCount}</strong>{" "}
+            {visibleCount === 1 ? "destination" : "destinations"} this month
+          </p>
+        </div>
+
+        <label className="map-month-slider-field">
+          <span className="sr-only">Month</span>
+          <input
+            type="range"
+            className="map-month-slider"
+            min={1}
+            max={12}
+            step={1}
+            value={month}
+            onChange={(e) => {
+              onPlayingChange(false);
+              onMonthChange(Number(e.target.value));
+            }}
+          />
+        </label>
+
+        <div className="map-month-ticks" aria-hidden="true">
+          {MONTH_LABELS.map((label, i) => (
+            <button
+              key={label}
+              type="button"
+              className={`map-month-tick ${month === i + 1 ? "map-month-tick-on" : ""}`}
+              onClick={() => {
+                onPlayingChange(false);
+                onMonthChange(i + 1);
+              }}
+            >
+              {label.slice(0, 3)}
+            </button>
+          ))}
+        </div>
+      </div>
+    </div>
+  );
+}
+
 export function MapView({
   events,
   filters,
-  departureIata,
-  stayDays,
-  currency,
   selectedIds,
   onSelect,
   pulseTarget,
+  showMonthScrubber = false,
 }: MapViewProps) {
+  const [month, setMonth] = useState(() => new Date().getMonth() + 1);
+  const [playing, setPlaying] = useState(false);
+
+  useEffect(() => {
+    if (!playing) return;
+    const id = window.setInterval(() => {
+      setMonth((current) => (current >= 12 ? 1 : current + 1));
+    }, PLAY_MS);
+    return () => window.clearInterval(id);
+  }, [playing]);
+
+  useEffect(() => {
+    if (!showMonthScrubber) setPlaying(false);
+  }, [showMonthScrubber]);
+
+  const visibleEvents = useMemo(() => {
+    if (!showMonthScrubber) return events;
+    return events.filter((event) => eventOverlapsMonth(event, month));
+  }, [events, month, showMonthScrubber]);
+
   const pulseEvent =
     pulseTarget != null
-      ? (events.find((e) => e.id === pulseTarget.id) ?? null)
+      ? (visibleEvents.find((e) => e.id === pulseTarget.id) ?? null)
       : null;
 
   return (
@@ -149,7 +246,6 @@ export function MapView({
         maxZoom={12}
         scrollWheelZoom
         worldCopyJump
-        style={{ width: "100%", height: "100%" }}
       >
         <TileLayer
           attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>'
@@ -160,50 +256,34 @@ export function MapView({
         <InvalidateSize />
         <RegionLandmasses filters={filters} />
 
-        {events.map((event) => (
+        {visibleEvents.map((event) => (
           <Marker
             key={event.id}
             position={[event.lat, event.lng]}
-            icon={createMarkerIcon(event, selectedIds.includes(event.id))}
+            icon={createMarkerIcon(selectedIds.includes(event.id))}
             eventHandlers={{
               click: () => onSelect(event.id),
             }}
-          >
-            <Popup>
-              <div className="map-popup">
-                <p className="map-popup-region">{event.region}</p>
-                <p className="map-popup-title">{event.title}</p>
-                <p className="map-popup-place">
-                  {event.location}, {event.country}
-                </p>
-                <p className="map-popup-dates">
-                  {formatAnnualRange(event)}
-                </p>
-                <p className="map-popup-budget">
-                  {formatTotalBudget(
-                    computeEventBudget(event, departureIata, stayDays),
-                    departureIata,
-                    currency,
-                  )}
-                </p>
-                <button
-                  type="button"
-                  className="map-popup-btn"
-                  onClick={() => onSelect(event.id)}
-                >
-                  View details
-                </button>
-              </div>
-            </Popup>
-          </Marker>
+          />
         ))}
 
         {pulseEvent && pulseTarget ? (
           <PulseRing event={pulseEvent} pulseKey={pulseTarget.key} />
         ) : null}
 
+        {/* Frame to the full filtered set so the camera stays steady while months play. */}
         <FitBounds events={events} filters={filters} />
       </MapContainer>
+
+      {showMonthScrubber ? (
+        <MapMonthScrubber
+          month={month}
+          playing={playing}
+          visibleCount={visibleEvents.length}
+          onMonthChange={setMonth}
+          onPlayingChange={setPlaying}
+        />
+      ) : null}
     </div>
   );
 }

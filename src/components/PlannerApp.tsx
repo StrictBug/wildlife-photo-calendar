@@ -456,7 +456,7 @@ export function PlannerApp() {
               {sorted.length === 1 ? "destination" : "destinations"}
             </p>
             <div className="results-toolbar-actions">
-              {sortControl}
+              {view === "list" ? sortControl : null}
               {renderViewToggle("view-toggle-desktop")}
             </div>
           </div>
@@ -509,6 +509,7 @@ export function PlannerApp() {
               selectedIds={selectedIds}
               onSelect={handleSelect}
               pulseTarget={mapPulse}
+              showMonthScrubber={!isMobile}
             />
           )}
         </main>
