@@ -90,9 +90,10 @@ export function sortEvents(
     );
   }
 
+  const field = sort.field;
   const dir = sort.direction === "asc" ? 1 : -1;
   return [...events].sort(
-    (a, b) => compareByField(a, b, sort.field, departureIata, stayDays) * dir,
+    (a, b) => compareByField(a, b, field, departureIata, stayDays) * dir,
   );
 }
 
