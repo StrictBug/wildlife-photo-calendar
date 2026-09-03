@@ -64,6 +64,10 @@ function Meta({ label, value }: { label: string; value: string }) {
   );
 }
 
+function eventSubjectLabels(event: WildlifeEvent): string[] {
+  return event.kind === "nature" ? event.subjectLabels : event.animalLabels;
+}
+
 function formatCoords(lat: number, lng: number): string {
   const latDir = lat >= 0 ? "N" : "S";
   const lngDir = lng >= 0 ? "E" : "W";
@@ -405,7 +409,7 @@ export function EventDetail({
                 <div className="detail-section">
                   <h3>Subjects</h3>
                   <div className="tag-row">
-                    {event.animalLabels.map((a) => (
+                    {eventSubjectLabels(event).map((a) => (
                       <span key={a} className="tag">{a}</span>
                     ))}
                   </div>
@@ -487,7 +491,7 @@ export function EventDetail({
               <div className="detail-section">
                 <h3>Subjects</h3>
                 <div className="tag-row">
-                  {event.animalLabels.map((a) => (
+                  {eventSubjectLabels(event).map((a) => (
                     <span key={a} className="tag">{a}</span>
                   ))}
                 </div>

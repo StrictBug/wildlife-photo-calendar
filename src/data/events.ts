@@ -1,8 +1,8 @@
 import type { WildlifeEvent } from "@/lib/types";
 import { withClimates } from "./eventClimates";
 import { extraEvents } from "./eventsExtra";
-
-type EventDraft = Omit<WildlifeEvent, "climates">;
+import { natureEvents } from "./eventsNature";
+import type { EventDraft } from "./eventTypes";
 
 const baseEvents: EventDraft[] = [
   {
@@ -2116,4 +2116,5 @@ const baseEvents: EventDraft[] = [
 export const events: WildlifeEvent[] = withClimates([
   ...baseEvents,
   ...extraEvents,
+  ...natureEvents,
 ]);

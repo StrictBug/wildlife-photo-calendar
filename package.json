@@ -6,7 +6,13 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "eslint"
+    "lint": "eslint",
+    "images:candidates": "node scripts/fetch-image-candidates.mjs",
+    "images:candidates:pilot": "node scripts/fetch-image-candidates.mjs --pilot",
+    "images:candidates:nature": "node scripts/fetch-image-candidates.mjs --nature",
+    "images:candidates:wildlife": "node scripts/fetch-image-candidates.mjs --wildlife",
+    "images:review": "node scripts/review-gallery-server.mjs",
+    "images:apply": "node scripts/apply-image-selections.mjs"
   },
   "dependencies": {
     "leaflet": "^1.9.4",

@@ -97,12 +97,38 @@ const BY_COUNTRY: Record<string, Gateway> = {
   "New Caledonia": { airport: "NOU", lat: -22.01, lng: 166.21 },
   Vanuatu: { airport: "VLI", lat: -17.7, lng: 168.32 },
   Singapore: { airport: "SIN", lat: 1.36, lng: 103.99 },
+  Tonga: { airport: "TBU", lat: -21.24, lng: -175.15 },
+  "Falkland Islands": { airport: "MPN", lat: -51.82, lng: -58.45 },
+  "South Korea": { airport: "ICN", lat: 37.46, lng: 126.44 },
+  Austria: { airport: "VIE", lat: 48.11, lng: 16.57 },
+  Slovenia: { airport: "LJU", lat: 46.22, lng: 14.46 },
+  Croatia: { airport: "ZAG", lat: 45.74, lng: 16.07 },
+  Turkey: { airport: "IST", lat: 41.26, lng: 28.74 },
+  Venezuela: { airport: "CCS", lat: 10.6, lng: -66.99 },
+  "Faroe Islands": { airport: "FAE", lat: 62.06, lng: -7.28 },
 };
 
 /** Prefer a nearer hub when the country default is a poor fit. */
 const BY_EVENT: Record<string, Gateway> = {
   "philippines-thresher-sharks": { airport: "CEB", lat: 10.31, lng: 123.98 },
   "cocos-hammerheads": { airport: "SJO", lat: 9.99, lng: -84.21 },
+  "south-africa-sardine-run": { airport: "DUR", lat: -29.97, lng: 30.95 },
+  "canada-spirit-bears": { airport: "YPR", lat: 54.29, lng: -130.44 },
+  "bosque-sandhill-cranes": { airport: "ABQ", lat: 35.04, lng: -106.61 },
+  "hawaii-humpback-whales": { airport: "OGG", lat: 20.9, lng: -156.43 },
+  "canada-narwhal-pond-inlet": { airport: "YRT", lat: 62.81, lng: -92.12 },
+  "ano-nuevo-elephant-seals": { airport: "SFO", lat: 37.62, lng: -122.38 },
+  "baja-mobula-rays": { airport: "SJD", lat: 23.15, lng: -109.72 },
+  "tanzania-ndutu-calving": { airport: "ARK", lat: -3.37, lng: 36.63 },
+  "usa-san-francisco-golden-gate-fog": { airport: "SFO", lat: 37.62, lng: -122.38 },
+  "australia-yarra-valley-morning-fog": { airport: "MEL", lat: -37.67, lng: 144.85 },
+  "norway-tromso-aurora": { airport: "TOS", lat: 69.68, lng: 18.92 },
+  "finland-rovaniemi-aurora": { airport: "RVN", lat: 66.56, lng: 25.83 },
+  "canada-yellowknife-aurora": { airport: "YZF", lat: 62.47, lng: -114.44 },
+  "russia-lake-baikal-blue-ice": { airport: "IKT", lat: 52.27, lng: 104.39 },
+  "japan-zao-snow-monsters": { airport: "SDJ", lat: 38.14, lng: 140.92 },
+  "japan-abashiri-drift-ice": { airport: "MMB", lat: 43.88, lng: 144.16 },
+  "new-zealand-taupo-bay-fog": { airport: "KKE", lat: -35.26, lng: 173.91 },
 };
 
 export function getGateway(event: WildlifeEvent): Gateway {

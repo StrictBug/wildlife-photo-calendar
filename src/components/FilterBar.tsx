@@ -8,7 +8,11 @@ import {
   CLIMATE_LABELS,
   DANGERS,
   DIFFICULTIES,
+  EVENT_KINDS,
+  EVENT_KIND_LABELS,
   MONTHS,
+  NATURE_SUBJECTS,
+  NATURE_SUBJECT_LABELS,
   PACES,
   REGIONS,
   ACCESS_LABELS,
@@ -135,7 +139,7 @@ export function FilterBar({
           <input
             type="search"
             className="filter-control"
-            placeholder="Place, animal, destination…"
+            placeholder="Place, animal, landscape…"
             value={filters.query}
             onChange={(e) =>
               onChange({ ...filters, query: e.target.value })
@@ -169,6 +173,32 @@ export function FilterBar({
           </select>
         </label>
       </fieldset>
+
+      <ChipGroup
+        label="Event type"
+        options={EVENT_KINDS}
+        selected={filters.eventKinds}
+        onToggle={(v) =>
+          onChange({
+            ...filters,
+            eventKinds: toggleInList(filters.eventKinds, v),
+          })
+        }
+        format={(v) => EVENT_KIND_LABELS[v]}
+      />
+
+      <ChipGroup
+        label="Nature subjects"
+        options={NATURE_SUBJECTS}
+        selected={filters.natureSubjects}
+        onToggle={(v) =>
+          onChange({
+            ...filters,
+            natureSubjects: toggleInList(filters.natureSubjects, v),
+          })
+        }
+        format={(v) => NATURE_SUBJECT_LABELS[v]}
+      />
 
       <ChipGroup
         label="Region"

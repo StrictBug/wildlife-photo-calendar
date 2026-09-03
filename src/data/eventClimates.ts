@@ -1,4 +1,6 @@
 import type { Climate, WildlifeEvent } from "@/lib/types";
+import { NATURE_EVENT_CLIMATES } from "./natureEventClimates";
+import type { EventDraft } from "./eventTypes";
 
 /**
  * Climate / biome tags per event. Multiple allowed when a destination spans
@@ -201,11 +203,25 @@ export const EVENT_CLIMATES: Record<string, Climate[]> = {
   "costa-rica-red-eyed-tree-frogs": ["tropical", "rainforest"],
   "ecuador-amazon-glass-frogs": ["tropical", "rainforest"],
   "madagascar-mantella-jewels": ["tropical", "rainforest"],
+  "south-africa-sardine-run": ["subtropical", "temperate"],
+  "canada-spirit-bears": ["temperate", "rainforest"],
+  "uganda-shoebill-stork": ["tropical", "subtropical"],
+  "bosque-sandhill-cranes": ["desert", "temperate"],
+  "tonga-humpback-swim": ["tropical", "subtropical"],
+  "uganda-ishasha-tree-lions": ["savanna", "tropical"],
+  "zambia-kasanka-bats": ["tropical", "savanna"],
+  "baja-mobula-rays": ["subtropical", "desert"],
+  "tanzania-ndutu-calving": ["savanna"],
+  "hawaii-humpback-whales": ["tropical", "subtropical"],
+  "canada-narwhal-pond-inlet": ["polar", "boreal"],
+  "ano-nuevo-elephant-seals": ["temperate", "mediterranean"],
+  "kenya-lake-bogoria-flamingos": ["savanna", "desert"],
+  "smoky-synchronous-fireflies": ["temperate"],
+  "falklands-king-penguins": ["temperate", "polar"],
+  ...NATURE_EVENT_CLIMATES,
 };
 
-type EventDraft = Omit<WildlifeEvent, "climates">;
-
-export function climatesFor(event: EventDraft): Climate[] {
+export function climatesFor(event: Pick<EventDraft, "id">): Climate[] {
   const tagged = EVENT_CLIMATES[event.id];
   if (!tagged?.length) {
     throw new Error(`Missing climate tags for event: ${event.id}`);
@@ -214,8 +230,14 @@ export function climatesFor(event: EventDraft): Climate[] {
 }
 
 export function withClimates(events: EventDraft[]): WildlifeEvent[] {
-  return events.map((event) => ({
-    ...event,
-    climates: climatesFor(event),
-  }));
+  return events.map((event) => {
+    const kind = event.kind ?? "wildlife";
+    return {
+      ...event,
+      kind,
+      natureSubjects: event.natureSubjects ?? [],
+      subjectLabels: event.subjectLabels ?? [],
+      climates: climatesFor(event),
+    };
+  });
 }

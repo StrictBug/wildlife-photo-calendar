@@ -39,3 +39,7 @@ yarn-error.log*
 # typescript
 *.tsbuildinfo
 next-env.d.ts
+
+# image curation (regenerable via scripts/fetch-image-candidates.mjs)
+public/images/candidates/
+scripts/image-candidates-checkpoint.json

@@ -31,6 +31,10 @@ export function EventCard({
 }: EventCardProps) {
   const image = getEventImage(event.id);
   const budget = computeEventBudget(event, departureIata, stayDays);
+  const subjectTags =
+    event.kind === "nature"
+      ? event.subjectLabels.slice(0, 2)
+      : event.animalLabels.slice(0, 2);
 
   return (
     <article
@@ -78,9 +82,9 @@ export function EventCard({
                 {labelize(s)}
               </span>
             ))}
-            {event.animals.slice(0, 2).map((a) => (
-              <span key={a} className="tag tag-muted">
-                {labelize(a)}
+            {subjectTags.map((label) => (
+              <span key={label} className="tag tag-muted">
+                {label}
               </span>
             ))}
           </div>

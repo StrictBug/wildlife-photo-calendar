@@ -12,6 +12,7 @@ import {
   formatAnnualRange,
   formatCalendarScopeHint,
 } from "@/lib/calendar";
+import { markerColorsFor } from "@/lib/markerColors";
 import type { WildlifeEvent } from "@/lib/types";
 
 interface CalendarViewProps {
@@ -409,14 +410,20 @@ export function CalendarView({
                   <span className="cal-daynum">{day}</span>
                   {dayEvents.length > 0 && (
                     <div className="cal-day-markers">
-                      {dayEvents.slice(0, MAX_DOTS).map((e) => (
+                      {dayEvents.slice(0, MAX_DOTS).map((e) => {
+                        const { fill, border } = markerColorsFor(e.kind);
+                        return (
                         <span
                           key={e.id}
                           className={`cal-dot ${selectedIds.includes(e.id) ? "cal-dot-on" : ""}`}
-                          style={{ background: e.atmosphere[1] }}
+                          style={{
+                            background: fill,
+                            borderColor: border,
+                          }}
                           aria-hidden="true"
                         />
-                      ))}
+                        );
+                      })}
                       {overflow > 0 && (
                         <span className="cal-overflow">+{overflow}</span>
                       )}

@@ -11,7 +11,9 @@ import type {
   Climate,
   Danger,
   Difficulty,
+  EventKind,
   FilterState,
+  NatureSubject,
   Pace,
   PhotoStyle,
   Region,
@@ -134,6 +136,35 @@ export const CLIMATE_LABELS: Record<Climate, string> = {
 
 export const BUDGET_BANDS: BudgetBand[] = ["low", "mid", "high"];
 
+export const EVENT_KINDS: EventKind[] = ["wildlife", "nature"];
+
+export const EVENT_KIND_LABELS: Record<EventKind, string> = {
+  wildlife: "Wildlife",
+  nature: "Landscapes",
+};
+
+export const NATURE_SUBJECTS: NatureSubject[] = [
+  "flora",
+  "landscape",
+  "atmospheric",
+  "geology",
+  "agricultural",
+  "fog",
+  "thunderstorm",
+  "winter",
+];
+
+export const NATURE_SUBJECT_LABELS: Record<NatureSubject, string> = {
+  flora: "Flora",
+  landscape: "Landscape",
+  atmospheric: "Atmospheric",
+  geology: "Geology",
+  agricultural: "Agricultural",
+  fog: "Fog",
+  thunderstorm: "Thunderstorms",
+  winter: "Winter",
+};
+
 export const TRIP_LENGTH_OPTIONS = [7, 14, 21, 28] as const;
 
 export const MONTHS = [
@@ -166,6 +197,8 @@ export const emptyFilters = (): FilterState => ({
   paces: [],
   dangers: [],
   animals: [],
+  eventKinds: [],
+  natureSubjects: [],
   budgetBands: [],
   query: "",
 });
@@ -254,6 +287,8 @@ function matchesQuery(event: WildlifeEvent, query: string): boolean {
     event.peakTip,
     ...event.animalLabels,
     ...event.animals,
+    ...event.subjectLabels,
+    ...event.natureSubjects,
     ...event.climates,
     ...event.styles,
   ]
@@ -269,6 +304,9 @@ export function matchesFilters(
   stayDays: number = resolveStayDays(filters),
 ): boolean {
   if (!matchesQuery(event, filters.query)) return false;
+  if (!includesAny(filters.eventKinds, event.kind)) return false;
+  if (!includesAny(filters.natureSubjects, event.natureSubjects)) return false;
+  if (filters.animals.length > 0 && event.kind === "nature") return false;
   if (!includesAny(filters.regions, event.region)) return false;
   if (!includesAny(filters.styles, event.styles)) return false;
   if (!includesAny(filters.climates, event.climates)) return false;
@@ -324,6 +362,8 @@ export function activeFilterCount(filters: FilterState): number {
   n += filters.paces.length;
   n += filters.dangers.length;
   n += filters.animals.length;
+  n += filters.eventKinds.length;
+  n += filters.natureSubjects.length;
   n += filters.budgetBands.length;
   if (filters.query.trim()) n += 1;
   if (filters.dateFrom) n += 1;

@@ -8,6 +8,11 @@ import { eventOverlapsMonth } from "@/lib/calendar";
 import type { DisplayCurrency } from "@/lib/currency";
 import { fitMapToEvents, fitMapToRegions } from "@/lib/mapFraming";
 import { hopDelayMs, type RandomizerSpin } from "@/lib/randomizer";
+import { markerColorsFor } from "@/lib/markerColors";
+import {
+  displayPositionsForEvents,
+  type LatLng,
+} from "@/lib/markerOffset";
 import type { FilterState, WildlifeEvent } from "@/lib/types";
 import { RegionLandmasses } from "./RegionLandmasses";
 
@@ -116,10 +121,12 @@ function FitBounds({
 
 function RandomizerFlyTo({
   event,
+  position,
   isFinal,
   reducedMotion,
 }: {
   event: WildlifeEvent;
+  position: LatLng;
   isFinal: boolean;
   reducedMotion: boolean;
 }) {
@@ -128,39 +135,42 @@ function RandomizerFlyTo({
   useEffect(() => {
     const zoom = isFinal ? LANDING_ZOOM : WORLD_ZOOM;
     if (reducedMotion) {
-      map.setView([event.lat, event.lng], zoom, { animate: false });
+      map.setView([position.lat, position.lng], zoom, { animate: false });
       return;
     }
-    map.flyTo([event.lat, event.lng], zoom, {
+    map.flyTo([position.lat, position.lng], zoom, {
       duration: isFinal ? 1.2 : 0.45,
     });
-  }, [map, event.lat, event.lng, event.id, isFinal, reducedMotion]);
+  }, [map, position.lat, position.lng, event.id, isFinal, reducedMotion]);
 
   return null;
 }
 
 function PulseRing({
   event,
+  position,
   pulseKey,
 }: {
   event: WildlifeEvent;
+  position: LatLng;
   pulseKey: number;
 }) {
   const map = useMap();
+  const { fill } = markerColorsFor(event.kind);
 
   useEffect(() => {
-    map.panTo([event.lat, event.lng], { animate: true });
-  }, [map, event.lat, event.lng, pulseKey]);
+    map.panTo([position.lat, position.lng], { animate: true });
+  }, [map, position.lat, position.lng, pulseKey]);
 
   return (
     <Marker
       key={`pulse-${event.id}-${pulseKey}`}
-      position={[event.lat, event.lng]}
+      position={[position.lat, position.lng]}
       interactive={false}
       zIndexOffset={1000}
       icon={L.divIcon({
         className: "map-pulse-icon",
-        html: `<span class="map-pulse-ring" style="--pulse-color:${MARKER_FILL}"></span>`,
+        html: `<span class="map-pulse-ring" style="--pulse-color:${fill}"></span>`,
         iconSize: [64, 64],
         iconAnchor: [32, 32],
       })}
@@ -168,15 +178,12 @@ function PulseRing({
   );
 }
 
-/** Shared marker palette — softer navy fill + light blue rim. */
-const MARKER_FILL = "#2f5f9e";
-const MARKER_BORDER = "#8ec5eb";
-
-function createMarkerIcon(selected: boolean) {
+function createMarkerIcon(event: WildlifeEvent, selected: boolean) {
+  const { fill, border } = markerColorsFor(event.kind);
   const size = selected ? 18 : 14;
   return L.divIcon({
     className: "map-marker-icon",
-    html: `<span class="map-marker ${selected ? "map-marker-on" : ""}" style="background:${MARKER_FILL};border-color:${MARKER_BORDER}"></span>`,
+    html: `<span class="map-marker ${selected ? "map-marker-on" : ""}" style="background:${fill};border-color:${border}"></span>`,
     iconSize: [size, size],
     iconAnchor: [size / 2, size / 2],
   });
@@ -371,6 +378,14 @@ export function MapView({
     return events.filter((event) => eventOverlapsMonth(event, month));
   }, [events, month, scrubberActive, showMonthScrubber]);
 
+  const displayPositions = useMemo(
+    () => displayPositionsForEvents(events),
+    [events],
+  );
+
+  const displayPos = (event: WildlifeEvent): LatLng =>
+    displayPositions.get(event.id) ?? { lat: event.lat, lng: event.lng };
+
   const spinFocusEvent = randomizerSpin
     ? events.find(
         (e) => e.id === (randomizerSpin.path[randomizerSpin.hopIndex] ?? randomizerSpin.winnerId),
@@ -415,16 +430,20 @@ export function MapView({
           {spinFocusEvent ? (
             <RandomizerFlyTo
               event={spinFocusEvent}
+              position={displayPos(spinFocusEvent)}
               isFinal={spinIsFinal}
               reducedMotion={reducedMotion}
             />
           ) : null}
 
-          {visibleEvents.map((event) => (
+          {visibleEvents.map((event) => {
+            const position = displayPos(event);
+            return (
             <Marker
               key={event.id}
-              position={[event.lat, event.lng]}
+              position={[position.lat, position.lng]}
               icon={createMarkerIcon(
+                event,
                 selectedIds.includes(event.id) ||
                   (spinPulse && event.id === randomizerSpin?.winnerId),
               )}
@@ -436,15 +455,21 @@ export function MapView({
                     }
               }
             />
-          ))}
+            );
+          })}
 
           {pulseEvent && pulseTarget ? (
-            <PulseRing event={pulseEvent} pulseKey={pulseTarget.key} />
+            <PulseRing
+              event={pulseEvent}
+              position={displayPos(pulseEvent)}
+              pulseKey={pulseTarget.key}
+            />
           ) : null}
 
           {spinPulse && spinWinner && randomizerSpin ? (
             <PulseRing
               event={spinWinner}
+              position={displayPos(spinWinner)}
               pulseKey={randomizerSpin.key}
             />
           ) : null}

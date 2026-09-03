@@ -4,6 +4,7 @@ import { useEffect } from "react";
 import L from "leaflet";
 import "leaflet/dist/leaflet.css";
 import { MapContainer, Marker, TileLayer, useMap } from "react-leaflet";
+import { markerColorsFor } from "@/lib/markerColors";
 import type { WildlifeEvent } from "@/lib/types";
 
 const DETAIL_MAP_ZOOM = 4;
@@ -19,9 +20,10 @@ function SetView({ lat, lng }: { lat: number; lng: number }) {
 }
 
 function createPinIcon(event: WildlifeEvent) {
+  const { fill, border } = markerColorsFor(event.kind);
   return L.divIcon({
     className: "map-marker-icon",
-    html: `<span class="map-marker map-marker-on" style="background:${event.atmosphere[0]};border-color:${event.atmosphere[1]}"></span>`,
+    html: `<span class="map-marker map-marker-on" style="background:${fill};border-color:${border}"></span>`,
     iconSize: [18, 18],
     iconAnchor: [9, 9],
   });

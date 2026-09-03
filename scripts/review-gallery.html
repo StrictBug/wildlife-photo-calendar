@@ -1,0 +1,434 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Event image curation</title>
+  <style>
+    :root {
+      --bg: #f6f2ec;
+      --card: #fff;
+      --ink: #3d2418;
+      --muted: #7a5c48;
+      --accent: #9a6040;
+      --border: #e0d4c8;
+      --pick: #2f5f9e;
+      --skip: #888;
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      font-family: system-ui, -apple-system, sans-serif;
+      background: var(--bg);
+      color: var(--ink);
+      line-height: 1.45;
+    }
+    header {
+      position: sticky;
+      top: 0;
+      z-index: 10;
+      background: rgba(246, 242, 236, 0.95);
+      backdrop-filter: blur(8px);
+      border-bottom: 1px solid var(--border);
+      padding: 0.75rem 1.25rem;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.75rem 1.5rem;
+      align-items: center;
+    }
+    h1 { font-size: 1.1rem; margin: 0; }
+    .meta { color: var(--muted); font-size: 0.9rem; }
+    .progress { font-weight: 600; }
+    button {
+      font: inherit;
+      cursor: pointer;
+      border: 1px solid var(--border);
+      background: var(--card);
+      border-radius: 8px;
+      padding: 0.4rem 0.75rem;
+    }
+    button.primary { background: var(--accent); color: #fff; border-color: var(--accent); }
+    main { max-width: 1200px; margin: 0 auto; padding: 1.25rem; }
+    .event-card {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 1rem;
+      margin-bottom: 1.25rem;
+      box-shadow: 0 4px 16px rgba(61, 36, 24, 0.06);
+    }
+    .event-card.active { outline: 2px solid var(--pick); }
+    .event-header { margin-bottom: 0.75rem; }
+    .event-title { font-size: 1.15rem; font-weight: 700; margin: 0 0 0.2rem; }
+    .event-place { color: var(--muted); margin: 0; font-size: 0.9rem; }
+    .status {
+      display: inline-block;
+      font-size: 0.75rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+      padding: 0.15rem 0.45rem;
+      border-radius: 4px;
+      margin-top: 0.35rem;
+    }
+    .status-pending { background: #eee; color: #666; }
+    .status-picked { background: #d8e8f8; color: var(--pick); }
+    .status-keep { background: #e8f0e8; color: #3a6a3a; }
+    .status-skip { background: #f0e8e8; color: #8a4a4a; }
+    .status-warn { background: #fff3cd; color: #856404; }
+    .search-terms {
+      font-size: 0.82rem;
+      color: var(--muted);
+      margin: 0.35rem 0 0;
+      padding: 0.45rem 0.6rem;
+      background: #faf8f5;
+      border-radius: 6px;
+      border: 1px solid var(--border);
+    }
+    .search-terms strong { color: var(--ink); }
+    .filter-bar {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      font-size: 0.85rem;
+    }
+    .filter-bar label { display: flex; align-items: center; gap: 0.35rem; cursor: pointer; }
+    .thumb-title {
+      display: block;
+      font-size: 0.68rem;
+      font-weight: 600;
+      color: var(--ink);
+      line-height: 1.25;
+      margin-bottom: 0.15rem;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+    .row-label {
+      font-size: 0.8rem;
+      font-weight: 600;
+      color: var(--muted);
+      margin: 0.5rem 0 0.35rem;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+    }
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
+      gap: 0.65rem;
+    }
+    .thumb {
+      border: 2px solid transparent;
+      border-radius: 8px;
+      overflow: hidden;
+      background: #ddd;
+      cursor: pointer;
+      position: relative;
+    }
+    .thumb img {
+      display: block;
+      width: 100%;
+      aspect-ratio: 4/3;
+      object-fit: cover;
+    }
+    .thumb.selected { border-color: var(--pick); box-shadow: 0 0 0 2px rgba(47, 95, 158, 0.25); }
+    .thumb-key {
+      position: absolute;
+      top: 4px;
+      left: 4px;
+      background: rgba(0,0,0,0.65);
+      color: #fff;
+      font-size: 0.7rem;
+      font-weight: 700;
+      padding: 0.1rem 0.35rem;
+      border-radius: 4px;
+    }
+    .thumb-meta {
+      padding: 0.35rem 0.4rem;
+      font-size: 0.68rem;
+      color: var(--muted);
+      background: #faf8f5;
+      border-top: 1px solid var(--border);
+    }
+    .actions { display: flex; gap: 0.5rem; flex-wrap: wrap; margin-top: 0.65rem; }
+    .empty { color: var(--muted); font-style: italic; padding: 1rem; text-align: center; }
+    #toast {
+      position: fixed;
+      bottom: 1rem;
+      right: 1rem;
+      background: var(--ink);
+      color: #fff;
+      padding: 0.5rem 0.85rem;
+      border-radius: 8px;
+      opacity: 0;
+      transition: opacity 0.2s;
+      pointer-events: none;
+    }
+    #toast.show { opacity: 1; }
+  </style>
+</head>
+<body>
+  <header>
+    <h1>Event image curation</h1>
+    <span class="progress" id="progress">Loading…</span>
+    <label class="filter-bar">
+      <input type="checkbox" id="needsReviewOnly" />
+      Needs review only
+    </label>
+    <span class="meta">1–5 pick · K keep · S skip · ←/→ navigate</span>
+    <button type="button" id="prevBtn">← Prev</button>
+    <button type="button" id="nextBtn">Next →</button>
+    <button type="button" class="primary" id="saveBtn">Save selections</button>
+    <button type="button" id="exportBtn">Download JSON</button>
+  </header>
+  <main id="main"></main>
+  <div id="toast"></div>
+
+  <script>
+    let manifest = {};
+    let allEventIds = [];
+    let eventIds = [];
+    let selections = {};
+    let activeIndex = 0;
+    let needsReviewOnly = false;
+
+    const toast = (msg) => {
+      const el = document.getElementById("toast");
+      el.textContent = msg;
+      el.classList.add("show");
+      setTimeout(() => el.classList.remove("show"), 1800);
+    };
+
+    async function load() {
+      const [cRes, sRes] = await Promise.all([
+        fetch("/api/candidates"),
+        fetch("/api/selections"),
+      ]);
+      if (!cRes.ok) {
+        document.getElementById("main").innerHTML =
+          '<p class="empty">No candidates yet. Run: node scripts/fetch-image-candidates.mjs --pilot</p>';
+        return;
+      }
+      manifest = await cRes.json();
+      selections = sRes.ok ? await sRes.json() : {};
+      allEventIds = Object.keys(manifest).sort((a, b) =>
+        manifest[a].title.localeCompare(manifest[b].title),
+      );
+      applyFilter();
+    }
+
+    function candidateMatchesSubject(title, entry) {
+      const terms = entry.subjectTerms || [];
+      if (!terms.length) return true;
+      const hay = (title || "").toLowerCase();
+      return terms.some((t) => hay.includes(t.toLowerCase()));
+    }
+
+    function needsReview(id) {
+      const entry = manifest[id];
+      if (!entry) return false;
+      if (!entry.candidates || entry.candidates.length === 0) return true;
+      const top = entry.candidates[0];
+      if (!candidateMatchesSubject(top.title, entry)) return true;
+      return false;
+    }
+
+    function applyFilter() {
+      eventIds = needsReviewOnly
+        ? allEventIds.filter(needsReview)
+        : [...allEventIds];
+      if (activeIndex >= eventIds.length) activeIndex = Math.max(0, eventIds.length - 1);
+      render();
+    }
+
+    function statusFor(id) {
+      const s = selections[id];
+      if (!s) return { label: "Pending", cls: "status-pending" };
+      if (s.choice === "skip") return { label: "Skip", cls: "status-skip" };
+      if (s.choice === "keep") return { label: "Keep current", cls: "status-keep" };
+      return { label: `Picked #${s.choice}`, cls: "status-picked" };
+    }
+
+    function updateProgress() {
+      const done = eventIds.filter((id) => selections[id]).length;
+      document.getElementById("progress").textContent =
+        `${done} / ${eventIds.length} reviewed`;
+    }
+
+    function setSelection(eventId, choice) {
+      if (choice === "skip" || choice === "keep") {
+        selections[eventId] = { choice };
+      } else {
+        const entry = manifest[eventId];
+        const c = entry.candidates.find((x) => x.index === choice);
+        selections[eventId] = {
+          choice,
+          candidateId: c?.candidateId,
+        };
+      }
+      updateProgress();
+      render();
+      saveQuiet();
+    }
+
+    async function saveQuiet() {
+      try {
+        await fetch("/api/selections", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(selections, null, 2),
+        });
+      } catch (_) {}
+    }
+
+    function render() {
+      updateProgress();
+      const main = document.getElementById("main");
+      if (!eventIds.length) {
+        main.innerHTML = '<p class="empty">No events in manifest.</p>';
+        return;
+      }
+
+      const id = eventIds[activeIndex];
+      const entry = manifest[id];
+      const st = statusFor(id);
+      const sel = selections[id];
+
+      const noSubjectMatch =
+        entry.candidates.length > 0 &&
+        !candidateMatchesSubject(entry.candidates[0].title, entry);
+      const warnBadge =
+        entry.candidates.length === 0 || noSubjectMatch
+          ? '<span class="status status-warn">No subject matches</span>'
+          : "";
+
+      const subjectLine = entry.primarySubject
+        ? `<strong>Subject:</strong> ${entry.primarySubject}`
+        : "";
+      const termsLine =
+        entry.subjectTerms?.length
+          ? `<strong>Terms:</strong> ${entry.subjectTerms.slice(0, 6).join(", ")}`
+          : "";
+      const queryLine =
+        entry.searchQueries?.length
+          ? `<strong>Searches:</strong> ${entry.searchQueries.slice(0, 3).join(" · ")}`
+          : "";
+      const searchBlock =
+        subjectLine || termsLine || queryLine
+          ? `<p class="search-terms">${[subjectLine, termsLine, queryLine].filter(Boolean).join(" · ")}</p>`
+          : "";
+
+      const candidateHtml = entry.candidates.length
+        ? entry.candidates
+            .map((c) => {
+              const src = c.localPath || c.thumbUrl;
+              const selected =
+                sel && typeof sel.choice === "number" && sel.choice === c.index;
+              const safeTitle = (c.title || "").replace(/"/g, "&quot;");
+              return `<button type="button" class="thumb ${selected ? "selected" : ""}" data-pick="${c.index}" title="${safeTitle}">
+                <span class="thumb-key">${c.index}</span>
+                <img src="${src}" alt="" loading="lazy" />
+                <div class="thumb-meta">
+                  <span class="thumb-title">${safeTitle}</span>
+                  ${c.source} · score ${c.score} · ${c.license}
+                </div>
+              </button>`;
+            })
+            .join("")
+        : '<p class="empty">No candidates found for this event.</p>';
+
+      main.innerHTML = `
+        <article class="event-card active" data-id="${id}">
+          <div class="event-header">
+            <h2 class="event-title">${entry.title}</h2>
+            <p class="event-place">${entry.location}, ${entry.country} · ${entry.kind}</p>
+            <span class="status ${st.cls}">${st.label}</span>
+            ${warnBadge}
+            ${searchBlock}
+          </div>
+          <p class="row-label">Current image</p>
+          <div class="grid" style="grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));">
+            <div class="thumb" style="cursor:default">
+              <img src="${entry.currentImage}" alt="Current" />
+              <div class="thumb-meta">Current</div>
+            </div>
+          </div>
+          <p class="row-label">Candidates</p>
+          <div class="grid">${candidateHtml}</div>
+          <div class="actions">
+            <button type="button" data-action="keep">K — Keep current</button>
+            <button type="button" data-action="skip">S — Skip</button>
+          </div>
+        </article>
+      `;
+
+      main.querySelectorAll("[data-pick]").forEach((btn) => {
+        btn.addEventListener("click", () =>
+          setSelection(id, Number(btn.dataset.pick)),
+        );
+      });
+      main.querySelector('[data-action="keep"]')?.addEventListener("click", () =>
+        setSelection(id, "keep"),
+      );
+      main.querySelector('[data-action="skip"]')?.addEventListener("click", () =>
+        setSelection(id, "skip"),
+      );
+    }
+
+    document.getElementById("needsReviewOnly").addEventListener("change", (e) => {
+      needsReviewOnly = e.target.checked;
+      activeIndex = 0;
+      applyFilter();
+    });
+
+    document.getElementById("prevBtn").addEventListener("click", () => {
+      activeIndex = (activeIndex - 1 + eventIds.length) % eventIds.length;
+      render();
+    });
+    document.getElementById("nextBtn").addEventListener("click", () => {
+      activeIndex = (activeIndex + 1) % eventIds.length;
+      render();
+    });
+    document.getElementById("saveBtn").addEventListener("click", async () => {
+      await fetch("/api/selections", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(selections, null, 2),
+      });
+      toast("Selections saved to scripts/image-selections.json");
+    });
+    document.getElementById("exportBtn").addEventListener("click", () => {
+      const blob = new Blob([JSON.stringify(selections, null, 2)], {
+        type: "application/json",
+      });
+      const a = document.createElement("a");
+      a.href = URL.createObjectURL(blob);
+      a.download = "image-selections.json";
+      a.click();
+    });
+
+    document.addEventListener("keydown", (e) => {
+      if (!eventIds.length) return;
+      const id = eventIds[activeIndex];
+      if (e.key >= "1" && e.key <= "5") {
+        const n = Number(e.key);
+        const entry = manifest[id];
+        if (entry.candidates.some((c) => c.index === n)) setSelection(id, n);
+      } else if (e.key === "k" || e.key === "K") setSelection(id, "keep");
+      else if (e.key === "s" || e.key === "S") setSelection(id, "skip");
+      else if (e.key === "ArrowRight") {
+        activeIndex = (activeIndex + 1) % eventIds.length;
+        render();
+      } else if (e.key === "ArrowLeft") {
+        activeIndex = (activeIndex - 1 + eventIds.length) % eventIds.length;
+        render();
+      } else if ((e.ctrlKey || e.metaKey) && e.key === "s") {
+        e.preventDefault();
+        document.getElementById("saveBtn").click();
+      }
+    });
+
+    load();
+  </script>
+</body>
+</html>
