@@ -707,10 +707,9 @@ const EVENT_IMAGES: Record<string, EventImage> = {
   },
   "mozambique-ponta-turtles": {
     imagePath: "/images/events/mozambique-ponta-turtles.v3.jpg",
-    credit: "カイロス / Wikimedia Commons",
-    license: "Public domain",
-    sourceUrl:
-      "https://commons.wikimedia.org/wiki/File:Caretta_Shiodome_Blue_Ocean.jpg",
+    credit: "Jeroen Looyé / Flickr",
+    license: "CC BY-SA 2.0",
+    sourceUrl: "https://www.flickr.com/photos/looye/6780166094/",
   },
   "south-africa-hermanus-whales": {
     imagePath: "/images/events/south-africa-hermanus-whales.v3.jpg",
@@ -1740,10 +1739,9 @@ const EVENT_IMAGES: Record<string, EventImage> = {
   },
   "australia-riverina-canola-fields": {
     imagePath: "/images/events/australia-riverina-canola-fields.jpg",
-    credit: "Gregory Heath, CSIRO / Wikimedia Commons",
-    license: "CC BY 3.0",
-    sourceUrl:
-      "https://commons.wikimedia.org/wiki/File:CSIRO_ScienceImage_4589_Pattersons_curse_and_canola_crop_at_Binalong_NSW_2001.jpg",
+    credit: "Dan O'Cker / Flickr",
+    license: "CC BY 2.0",
+    sourceUrl: "https://www.flickr.com/photos/danthemanocallaghan/21165736659/",
   },
   "australia-uluru-sunrise-glow": {
     imagePath: "/images/events/australia-uluru-sunrise-glow.jpg",

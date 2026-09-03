@@ -557,6 +557,12 @@ input {
   color: var(--forest);
 }
 
+.sort-direction:disabled {
+  opacity: 0.35;
+  cursor: default;
+  pointer-events: none;
+}
+
 .view-toggle {
   display: inline-flex;
   padding: 0.2rem;

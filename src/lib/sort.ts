@@ -1,7 +1,7 @@
 import { computeEventBudget } from "@/lib/budget";
 import type { Danger, Difficulty, Pace, WildlifeEvent } from "@/lib/types";
 
-export type SortField = "price" | "difficulty" | "pace" | "danger";
+export type SortField = "none" | "price" | "difficulty" | "pace" | "danger";
 export type SortDirection = "asc" | "desc";
 
 export interface SortState {
@@ -10,11 +10,12 @@ export interface SortState {
 }
 
 export const DEFAULT_SORT: SortState = {
-  field: "price",
+  field: "none",
   direction: "asc",
 };
 
 export const SORT_FIELDS: { value: SortField; label: string }[] = [
+  { value: "none", label: "Random" },
   { value: "price", label: "Price" },
   { value: "difficulty", label: "Difficulty" },
   { value: "pace", label: "Pace" },
@@ -40,10 +41,22 @@ const DANGER_ORDER: Record<Danger, number> = {
   high: 2,
 };
 
+/** Stable session shuffle of event ids (Fisher–Yates). */
+export function createShuffleOrder(ids: string[]): string[] {
+  const arr = [...ids];
+  for (let i = arr.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    const tmp = arr[i];
+    arr[i] = arr[j];
+    arr[j] = tmp;
+  }
+  return arr;
+}
+
 function compareByField(
   a: WildlifeEvent,
   b: WildlifeEvent,
-  field: SortField,
+  field: Exclude<SortField, "none">,
   departureIata: string,
   stayDays: number,
 ): number {
@@ -67,7 +80,16 @@ export function sortEvents(
   sort: SortState,
   departureIata: string,
   stayDays: number,
+  shuffleOrder: string[] = [],
 ): WildlifeEvent[] {
+  if (sort.field === "none") {
+    if (shuffleOrder.length === 0) return [...events];
+    const rank = new Map(shuffleOrder.map((id, i) => [id, i]));
+    return [...events].sort(
+      (a, b) => (rank.get(a.id) ?? 0) - (rank.get(b.id) ?? 0),
+    );
+  }
+
   const dir = sort.direction === "asc" ? 1 : -1;
   return [...events].sort(
     (a, b) => compareByField(a, b, sort.field, departureIata, stayDays) * dir,

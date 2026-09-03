@@ -30,6 +30,7 @@ import {
   type DisplayCurrency,
 } from "@/lib/currency";
 import {
+  createShuffleOrder,
   DEFAULT_SORT,
   SORT_FIELDS,
   sortEvents,
@@ -109,6 +110,9 @@ export function PlannerApp() {
   const [currency, setCurrency] = useState<DisplayCurrency>(DEFAULT_CURRENCY);
   const [view, setView] = useState<ViewMode>("list");
   const [sort, setSort] = useState<SortState>(DEFAULT_SORT);
+  const [shuffleOrder] = useState(() =>
+    createShuffleOrder(events.map((event) => event.id)),
+  );
   const [selectedIds, setSelectedIds] = useState<string[]>([]);
   const [activeId, setActiveId] = useState<string | null>(null);
   const [mapPulse, setMapPulse] = useState<{ id: string; key: number } | null>(
@@ -131,8 +135,8 @@ export function PlannerApp() {
   );
 
   const sorted = useMemo(
-    () => sortEvents(filtered, sort, departureIata, stayDays),
-    [filtered, sort, departureIata, stayDays],
+    () => sortEvents(filtered, sort, departureIata, stayDays, shuffleOrder),
+    [filtered, sort, departureIata, stayDays, shuffleOrder],
   );
 
   const calendarScope = useMemo(
@@ -434,6 +438,7 @@ export function PlannerApp() {
       <button
         type="button"
         className="sort-direction"
+        disabled={sort.field === "none"}
         onClick={() =>
           setSort((prev) => ({
             ...prev,
@@ -441,11 +446,19 @@ export function PlannerApp() {
           }))
         }
         aria-label={
-          sort.direction === "asc"
-            ? "Ascending — click for descending"
-            : "Descending — click for ascending"
+          sort.field === "none"
+            ? "Sort direction unavailable while random"
+            : sort.direction === "asc"
+              ? "Ascending — click for descending"
+              : "Descending — click for ascending"
         }
-        title={sort.direction === "asc" ? "Low to high" : "High to low"}
+        title={
+          sort.field === "none"
+            ? "Choose a sort field first"
+            : sort.direction === "asc"
+              ? "Low to high"
+              : "High to low"
+        }
       >
         {sort.direction === "asc" ? "↑" : "↓"}
       </button>
