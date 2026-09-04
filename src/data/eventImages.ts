@@ -288,10 +288,9 @@ const EVENT_IMAGES: Record<string, EventImage> = {
   },
   "denali-caribou": {
     imagePath: "/images/events/denali-caribou.jpg",
-    credit: "Forest Service Photography / Wikimedia Commons",
-    license: "Public domain",
-    sourceUrl:
-      "https://commons.wikimedia.org/wiki/File:Caribou-Targhee_National_Forest_(20170602-FS-Caribou-CP-001).jpg",
+    credit: 'Gregory "Slobirdr" Smith / Flickr',
+    license: "CC BY-SA 2.0",
+    sourceUrl: "https://www.flickr.com/photos/slobirdr/14820919843/",
   },
   "baja-gray-whales": {
     imagePath: "/images/events/baja-gray-whales.jpg",
@@ -344,10 +343,9 @@ const EVENT_IMAGES: Record<string, EventImage> = {
   },
   "tasmania-devils": {
     imagePath: "/images/events/tasmania-devils.jpg",
-    credit: "JJ Harrison / Wikimedia Commons",
-    license: "CC BY-SA 3.0",
-    sourceUrl:
-      "https://commons.wikimedia.org/wiki/File:Sarcophilus_harrisii_taranna.jpg",
+    credit: "Mathias Appel / Flickr",
+    license: "CC0",
+    sourceUrl: "https://www.flickr.com/photos/mathiasappel/33334443170/",
   },
   "png-birds-of-paradise": {
     imagePath: "/images/events/png-birds-of-paradise.jpg",
@@ -602,10 +600,9 @@ const EVENT_IMAGES: Record<string, EventImage> = {
   },
   "shark-bay-dugongs": {
     imagePath: "/images/events/shark-bay-dugongs.v3.jpg",
-    credit: "Sebastian Gerhard Venturemedia / Wikimedia Commons",
-    license: "GFDL",
-    sourceUrl:
-      "https://commons.wikimedia.org/wiki/File:Dugong_dugon_fin_egypt.jpg",
+    credit: "Michael Coghlan / Flickr",
+    license: "CC BY-SA 2.0",
+    sourceUrl: "https://www.flickr.com/photos/mikecogh/5197872781/",
   },
   "houtman-abrolhos-seals": {
     imagePath: "/images/events/houtman-abrolhos-seals.v3.jpg",
@@ -951,10 +948,9 @@ const EVENT_IMAGES: Record<string, EventImage> = {
   },
   "pribilof-seabirds": {
     imagePath: "/images/events/pribilof-seabirds.v3.jpg",
-    credit: "Department of Commerce. National Oceanic and Atmospheric Administration. National Ocean Service. Office of Response and Restoration. Pribilof Islands Restoration Project Office. 1996-9/2008 / Wikimedia Commons",
-    license: "Public domain",
-    sourceUrl:
-      "https://commons.wikimedia.org/wiki/File:Seals_and_Sea_Lions--St._Paul_-_DPLA_-_187797f9df8ddf9b4ccbd40fd38f5cf4.jpg",
+    credit: 'Gregory "Slobirdr" Smith / Flickr',
+    license: "CC BY-SA 2.0",
+    sourceUrl: "https://www.flickr.com/photos/slobirdr/19007304898/",
   },
   "arizona-desert-wildlife": {
     imagePath: "/images/events/arizona-desert-wildlife.v3.jpg",
@@ -1573,10 +1569,9 @@ const EVENT_IMAGES: Record<string, EventImage> = {
   },
   "japan-abashiri-drift-ice": {
     imagePath: "/images/events/japan-abashiri-drift-ice.jpg",
-    credit: "221.20 (talk) / Wikimedia Commons",
-    license: "Public domain",
-    sourceUrl:
-      "https://commons.wikimedia.org/wiki/File:Abashiri_Drift_ice_banner.jpg",
+    credit: "Julien Seguinot / Flickr",
+    license: "CC BY-SA 2.0",
+    sourceUrl: "https://www.flickr.com/photos/pyjeo/49915511846/",
   },
 
   "japan-kyoto-cherry-blossom": {
@@ -1711,10 +1706,9 @@ const EVENT_IMAGES: Record<string, EventImage> = {
   },
   "japan-farm-tomita-lavender": {
     imagePath: "/images/events/japan-farm-tomita-lavender.jpg",
-    credit: "掬茶 / Wikimedia Commons",
-    license: "CC BY-SA 4.0",
-    sourceUrl:
-      "https://commons.wikimedia.org/wiki/File:Farm_Tomita_Lavender_East_20260704b.jpg",
+    credit: "Reginald Pentinio / Flickr",
+    license: "CC BY 2.0",
+    sourceUrl: "https://www.flickr.com/photos/reggiepen/28919003022/",
   },
   "morocco-valley-of-roses": {
     imagePath: "/images/events/morocco-valley-of-roses.jpg",
@@ -2134,10 +2128,9 @@ const EVENT_IMAGES: Record<string, EventImage> = {
   },
   "usa-grand-canyon-monsoon-storms": {
     imagePath: "/images/events/usa-grand-canyon-monsoon-storms.jpg",
-    credit: "Nate Loper from Flagstaff, AZ, USA / Wikimedia Commons",
+    credit: "Grand Canyon NPS / M. Quinn / Flickr",
     license: "CC BY 2.0",
-    sourceUrl:
-      "https://commons.wikimedia.org/wiki/File:Monsoon_storm_in_Grand_Canyon_looking_downstream_(42610606345).jpg",
+    sourceUrl: "https://www.flickr.com/photos/grand_canyon_nps/51441851059/",
   },
   "australia-top-end-wet-lightning": {
     imagePath: "/images/events/australia-top-end-wet-lightning.jpg",
